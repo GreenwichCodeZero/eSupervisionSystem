@@ -63,13 +63,15 @@ if (count($errorList) > 0) {
     $errorListOutput = DisplayErrorMessages($errorList);
 }
 ?>
-<?php echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"; ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb">
+<!DOCTYPE html>
+<html>
 
 <head>
     <title>Login</title>
+
     <meta name="author" content="Code Zero"/>
+    <meta charset="UTF-8">
+
     <link href="styles.css" rel="stylesheet" type="text/css"/>
 
     <script type="text/javascript">
@@ -146,7 +148,7 @@ if (count($errorList) > 0) {
                 Login to your account
             </legend>
 
-            <table summary="Table containing information fields required to login to the website">
+            <table>
                 <tbody>
                 <tr>
                     <td>
