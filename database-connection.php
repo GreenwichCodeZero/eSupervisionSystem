@@ -23,17 +23,17 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
     // Function to authenticate a user
     function LoginUser($link, $username, $password) {
         // Get student password hash from database
-        $studentResult = mysqli_query($link, "SELECT student_password FROM esuper_student WHERE student_email = '$username'");
+        $studentResult = mysqli_query($link, "SELECT student_password FROM esuper_student WHERE student_username = '$username'");
         $studentPasswordHash = mysqli_fetch_assoc($studentResult)['student_password'];
 
         // Get staff password hash from database
-        $staffResult = mysqli_query($link, "SELECT staff_password FROM esuper_staff WHERE staff_email = '$username'");
+        $staffResult = mysqli_query($link, "SELECT staff_password FROM esuper_staff WHERE staff_username = '$username'");
         $staffPasswordHash = mysqli_fetch_assoc($staffResult)['staff_password'];
 
         if (mysqli_num_rows($studentResult) == 1) {
             // User found in student table
             if (password_verify($password, $studentPasswordHash)) {
-                $sql = "SELECT student_first, student_last, student_email, student_banner_id, student_active FROM esuper_student WHERE student_email = '$username'";
+                $sql = "SELECT student_first, student_last, student_username, student_banner_id, student_active FROM esuper_student WHERE student_username = '$username'";
                 $result = mysqli_query($link, $sql);
                 $student = mysqli_fetch_assoc($result);
                 $student += array('user_type' => 'student');
@@ -43,7 +43,7 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         } else if (mysqli_num_rows($staffResult) == 1) {
             // User found in staff table
             if (password_verify($password, $staffPasswordHash)) {
-                $sql = "SELECT staff_first, staff_last, staff_email, staff_banner_id, staff_active, staff_authorised FROM esuper_staff WHERE staff_email = '$username'";
+                $sql = "SELECT staff_first, staff_last, staff_username, staff_banner_id, staff_active, staff_authorised FROM esuper_staff WHERE staff_username = '$username'";
                 $result = mysqli_query($link, $sql);
                 $staff = mysqli_fetch_assoc($result);
                 $staff += array('user_type' => 'staff');
