@@ -6,6 +6,36 @@ body {
 
 }
 
+
+h1{
+	text-align: center;
+}
+
+.logo{
+	max-width: 300px;
+	display: block;
+	width: 90%;
+	margin: 0 auto;
+}
+#login{
+	width: 100%;
+}
+
+#login legend{
+	color: green;
+	font-weight: bold;
+}
+
+#login fieldset{
+	border-style: none;
+}
+
+#login #submitLogin{
+	background-color: green;
+	padding: 10px 30px 10px 30px;
+	color: white;
+
+}
 .error {
     /* PHP form validation error */
 }
