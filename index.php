@@ -128,14 +128,9 @@ if (count($errorList) > 0) {
 
 <div class="container">
 
-
-    <h1>eSupervisor Dashboard</h1>
-
-
+    <h1>eSupervison Dashboard</h1>
 
     <img class="logo" src="imgs/greenwichLogo.png" alt="University of Greenwich logo" />
-
-
 
 <div class="row formLogin">
 <div class="col s10 m6 l6 offset-m3 offset-l3 offset-s1">
@@ -187,13 +182,13 @@ if (count($errorList) > 0) {
 
 
 <input id="rememberUsername" value="rememberUsername" name="rememberUsername[]" type="checkbox" checked="checked"/>
-<small><label for="rememberUsername">Remember username</label></small>
+<small><label for="rememberUsername">Remember user</label></small>
 
 <div class="card-action">
 
 <div class="row">
 <div class="col s6 m6 l8">
-<a href="http://ach-support.gre.ac.uk/general/password.asp" target="_blank">Password reset</a></div>
+<a href="http://ach-support.gre.ac.uk/general/password.asp" target="_blank" class="passwordReset">Password reset</a></div>
 <div class="col s6 m6 l4">
               
 
@@ -204,8 +199,7 @@ if (count($errorList) > 0) {
 
 </div>
 
-            <?php echo $outputText; ?>
-            <?php echo $errorListOutput; ?>
+          
 
         </fieldset>
 </div>
@@ -220,8 +214,11 @@ if (count($errorList) > 0) {
                     being stored on your computer.
                 </small>
             </p>
+    <span class="validation-error"><?php echo $outputText; ?></span>
+    <span class="validation-error"> <?php echo $errorListOutput; ?></span>
             </div>
             </div>
+
 </div>
 
 </body>
