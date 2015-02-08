@@ -73,7 +73,9 @@ if (count($errorList) > 0) {
     <meta charset="UTF-8">
 
     <link href="styles.css" rel="stylesheet" type="text/css"/>
-
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
     <script type="text/javascript">
         <!--
         // Client-side form validation
