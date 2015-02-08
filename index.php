@@ -128,11 +128,21 @@ if (count($errorList) > 0) {
 
 <div class="container">
 
+
     <h1>eSupervisor Dashboard</h1>
 
-    <img src="imgs/greenwichLogo.png" alt="University of Greenwich logo" />
 
-    <form action="index.php<?php (SID != '' ? '&amp;' . SID : ''); ?>" method="post" id="login" class="col s12">
+
+    <img class="logo" src="imgs/greenwichLogo.png" alt="University of Greenwich logo" />
+
+
+
+<div class="row formLogin">
+<div class="col s10 m6 l6 offset-m3 offset-l3 offset-s1">
+
+<div class="card">
+
+    <form action="index.php<?php (SID != '' ? '&amp;' . SID : ''); ?>" method="post" id="login" class="col s10 m6 l6">
 
         <?php
         // Sticky form fields
@@ -149,67 +159,69 @@ if (count($errorList) > 0) {
         <fieldset>
 
             <legend>
-                Login to your account
+                Login
             </legend>
 
-            <table>
-                <tbody>
-                <tr>
-                    <td>
-                        <p>
-                            <label for="username">Username:</label>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
+<div class="row">
+      <div class="input-field col s12 m12 l12">
+                            <label for="username" id="labelUsername">User ID:</label>
+      
                             <input id="username" value="<?php echo $username; ?>" name="username" type="text" size="30"
                                    maxlength="30" onkeyup="ValidateUsername(this.value);"
                                    onblur="ValidateUsername(this.value);"/>
                             <small><span id="usernameValidation" class="validation-error"></span></small>
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>
+                            </div>
+    
+<div class="row"></div>
+          <div class="input-field col s12 m12 l12">
+
                             <label for="password">Password:</label>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
+
                             <input id="password" name="password" type="password" size="30" maxlength="30"
                                    onkeyup="ValidatePassword(this.value);" onblur="ValidatePassword(this.value);"/>
                             <small><span id="passwordValidation" class="validation-error"></span></small>
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <p>
-                            <input type="submit" value="Login" name="login" onclick="return ValidateForm();"/>
 
-                            <input id="rememberUsername" value="rememberUsername" name="rememberUsername[]"
-                                   type="checkbox" checked="checked"/>
-                            <small><label for="rememberUsername">Remember username</label></small>
-                        </p>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+</div>
+</div>
 
-            <p class="notice">
-                <small>This website uses cookies to improve your experience. By continuing you agree to these cookies
-                    being stored on your computer.
-                </small>
-            </p>
+
+
+<input id="rememberUsername" value="rememberUsername" name="rememberUsername[]" type="checkbox" checked="checked"/>
+<small><label for="rememberUsername">Remember username</label></small>
+
+<div class="card-action">
+
+<div class="row">
+<div class="col s6 m6 l8">
+<a href="http://ach-support.gre.ac.uk/general/password.asp" target="_blank">Password reset</a></div>
+<div class="col s6 m6 l4">
+              
+
+
+        <input type="submit" value="Login" id="submitLogin" name="login" onclick="return ValidateForm();"/>
+
+</div>
+
+</div>
 
             <?php echo $outputText; ?>
             <?php echo $errorListOutput; ?>
 
         </fieldset>
-
+</div>
     </form>
+    </div>
+    </div>
 
+<div class="row">
+<div class="col s10 m6 l6 offset-m3 offset-l3 offset-s1">
+            <p class="notice">
+                <small>This website uses cookies to improve your experience. By continuing you agree to these cookies
+                    being stored on your computer.
+                </small>
+            </p>
+            </div>
+            </div>
 </div>
 
 </body>
