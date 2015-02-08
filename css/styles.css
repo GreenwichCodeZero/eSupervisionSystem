@@ -7,6 +7,12 @@ body {
 }
 
 
+
+
+.validation-error{
+	padding: 5px;
+}
+
 h1{
 	text-align: center;
 }
@@ -34,7 +40,10 @@ h1{
 	background-color: green;
 	padding: 10px 30px 10px 30px;
 	color: white;
+}
 
+.passwordReset{
+	color: gray;
 }
 .error {
     /* PHP form validation error */
