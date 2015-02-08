@@ -44,7 +44,7 @@ if (isset($_POST['login'])) {
             }
 
             // Redirect to dashboard
-            header('Location: dashboard.php' . (SID != '' ? '?' . SID : ''));
+            header('Location: dashboard.php'.(SID != '' ? '?' . SID : ''));
 
             // Close connection
             CloseConnection($link);
@@ -53,9 +53,9 @@ if (isset($_POST['login'])) {
             array_push($errorList, 'Username and password match not found');
         }
     }
-} elseif (isset($_SESSION['username'])) {
+} else if (isset($_SESSION['username'])) {
     // User is already logged in, redirect to dashboard
-    header('Location: dashboard.php' . (SID != '' ? '?' . SID : ''));
+    header('Location: dashboard.php'.(SID != '' ? '?' . SID : ''));
 }
 
 // Check for and display any errors
@@ -124,103 +124,62 @@ if (count($errorList) > 0) {
     </script>
 </head>
 
-<body>
+	<body>
+		<div class="container">
+			<div class="center-align">
+				<h5>eSupervison Dashboard</h5>
+				<img id="logo" class="responsive-img" src="imgs/greenwichLogo.png" alt="University of Greenwich logo" />
+			</div>
+			<div class="row">
+				<div class="col s10 m6 l6 offset-s1 offset-m3 offset-l3">
+					<div class="card">
+					<span class="card-title green-text">Login</span>
+						<form action="index.php<?php (SID != '' ? '&amp;' . SID : ''); ?>" method="post" id="login">
+			<?php
+			// Sticky form fields
+			if (isset($_COOKIE['username'])) {
+				// Add username to username text box if cookie is saved
+				$username = $_COOKIE['username'];
+			} else {
+				$username = '';
+			}
 
-<div class="container">
+			extract($_POST);
+			?>
+							<div class="card-content">
+								<div class="input-field">
+									<label for="username">User ID:</label>
+									<input id="username" value="<?php echo $username; ?>" name="username" type="text" size="30"
+										   maxlength="30" onkeyup="ValidateUsername(this.value);"
+										   onblur="ValidateUsername(this.value);"/>
+									<span id="usernameValidation" class="red-text text-light-3 validation-error"></span>
+								</div>
+								<div class="input-field">
+									<label for="password">Password:</label>
+									<input id="password" name="password" type="password" size="30" maxlength="30" onkeyup="ValidatePassword(this.value);" onblur="ValidatePassword(this.value);" />
+									<span id="passwordValidation" class="red-text text-light-3 validation-error"></span>
+								</div>
+								 <div>
+									<input value="rememberUsername" name="rememberUsername[]" id="rememberUsername" type="checkbox"/>
+									<label for="rememberUsername">Remember user</label>
+								</div>
+								<span class="red-text text-light-3 validation-error"><?php echo $outputText; ?></span>
+								<span class="red-text text-light-3 validation-error"> <?php echo $errorListOutput; ?></span>
+							</div>
+								<div class="card-action">
+								  <button class="btn-flat green waves-effect waves-light" type="submit" value="Login" id="submitLogin" name="login" onclick="return ValidateForm();">Login</button>
+								  <a class="card-link" href="http://ach-support.gre.ac.uk/general/password.asp" target="_blank">Password reset</a>
+								</div>
+						</form>
+					</div>
+					
+				</div>
+			</div>
 
-    <h1>eSupervison Dashboard</h1>
-
-    <img class="logo" src="imgs/greenwichLogo.png" alt="University of Greenwich logo" />
-
-<div class="row formLogin">
-<div class="col s10 m6 l6 offset-m3 offset-l3 offset-s1">
-
-<div class="card">
-
-    <form action="index.php<?php (SID != '' ? '&amp;' . SID : ''); ?>" method="post" id="login" class="col s10 m6 l6">
-
-        <?php
-        // Sticky form fields
-        if (isset($_COOKIE['username'])) {
-            // Add username to username text box if cookie is saved
-            $username = $_COOKIE['username'];
-        } else {
-            $username = '';
-        }
-
-        extract($_POST);
-        ?>
-
-        <fieldset>
-
-            <legend>
-                Login
-            </legend>
-
-<div class="row">
-      <div class="input-field col s12 m12 l12">
-                            <label for="username" id="labelUsername">User ID:</label>
-      
-                            <input id="username" value="<?php echo $username; ?>" name="username" type="text" size="30"
-                                   maxlength="30" onkeyup="ValidateUsername(this.value);"
-                                   onblur="ValidateUsername(this.value);"/>
-                            <small><span id="usernameValidation" class="validation-error"></span></small>
-                            </div>
-    
-<div class="row"></div>
-          <div class="input-field col s12 m12 l12">
-
-                            <label for="password">Password:</label>
-
-                            <input id="password" name="password" type="password" size="30" maxlength="30"
-                                   onkeyup="ValidatePassword(this.value);" onblur="ValidatePassword(this.value);"/>
-                            <small><span id="passwordValidation" class="validation-error"></span></small>
-
-</div>
-</div>
-
-
-
-<input id="rememberUsername" value="rememberUsername" name="rememberUsername[]" type="checkbox" checked="checked"/>
-<small><label for="rememberUsername">Remember user</label></small>
-
-<div class="card-action">
-
-<div class="row">
-<div class="col s6 m6 l8">
-<a href="http://ach-support.gre.ac.uk/general/password.asp" target="_blank" class="passwordReset">Password reset</a></div>
-<div class="col s6 m6 l4">
-              
-
-
-        <input type="submit" value="Login" id="submitLogin" name="login" onclick="return ValidateForm();"/>
-
-</div>
-
-</div>
-
-          
-
-        </fieldset>
-</div>
-    </form>
-    </div>
-    </div>
-
-<div class="row">
-<div class="col s10 m6 l6 offset-m3 offset-l3 offset-s1">
-            <p class="notice">
-                <small>This website uses cookies to improve your experience. By continuing you agree to these cookies
-                    being stored on your computer.
-                </small>
-            </p>
-    <span class="validation-error"><?php echo $outputText; ?></span>
-    <span class="validation-error"> <?php echo $errorListOutput; ?></span>
-            </div>
-            </div>
-
-</div>
-
-</body>
+			<div class="row">
+				<p class="col s10 m6 l6 offset-s1 offset-m3 offset-l3 notice">This website uses cookies to improve your experience. By continuing you agree to these cookies being stored on your computer.</p>
+			</div>
+		</div>
+	</body>
 
 </html>

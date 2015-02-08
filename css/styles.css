@@ -1,50 +1,18 @@
-* {
+* {}
+body {}
 
+#logo{
+max-width:200px;
+}
+span.card-title {
+margin-left:1em;
+line-height:2em;
 }
 
-body {
-
+.card-action button{
+float:right;
 }
 
-
-
-
-.validation-error{
-	padding: 5px;
-}
-
-h1{
-	text-align: center;
-}
-
-.logo{
-	max-width: 300px;
-	display: block;
-	width: 90%;
-	margin: 0 auto;
-}
-#login{
-	width: 100%;
-}
-
-#login legend{
-	color: green;
-	font-weight: bold;
-}
-
-#login fieldset{
-	border-style: none;
-}
-
-#login #submitLogin{
-	background-color: green;
-	padding: 10px 30px 10px 30px;
-	color: white;
-}
-
-.passwordReset{
-	color: gray;
-}
 .error {
     /* PHP form validation error */
 }
