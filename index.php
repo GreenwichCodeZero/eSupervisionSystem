@@ -72,7 +72,7 @@ if (count($errorList) > 0) {
     <meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
 
-    <link href="styles.css" rel="stylesheet" type="text/css"/>
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
@@ -128,9 +128,11 @@ if (count($errorList) > 0) {
 
 <div class="container">
 
-    <h2>Login</h2>
+    <h1>eSupervisor Dashboard</h1>
 
-    <form action="index.php<?php (SID != '' ? '&amp;' . SID : ''); ?>" method="post" id="login">
+    <img src="imgs/greenwichLogo.png" alt="University of Greenwich logo" />
+
+    <form action="index.php<?php (SID != '' ? '&amp;' . SID : ''); ?>" method="post" id="login" class="col s12">
 
         <?php
         // Sticky form fields
