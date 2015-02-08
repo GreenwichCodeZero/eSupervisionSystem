@@ -1,0 +1,22 @@
+* {}
+body {}
+
+#logo{
+max-width:200px;
+}
+span.card-title {
+margin-left:1em;
+line-height:2em;
+}
+
+.card-action button{
+float:right;
+}
+
+.error {
+    /* PHP form validation error */
+}
+
+.validation-error {
+    /* JavaScript form validation error */
+}
