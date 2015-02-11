@@ -1,10 +1,12 @@
 # eSupervisionSystem
 
+<p>
 Students:
 
 Active = tm112
+<br />
 Not active = jd119
-
+</p>
 
 Staff:
 
