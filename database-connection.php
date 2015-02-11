@@ -33,7 +33,7 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         if (mysqli_num_rows($studentResult) == 1) {
             // User found in student table
             if (password_verify($password, $studentPasswordHash)) {
-                $sql = "SELECT student_first, student_last, student_username, student_banner_id, student_active FROM esuper_student WHERE student_username = '$username'";
+                $sql = "SELECT student_id, student_first, student_last, student_username, student_banner_id, student_active FROM esuper_student WHERE student_username = '$username'";
                 $result = mysqli_query($link, $sql);
                 $student = mysqli_fetch_assoc($result);
                 $student += array('user_type' => 'student');
@@ -43,7 +43,7 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         } else if (mysqli_num_rows($staffResult) == 1) {
             // User found in staff table
             if (password_verify($password, $staffPasswordHash)) {
-                $sql = "SELECT staff_first, staff_last, staff_username, staff_banner_id, staff_active, staff_authorised FROM esuper_staff WHERE staff_username = '$username'";
+                $sql = "SELECT staff_id, staff_first, staff_last, staff_username, staff_banner_id, staff_active, staff_authorised FROM esuper_staff WHERE staff_username = '$username'";
                 $result = mysqli_query($link, $sql);
                 $staff = mysqli_fetch_assoc($result);
                 $staff += array('user_type' => 'staff');

@@ -14,7 +14,7 @@ if ($currentUser['user_type'] === 'staff') {
     // All staff only things here
     $userDetails = '<li>staff_first: ' . $currentUser['staff_first'] . '</li>
                     <li>staff_last: ' . $currentUser['staff_last'] . '</li>
-                    <li>staff_email: ' . $currentUser['staff_email'] . '</li>
+                    <li>staff_username: ' . $currentUser['staff_username'] . '</li>
                     <li>staff_banner_id: ' . $currentUser['staff_banner_id'] . '</li>
                     <li>staff_active: ' . $currentUser['staff_active'] . '</li>
                     <li>user_type: ' . $currentUser['user_type'] . '</li>';
@@ -28,21 +28,165 @@ if ($currentUser['user_type'] === 'staff') {
     }
 } else {
     // Student only things here
-    $userDetails = '<li>student_first: ' . $currentUser['student_first'] . '</li>
-                    <li>student_last: ' . $currentUser['student_last'] . '</li>
-                    <li>student_email: ' . $currentUser['student_email'] . '</li>
-                    <li>student_banner_id: ' . $currentUser['student_banner_id'] . '</li>
-                    <li>student_active: ' . $currentUser['student_active'] . '</li>
-                    <li>user_type: ' . $currentUser['user_type'] . '</li>';
+    $userDetails = '<b>' . $currentUser['student_first'] . ' ' . $currentUser['student_last'] . '</b> (' . $currentUser['student_username'] . ')
+                    <p>Banner ID: ' . $currentUser['student_banner_id'] . '</p>';
 }
 
+
+include '1/Styledcommunication/classes/communication.class.php';
+include '1/Styledcommunication/classes/meetings.class.php';
+include '1/Styledcommunication/classes/userDetails.class.php';
+
+// $_SESSION['user']['id']
+$stu_id = $currentUser['student_id']; // (1) = demo student id
+
+$c = new Communication ();
+
+$c->getAll('blog', 'student', $stu_id);
+$blogs = $c->getResponse();
+$blog_count = count($blogs);
+
+$c->getAll('message', 'student', $stu_id);
+$messages = $c->getResponse();
+$message_count = count($messages);
+
+$m = new Meeting ();
+$m->getAll(null, $stu_id);
+$meetings = $m->getResponse();
+$meeting_count = count($meetings);
+
+$u = new UserDetails ();
+$u->studentSuper($stu_id);
+$supervisor = $u->getResponse();
+
+
+
 ?>
+<!DOCTYPE html>
+<html>
 
-<p>Dashboard placeholder. Must be logged in to see this.</p>
+<head>
+    <title>eSupervision - Dashboard</title>
 
-<p><a href="logout.php" title="Logout">Logout</a></p>
+    <meta name="author" content="Code Zero"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<ul>
-    <?php echo $userDetails; ?>
-</ul>
+    <!--<link href="css/styles.css" rel="stylesheet" type="text/css"/>-->
+    <link href="1/Styledcommunication/css/styles.css" rel="stylesheet" type="text/css"/>
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".button-collapse").sideNav();
+            $(".dropdown-button").dropdown();
+        });
+    </script>
+</head>
 
+<body>
+<nav>
+    <div class="nav-wrapper green">
+        <ul id="nav-mobile" class="side-nav">
+            <li>
+                <a href="dashboard.php">Dashboard</a>
+            </li>
+            <li>
+                <a href="#">Communication</a>
+            </li>
+            <li>
+                <a href="#">Meetings</a>
+            </li>
+            <li>
+                <a href="#">Blog/Diary</a>
+            </li>
+            <li>
+                <a href="#">Project Uploads</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <h5 class="center-align">eSupervision Dashboard</h5>
+    </div>
+    <div class="row">
+        <div class="col s12 m6 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Student Summary</span>
+
+                    <p>
+                        <?php echo $userDetails; ?> <a href="logout.php" title="Logout">Logout</a>
+                    </p>
+                </div>
+                <div class="card-action">
+                    <a href="logout.php" title="Logout">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Supervisor Details</span>
+
+                    <p>
+                        Supervisor: <a
+                            href="#"><?php echo $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last']; ?></a>
+                    </p>
+
+                    <p>
+                        Second Marker: <a
+                            href="#"><?php echo $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last']; ?></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m6 l4">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Meeting Summary</span>
+
+                    <p>You have submitted <?php echo $meeting_count; ?> meeting records.</p>
+                </div>
+                <div class="card-action">
+                    <a href="#" title="View all meetings">View All</a>
+                    <a href="#" title="Request new meeting">Request</a>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6 l4">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Message Summary</span>
+
+                    <p>You have submitted <?php echo $message_count; ?> messages.</p>
+                </div>
+                <div class="card-action">
+                    <a href="#" title="View all messages">View All</a>
+                    <a href="#" title="Write new message">New</a>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6 l4">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Blog Summary</span>
+
+                    <p>You have submitted <?php echo $blog_count; ?> blog posts.</p>
+                </div>
+                <div class="card-action">
+                    <a href="#" title="View all blogs">View All</a>
+                    <a href="#" title="Write new blog">Write</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+
+</html>
