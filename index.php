@@ -44,7 +44,7 @@ if (isset($_POST['login'])) {
             }
 
             // Redirect to dashboard
-            header('Location: dashboard.php' . (SID != '' ? '?' . SID : ''));
+            header('Location: dashboard.php');
 
             // Close connection
             CloseConnection($link);
@@ -55,7 +55,7 @@ if (isset($_POST['login'])) {
     }
 } else if (isset($_SESSION['username'])) {
     // User is already logged in, redirect to dashboard
-    header('Location: dashboard.php' . (SID != '' ? '?' . SID : ''));
+    header('Location: dashboard.php');
 }
 
 // Check for and display any errors
@@ -67,7 +67,7 @@ if (count($errorList) > 0) {
 <html>
 
 <head>
-    <title>Login</title>
+    <title>eSupervision - Login</title>
 
     <meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
@@ -128,7 +128,7 @@ if (count($errorList) > 0) {
 <body>
 <div class="container">
     <div class="center-align">
-        <h5>eSupervison Dashboard</h5>
+        <h5>eSupervision Dashboard</h5>
         <img id="logo" class="responsive-img" src="imgs/greenwichLogo.png" alt="University of Greenwich logo"/>
     </div>
     <div class="row">
@@ -136,7 +136,7 @@ if (count($errorList) > 0) {
             <div class="card">
                 <span class="card-title green-text">Login</span>
 
-                <form action="index.php<?php (SID != '' ? '&amp;' . SID : ''); ?>" method="post" id="login">
+                <form action="index.php" method="post" id="login">
                     <?php
                     // Sticky form fields
                     if (isset($_COOKIE['username'])) {
@@ -165,7 +165,7 @@ if (count($errorList) > 0) {
                         </div>
                         <div>
                             <input value="rememberUsername" name="rememberUsername[]" id="rememberUsername"
-                                   type="checkbox"/>
+                                   type="checkbox" checked="checked"/>
                             <label for="rememberUsername">Remember user</label>
                         </div>
                         <span class="red-text text-light-3 validation-error"><?php echo $outputText; ?></span>
