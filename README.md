@@ -1,15 +1,16 @@
 # eSupervisionSystem
 
 <p>
-Students:
-
+<b>Students:</b>
+<br />
 Active = tm112
 <br />
 Not active = jd119
 </p>
 
 <p>
-Staff:
+<b>Staff:</b>
+<br />
 
 Active + authorised = tm12
 <br />
