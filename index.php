@@ -140,7 +140,13 @@ $supervisor = $u->getResponse ();
                 <p class="green-text">You have submitted
                     <?php echo $message_count; ?> Message posts</p>
                 <ul class="collection">
-                    <?php foreach ($messages as $m) { echo '<li class="collection-item" id="message_box">'; echo $m[ 'communication_body']; echo "</li>"; } ?>
+                    <?php foreach ($messages as $m) { echo '<li class="collection-item">'; echo $m[ 'communication_body']; echo "</li>"; } ?>
+                    
+            <li class="collection-item">This is a blog record example</li>
+            <li class="collection-item">This is a blog record example</li>
+            <li class="collection-item">This is a blog record example</li>
+            <li class="collection-item">This is a blog record example</li>
+            <li class="collection-item">This is a blog record example</li>
                 </ul>
             </div>
         </div>
@@ -159,7 +165,10 @@ $supervisor = $u->getResponse ();
                 <textarea name='communication_body'></textarea>
                 <button>Submit</button>
             </form>
-            <?php foreach ($blogs as $b) { echo '<p >'; echo $b[ 'communication_body']; echo "</p>"; } ?>
+            <?php foreach ($blogs as $b) { echo '<p >'; echo $b[ 'communication_body']; echo "</p>"; } ?>  <li class="collection-item">This is a meeting record example</li>
+            <li class="collection-item">This is a upload record example</li>
+            <li class="collection-item">This is a upload record example</li>
+            <li class="collection-item">This is a upload record example</li>
         </div>
 
         <!-- BLOG SECTION END -->
