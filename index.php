@@ -177,7 +177,14 @@ $supervisor = $u->getResponse ();
                 <textarea name='communication_body'></textarea>
                 <button>Submit</button>
             </form>
-            <!-- THE CODE IN foreach GENERATES EACH MEETINGS RECORD AND NEEDS TO BE STYLES AS A COLLECTION ITEM ENCLOSED IN A COLLECTION DIV - SEE MESSAGES SECTION -->
+            <!-- THE CODE IN foreach GENERATES EACH MEETINGS RECORD AND NEEDS TO BE STYLES AS A COLLECTION ITEM ENCLOSED IN A COLLECTION DIV - SEE MESSAGES SECTION 
+
+THE CODE IN THE PARAGRAPHS BELOW IS A STATIC EXAMPLE OF THE SAME RECORDS; EACH PARAGRAPHS IS TO BE STYLED AS A COLLECTION ITEM AND ENCLOSED WITHIN THE SAME CONTAINER WITH CLASS COLLECTION - FOR TESTING PURPOSES-->
+            <p>This is a meeting record example</p>
+            <p>This is a meeting record example</p>
+            <p>This is a meeting record example</p>
+            <p>This is a meeting record example</p>
+            <p>This is a meeting record example</p>
             <?php foreach ($meetings as $mg) { echo '<p >'; echo $mg[ 'meeting_title']; echo "</p>"; } ?>
         </div>
         <!-- MEETING SECTION END -->
