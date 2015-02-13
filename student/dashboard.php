@@ -33,9 +33,9 @@ if ($currentUser['user_type'] === 'staff') {
 }
 
 
-include '../1/Styledcommunication/classes/communication.class.php';
-include '../1/Styledcommunication/classes/meetings.class.php';
-include '../1/Styledcommunication/classes/userDetails.class.php';
+include '../classes/communication.class.php';
+include '../classes/meetings.class.php';
+include '../classes/userDetails.class.php';
 
 // $_SESSION['user']['id']
 $stu_id = $currentUser['student_id']; // (1) = demo student id
@@ -102,7 +102,7 @@ $supervisor = $u->getResponse();
                 <a href="blogs.php">Blog</a>
             </li>
             <li>
-                <a href="#">Uploads</a>
+                <a href="uploads.php">Uploads</a>
             </li>
         </ul>
     </div>
