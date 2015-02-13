@@ -4,7 +4,7 @@
 // Initialise session
 session_start();
 
-require 'login-check.php';
+require '../login-check.php';
 
 $currentUser = $_SESSION['currentUser'];
 $userDetails = '';
@@ -33,9 +33,9 @@ if ($currentUser['user_type'] === 'staff') {
 }
 
 
-include '1/Styledcommunication/classes/communication.class.php';
-include '1/Styledcommunication/classes/meetings.class.php';
-include '1/Styledcommunication/classes/userDetails.class.php';
+include '../1/Styledcommunication/classes/communication.class.php';
+include '../1/Styledcommunication/classes/meetings.class.php';
+include '../1/Styledcommunication/classes/userDetails.class.php';
 
 // $_SESSION['user']['id']
 $stu_id = $currentUser['student_id']; // (1) = demo student id
@@ -73,10 +73,10 @@ $supervisor = $u->getResponse();
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!--<link href="css/styles.css" rel="stylesheet" type="text/css"/>-->
-    <link href="1/Styledcommunication/css/styles.css" rel="stylesheet" type="text/css"/>
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection"/>
+    <link href="../1/Styledcommunication/css/styles.css" rel="stylesheet" type="text/css"/>
+    <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript" src="../js/materialize.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $(".button-collapse").sideNav();
@@ -93,16 +93,16 @@ $supervisor = $u->getResponse();
                 <a href="dashboard.php">Dashboard</a>
             </li>
             <li>
-                <a href="#">Communication</a>
+                <a href="meetings.php">Meetings</a>
             </li>
             <li>
-                <a href="#">Meetings</a>
+                <a href="messages.php">Messages</a>
             </li>
             <li>
-                <a href="#">Blog/Diary</a>
+                <a href="blogs.php">Blog</a>
             </li>
             <li>
-                <a href="#">Project Uploads</a>
+                <a href="#">Uploads</a>
             </li>
         </ul>
     </div>
@@ -112,21 +112,21 @@ $supervisor = $u->getResponse();
         <h5 class="center-align">eSupervision Dashboard</h5>
     </div>
     <div class="row">
-        <div class="col s12 m6 l6">
+        <div class="col s12 m12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Student Summary</span>
 
                     <p>
-                        <?php echo $userDetails; ?> <a href="logout.php" title="Logout">Logout</a>
+                        <?php echo $userDetails; ?>
                     </p>
                 </div>
                 <div class="card-action">
-                    <a href="logout.php" title="Logout">Logout</a>
+                    <a href="../logout.php" title="Logout">Logout</a>
                 </div>
             </div>
         </div>
-        <div class="col s12 m6 l6">
+        <div class="col s12 m12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Supervisor Details</span>
@@ -153,7 +153,7 @@ $supervisor = $u->getResponse();
                     <p>You have submitted <?php echo $meeting_count; ?> meeting records.</p>
                 </div>
                 <div class="card-action">
-                    <a href="#" title="View all meetings">View All</a>
+                    <a href="meetings.php" title="View all meetings">View All</a>
                     <a href="#" title="Request new meeting">Request</a>
                 </div>
             </div>
@@ -166,7 +166,7 @@ $supervisor = $u->getResponse();
                     <p>You have submitted <?php echo $message_count; ?> messages.</p>
                 </div>
                 <div class="card-action">
-                    <a href="#" title="View all messages">View All</a>
+                    <a href="messages.php" title="View all messages">View All</a>
                     <a href="#" title="Write new message">New</a>
                 </div>
             </div>
@@ -179,7 +179,7 @@ $supervisor = $u->getResponse();
                     <p>You have submitted <?php echo $blog_count; ?> blog posts.</p>
                 </div>
                 <div class="card-action">
-                    <a href="#" title="View all blogs">View All</a>
+                    <a href="blogs.php" title="View all blogs">View All</a>
                     <a href="#" title="Write new blog">Write</a>
                 </div>
             </div>
