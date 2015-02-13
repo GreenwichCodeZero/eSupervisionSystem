@@ -13,10 +13,17 @@ line-height:2em;
 float:right;
 }
 
-.error {
-    /* PHP form validation error */
-}
 
-.validation-error {
-    /* JavaScript form validation error */
+
+h5{
+    padding:1em 0;
+}
+.c_right-align{
+    float: right;
+}
+.c_left-align{
+    float:left;
+}
+#sendmessage{
+    display:none;
 }
