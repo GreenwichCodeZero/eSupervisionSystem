@@ -31,6 +31,8 @@ if (isset($_POST['login'])) {
             array_push($errorList, 'Password not entered');
         }
 
+        $currentUser = $_SESSION['currentUser'];
+
         // Check for user in database
         if (($_SESSION['currentUser'] = LoginUser($link, $username, $password)) != null) {
             // Logged in successfully
@@ -44,7 +46,7 @@ if (isset($_POST['login'])) {
             }
 
             // Redirect to dashboard
-            header('Location: dashboard.php');
+            RedirectToDashboard($_SESSION['currentUser']['user_type']);
 
             // Close connection
             CloseConnection($link);
@@ -55,13 +57,20 @@ if (isset($_POST['login'])) {
     }
 } else if (isset($_SESSION['username'])) {
     // User is already logged in, redirect to dashboard
-    header('Location: dashboard.php');
+    RedirectToDashboard($_SESSION['currentUser']['user_type']);
 }
 
 // Check for and display any errors
 if (count($errorList) > 0) {
     $errorListOutput = DisplayErrorMessages($errorList);
 }
+
+// Function that redirects the user to the relevant dashboard
+function RedirectToDashboard($userType){
+    header("Location: $userType/dashboard.php");
+
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -128,7 +137,7 @@ if (count($errorList) > 0) {
 <body>
 <div class="container">
     <div class="center-align">
-        <h5>eSupervision Dashboard</h5>
+        <h5>eSupervision</h5>
         <img id="logo" class="responsive-img" src="imgs/greenwichLogo.png" alt="University of Greenwich logo"/>
     </div>
     <div class="row">
