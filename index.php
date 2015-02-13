@@ -1,5 +1,5 @@
 <?php
-
+/*
 include 'classes/communication.class.php';
 include 'classes/meetings.class.php';
 include 'classes/userDetails.class.php';
@@ -45,8 +45,9 @@ $supervisor = $u->getResponse ();
 // $supervisor[0]['staff_first'] = Supervisor first name
 // $supervisor[0]['staff_last'] = Supervisor last name
 // $supervisor[0]['staff_id'] = Supervisor DB id
-
+*/
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -72,7 +73,6 @@ $supervisor = $u->getResponse ();
         });
     </script>
 </head>
-
 <body>
     <nav>
         <div class="nav-wrapper green">
@@ -98,15 +98,20 @@ $supervisor = $u->getResponse ();
         <div class="row">
             <h5 class="center-align">eSupervision Dashboard</h5>
 
-            <!--           SUPERVISOR/SECOND MARKER-->
+            <!-- SUPERVISOR/SECOND MARKER -->
             <span class="col s10 offset-s1 m6 c_left-align">
                        Supervisor: <?php echo $supervisor[0][ 'staff_first']. ' '.$supervisor[0][ 'staff_last']; ?>
             </span>
             <span class="col s10 offset-s1 m6 c_right-align">Second Marker:<?php echo $supervisor[0][ 'staff_first']. ' '.$supervisor[0][ 'staff_last']; ?>
             </span>
         </div>
+
+                
+        <!-- id: 1 = Blog
+			     2 = Message-->
         
-    <!--            MESSAGE FORM-->
+        
+        <!-- MESSAGE SECTION START-->
         <div id="sendmessage" class="row">
             <form id='communication' action='' method='POST' enctype="multipart/form-data" class="col s10 m12 offset-s1">
                 <!-- id: 1 = Blog
@@ -127,8 +132,8 @@ $supervisor = $u->getResponse ();
         </div>
 
         <div class="col s10 m12 offset-s1 card">
-            <a onClick="showMessageInput();" style="float: right;">                
-                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Message</div>                
+            <a onClick="showMessageInput();" style="float: right;">
+                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Message</div>
             </a>
             <div class="card-content">
                 <span class="card-title green-text">Message History</span>
@@ -139,18 +144,13 @@ $supervisor = $u->getResponse ();
                 </ul>
             </div>
         </div>
-        
+        <!--MESSAGING SECTION END-->
+        <!-- BLOG SECTION START -->
         <div class="card">
             <p class="green-text">You have submitted
                 <?php echo $blog_count; ?> Blog posts</p>
             <form name="upload" method="post" action='' enctype="multipart/form-data">
                 <h2>New blog entry</h2>
-
-                <!-- 
-		id: 1 = Blog
-			2 = Message
-	-->
-
                 <input type='hidden' name='communication_action' value='posttoblog' />
                 <input type='hidden' name='communication_from_id' value='1' />
                 <input type='hidden' name='communication_from_id' value='1' />
@@ -159,30 +159,28 @@ $supervisor = $u->getResponse ();
                 <textarea name='communication_body'></textarea>
                 <button>Submit</button>
             </form>
-            <?php foreach ($blogs as $b) { echo '<p style="border: thin solid #ccc;">'; echo $b[ 'communication_body']; echo "</p>"; } ?>
+            <?php foreach ($blogs as $b) { echo '<p >'; echo $b[ 'communication_body']; echo "</p>"; } ?>
         </div>
 
+        <!-- BLOG SECTION END -->
+        <!-- MEETING SECTION START -->
+        <div>
+            <form name="upload" method="post" action='' enctype="multipart/form-data">
+                     <p>You have submitted
+                <?php echo $meeting_count; ?> Meeting records</p>
+                <h2>New Meeting Request</h2>
+                <input type='hidden' name='meeting_action' value='request' />
+                <input type='hidden' name='meeting_from_id' value='<?php echo $stu_id;?>' />
+                <input type='hidden' name='meeting_to_id' value='<?php echo $supervisor[0][' staff_id ']; ?>'/>
+                <input type="file" name="fileToUpload" id="fileToUpload">
 
-        <form name="upload" method="post" action='' enctype="multipart/form-data">
-            <h2>New Meeting Request</h2>
-
-            <!-- 
-		id: 1 = Blog
-			2 = Message
-	-->
-
-            <input type='hidden' name='meeting_action' value='request' />
-            <input type='hidden' name='meeting_from_id' value='<?php echo $stu_id;?>' />
-            <input type='hidden' name='meeting_to_id' value='<?php echo $supervisor[0][' staff_id ']; ?>'/>
-            <input type="file" name="fileToUpload" id="fileToUpload">
-
-            <textarea name='communication_body'></textarea>
-            <button>Submit</button>
-        </form>
-        <?php foreach ($meetings as $mg) { echo '<p style="border: thin solid #ccc;">'; echo $mg['meeting_title']; echo "</p>"; } ?>
-        <p>You have submitted
-            <?php echo $meeting_count; ?> Meeting records</p>
-    </div>
-    </body>
+                <textarea name='communication_body'></textarea>
+                <button>Submit</button>
+            </form>
+            <!-- THE CODE IN foreach GENERATES EACH MEETINGS RECORD AND NEEDS TO BE STYLES AS A COLLECTION ITEM ENCLOSED IN A COLLECTION DIV - SEE MESSAGES SECTION -->
+            <?php foreach ($meetings as $mg) { echo '<p >'; echo $mg[ 'meeting_title']; echo "</p>"; } ?>
+        </div>
+        <!-- MEETING SECTION END -->
+</body>
 
     </html>
