@@ -7,6 +7,6 @@ float: right;
 .c_left-align{
 float:left;
 }
-#sendmessage{
+#sendMessage, #submitBlog, #requestMeeting{
 display:none;
 }

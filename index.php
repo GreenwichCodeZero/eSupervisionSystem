@@ -54,22 +54,17 @@ $supervisor = $u->getResponse ();
 <head>
     <title>Communication</title>
     <link href="css/styles.css" rel="stylesheet" type="text/css" />
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
     <script>
-          function showMessageInput() {
-                var newMessage = document.getElementById("sendmessage");
-                if (newMessage.style.display !== "none") {
-                    newMessage.style.display = "none";
-                } else {
-                    newMessage.style.display = "block";
-                }
-            }
+        function toggleForm(elemID, newButtonID) {
+            $(elemID).toggle();
+            $(newButtonID).toggle();
+        };
+
         $(document).ready(function () {
             $(".button-collapse").sideNav();
-
-          
         });
     </script>
 </head>
@@ -105,20 +100,12 @@ $supervisor = $u->getResponse ();
             <span class="col s10 offset-s1 m6 c_right-align">Second Marker:<?php echo $supervisor[0][ 'staff_first']. ' '.$supervisor[0][ 'staff_last']; ?>
             </span>
         </div>
-
-                
-        <!-- id: 1 = Blog
-			     2 = Message-->
-        
         
         <!-- MESSAGE SECTION START-->
-        <div id="sendmessage" class="row">
+        <div id="sendMessage" class="row">
+            <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#sendMessage', '#newMessage');"></i>
             <form id='communication' action='' method='POST' enctype="multipart/form-data" class="col s10 m12 offset-s1">
-                <!-- id: 1 = Blog
-             2 = Message -->
-
                 <input type='hidden' name='communication_action' value='sendmessage' />
-
                 <input type='hidden' name='communication_from_id' value='1' />
                 <input type='hidden' name='communication_to_id' value='<?php echo $supervisor[0][' staff_id ']; ?>'/>
                 <input type='hidden' name='communication_type_id' value='2' />
@@ -132,7 +119,7 @@ $supervisor = $u->getResponse ();
         </div>
 
         <div class="col s10 m12 offset-s1 card">
-            <a onClick="showMessageInput();" style="float: right;">
+            <a onClick="toggleForm('#sendMessage', '#newMessage');" class="c_right_align" id="newMessage">
                 <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Message</div>
             </a>
             <div class="card-content">
@@ -141,62 +128,71 @@ $supervisor = $u->getResponse ();
                     <?php echo $message_count; ?> Message posts</p>
                 <ul class="collection">
                     <?php foreach ($messages as $m) { echo '<li class="collection-item">'; echo $m[ 'communication_body']; echo "</li>"; } ?>
-                    
-            <li class="collection-item">This is a blog record example</li>
-            <li class="collection-item">This is a blog record example</li>
-            <li class="collection-item">This is a blog record example</li>
-            <li class="collection-item">This is a blog record example</li>
-            <li class="collection-item">This is a blog record example</li>
                 </ul>
             </div>
         </div>
         <!--MESSAGING SECTION END-->
+        
         <!-- BLOG SECTION START -->
-        <div class="card">
-            <p class="green-text">You have submitted
-                <?php echo $blog_count; ?> Blog posts</p>
-            <form name="upload" method="post" action='' enctype="multipart/form-data">
-                <h2>New blog entry</h2>
+        <div id="submitBlog" class="row">
+            <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
+            <form name="blogEntry" method="post" action='' enctype="multipart/form-data" class="col s10 m12 offset-s1">
                 <input type='hidden' name='communication_action' value='posttoblog' />
                 <input type='hidden' name='communication_from_id' value='1' />
                 <input type='hidden' name='communication_from_id' value='1' />
-                <input type="file" name="fileToUpload" id="fileToUpload">
-
-                <textarea name='communication_body'></textarea>
-                <button>Submit</button>
+                <div class="input-field">
+                    <textarea class="materialize-textarea" name='communication_body'></textarea>
+                    <label>New Blog Entry</label>
+                </div>
+                <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
             </form>
-            <?php foreach ($blogs as $b) { echo '<p >'; echo $b[ 'communication_body']; echo "</p>"; } ?>  <li class="collection-item">This is a meeting record example</li>
-            <li class="collection-item">This is a upload record example</li>
-            <li class="collection-item">This is a upload record example</li>
-            <li class="collection-item">This is a upload record example</li>
+        </div>
+        <div class="col s10 m12 offset-s1 card">
+            <a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry" class="c_right-align">
+                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Entry</div>
+            </a>
+            <div class="card-content">
+                <span class="card-title green-text">Blog History</span>
+                <p class="green-text">You have submitted
+                    <?php echo $blog_count; ?> Blog posts</p>
+                <ul class="collection">
+                    <?php foreach ($blogs as $b) { echo '<li class="collection-item">'; echo $b[ 'communication_body']; echo "</li>"; } ?>
+                </ul>
+            </div>
         </div>
 
         <!-- BLOG SECTION END -->
+        
         <!-- MEETING SECTION START -->
-        <div>
-            <form name="upload" method="post" action='' enctype="multipart/form-data">
-                     <p>You have submitted
-                <?php echo $meeting_count; ?> Meeting records</p>
-                <h2>New Meeting Request</h2>
+        <div id="requestMeeting" class="row">
+                      <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#requestMeeting', '#newMeeting');"></i>
+            <form name='meetingRecord' action='' method='POST' enctype="multipart/form-data" class="col s10 m12 offset-s1">
                 <input type='hidden' name='meeting_action' value='request' />
                 <input type='hidden' name='meeting_from_id' value='<?php echo $stu_id;?>' />
                 <input type='hidden' name='meeting_to_id' value='<?php echo $supervisor[0][' staff_id ']; ?>'/>
-                <input type="file" name="fileToUpload" id="fileToUpload">
-
-                <textarea name='communication_body'></textarea>
-                <button>Submit</button>
+                <div class="input-field">
+                    <textarea name='communication_body' class="materialize-textarea"></textarea>
+                    <label>Request a meeting</label>
+                </div>
+                <input class="waves-effect waves-teal waves-light btn-flat" type="file" name="fileToUpload" id="fileToUpload">
+                <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
             </form>
-            <!-- THE CODE IN foreach GENERATES EACH MEETINGS RECORD AND NEEDS TO BE STYLES AS A COLLECTION ITEM ENCLOSED IN A COLLECTION DIV - SEE MESSAGES SECTION 
+        </div>
 
-THE CODE IN THE PARAGRAPHS BELOW IS A STATIC EXAMPLE OF THE SAME RECORDS; EACH PARAGRAPHS IS TO BE STYLED AS A COLLECTION ITEM AND ENCLOSED WITHIN THE SAME CONTAINER WITH CLASS COLLECTION - FOR TESTING PURPOSES-->
-            <p>This is a meeting record example</p>
-            <p>This is a meeting record example</p>
-            <p>This is a meeting record example</p>
-            <p>This is a meeting record example</p>
-            <p>This is a meeting record example</p>
-            <?php foreach ($meetings as $mg) { echo '<p >'; echo $mg[ 'meeting_title']; echo "</p>"; } ?>
+        <div class="col s10 m12 offset-s1 card">
+            <a onClick="toggleForm('#requestMeeting', '#newMeeting');" class="c_right_align" id="newMeeting">
+                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Request a Meeting</div>
+            </a>
+            <div class="card-content">
+                <span class="card-title green-text">Meetings History</span>
+                <p class="green-text">You have submitted
+                    <?php echo $meeting_count; ?> Meeting records</p>
+                <ul class="collection">
+                    <?php foreach ($meetings as $mg) { echo '<li class="collection-item" >'; echo $mg[ 'meeting_title']; echo "</li>"; } ?>
+                </ul>
+            </div>
         </div>
         <!-- MEETING SECTION END -->
+    </div>
 </body>
-
-    </html>
+</html>
