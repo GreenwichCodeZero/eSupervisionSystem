@@ -9,9 +9,6 @@ class Security {
     private $db_base = 'mdb_codezero';
 
      public function clean ( $input ) {
-
-        // Check that this actually works - Aaron put in html text
-
         $search = array(
             '@<script[^>]*?>.*?</script>@si',   // Strip out javascript
             '@<[\/\!]*?[^<>]*?>@si',            // Strip out HTML tags

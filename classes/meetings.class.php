@@ -1,7 +1,7 @@
 <?php
 
-require_once 'classes/security.class.php'; // include security class
-require_once 'classes/file.class.php'; // include file class
+require_once 'security.class.php'; // include security class
+require_once 'file.class.php'; // include file class
 
 class Meeting {
 
@@ -53,58 +53,24 @@ class Meeting {
 		$this->action = ( isset ($_POST['meeting_action']) ) ? $_POST['meeting_action'] : null;
 
 		switch ( $this->action ) {
-			case 'request':
-				$this->requestMeeting ();
+			case 'sendmessage':
+				echo "message:";
+				$this->add ('message');
 			break;
-			case 'remove':
-				$this->removeMeeting ();
+
+			case 'posttoblog':
+				echo "Blog Post: id1";
+				$this->add ('blog');
 			break;
 
 			default: 
-				echo "nothing to do: Request was empty <pre>";
+				echo "nothing to do <pre>";
 				print_r ($_POST);
 				exit;
 			break;
 
 		}
 
-	}
-
-	private function requestMeeting () {
-		$this->meeting_content;
-		$this->from;
-		$this->to;
-		$this->date;
-		$this->meeting_status = 1; // Default: requested
-		$this->meeting_timeslot_id;
-
-		$result = $this->con->prepare(
-			"INSERT INTO `esuper_meeting` (meeting_from_id,meeting_to_id, meeting_date_added, meeting_timeslot_id, meeting_type_id, meeting_content)
-			VALUES 
-			(:from_id,:to_id,:date_added,:time_added,:type_id ,:comm_body);");
-
-        $result->bindValue(':from_id', $this->from);
-        $result->bindValue(':to_id', $this->to);
-        $result->bindValue(':date_added', $this->date_addded);
-        $result->bindValue(':time_added', $this->date_addded );
-        $result->bindValue(':type_id', $this->type);
-        $result->bindValue(':comm_body', $this->body);
-        try {
-        	$result->execute();
-        }
-
-        catch (PDOException $e) {
-        	echo "ERROR:";
-        	echo "\n\n\r\r". $e->getMessage ();
-        	exit;
-        }
-
-        // $row = $result->fetch(PDO::FETCH_ASSOC);
-        $result = null;
-        $this->response ('Your content was successfully commited');
-
-		// insertinto meeting
-		// insertinto lastid meeting_times
 	}
 
 	public function validate () {
@@ -122,8 +88,9 @@ class Meeting {
 	public function add ( $type ) {
 
 		switch ( $type ) {
-			case 'request':
-			$this-
+			case 'message':
+				$this->type = 2;
+				$this->to = $_POST ['meeting_to_id'];
 			break;
 
 			case 'blog':
