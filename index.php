@@ -130,7 +130,6 @@ function RedirectToDashboard($userType){
             document.getElementById('passwordValidation').innerHTML = output;
             return output;
         }
-        //-->
     </script>
 </head>
 
@@ -161,28 +160,23 @@ function RedirectToDashboard($userType){
                     <div class="card-content">
                         <div class="input-field">
                             <label for="username">User ID:</label>
-                            <input id="username" value="<?php echo $username; ?>" name="username" type="text" size="30"
-                                   maxlength="30" onkeyup="ValidateUsername(this.value);"
-                                   onblur="ValidateUsername(this.value);"/>
+                            <input id="username" value="<?php echo $username; ?>" name="username" type="text" size="30" maxlength="30" onkeyup="ValidateUsername(this.value);" onblur="ValidateUsername(this.value);"/>
                             <span id="usernameValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
                         <div class="input-field">
                             <label for="password">Password:</label>
-                            <input id="password" name="password" type="password" size="30" maxlength="30"
-                                   onkeyup="ValidatePassword(this.value);" onblur="ValidatePassword(this.value);"/>
+                            <input id="password" name="password" type="password" size="30" maxlength="30" onkeyup="ValidatePassword(this.value);" onblur="ValidatePassword(this.value);"/>
                             <span id="passwordValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
                         <div>
-                            <input value="rememberUsername" name="rememberUsername[]" id="rememberUsername"
-                                   type="checkbox" checked="checked"/>
+                            <input value="rememberUsername" name="rememberUsername[]" id="rememberUsername" type="checkbox" checked="checked"/>
                             <label for="rememberUsername">Remember user</label>
                         </div>
                         <span class="red-text text-light-3 validation-error"><?php echo $outputText; ?></span>
                         <span class="red-text text-light-3 validation-error"> <?php echo $errorListOutput; ?></span>
                     </div>
                     <div class="card-action">
-                        <button class="btn-flat green waves-effect waves-light" type="submit" value="Login"
-                                id="submitLogin" name="login" onclick="return ValidateForm();">Login
+                        <button class="btn-flat green waves-effect waves-light white-text" type="submit" value="Login" id="submitLogin" name="login" onclick="return ValidateForm();">Login
                         </button>
                         <a class="card-link" href="http://ach-support.gre.ac.uk/general/password.asp" target="_blank">Password
                             reset</a>
@@ -193,8 +187,7 @@ function RedirectToDashboard($userType){
     </div>
 
     <div class="row">
-        <p class="col s10 m6 l6 offset-s1 offset-m3 offset-l3 notice">This website uses cookies to improve your
-            experience. By continuing you agree to these cookies being stored on your computer.</p>
+        <p class="col s10 m6 l6 offset-s1 offset-m3 offset-l3 notice">This website uses cookies to improve your experience. By continuing you agree to these cookies being stored on your computer.</p>
     </div>
 </div>
 </body>
