@@ -7,6 +7,8 @@ require '../login-check.php';
 $currentUser = $_SESSION['currentUser'];
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
+include '../classes/userDetails.class.php';
+
 
 $stu_id = $currentUser['student_id']; // (1) = demo student id
 $stu_user = $currentUser['student_username']; // (1) = demo student id
@@ -29,15 +31,18 @@ if ($_POST['communication_action']){
 
 $c->getAll('blog', $stu_user);
 $blogs = $c->getResponse();
-$sent_count = count($blogs);
+$blog_count = count($blogs);
 
 
+$u = new UserDetails ();
+$u->studentSuper($stu_id);
+$supervisor = $u->getResponse();
 
-$sentcount = 0;
 
 ?>
 
-  <title>Communication</title>
+
+  <title>Messages</title>
     <link href="../css/styles.css" rel="stylesheet" type="text/css" />
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection" />
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -75,29 +80,45 @@ $sentcount = 0;
     </nav>
 
     <div class="container">
+    <div class="row">
 
 
 
 
-<?php 
-foreach ($blogs as $b) {
-	echo "Blog Posts: ";
-	echo "message post:". ++$sentcount;
-	echo "<pre>";
-		print_r ($b);
-	echo "</pre>";
-}
+        <!-- BLOG SECTION START -->
+        <div id="submitBlog" class="row">
+            <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
+            <form name="blogEntry" method="post" action='' enctype="multipart/form-data" class="col s10 m12 offset-s1">
+                <input type='hidden' name='communication_action' value='posttoblog' />
+                <input type='hidden' name='communication_from_id' value='<?php echo $stu_user; ?>' />
+                <input type='hidden' name='communication_to_id' value='blog' />
+                <div class="input-field">
+                    <textarea class="materialize-textarea" name='communication_body'></textarea>
+                    <label>New Blog Entry</label>
+                </div>
+                <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
+            </form>
+        </div>
+        <div class="col s10 m12 offset-s1 card">
+            <a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry" class="c_right-align">
+                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Entry</div>
+            </a>
+            <div class="card-content">
+                <span class="card-title green-text">Blog History</span>
+                <p class="green-text">You have submitted
+                    <?php echo $blog_count; ?> Blog posts</p>
+                <ul class="collection">
+                    <?php foreach ($blogs as $b) { echo '<li class="collection-item">'; echo $b[ 'communication_body']; echo "</li>"; } ?>
+                </ul>
+            </div>
+        </div>
 
+        <!-- BLOG SECTION END -->
+    </div>
 
-?>
-
-
-
-
-
-
-
-
-</div>
-
-</body>
+</div> <!-- end container -->
+</body><script>
+$(document).ready(function(){
+    $('.modal-trigger').leanModal();
+  });
+</script>
