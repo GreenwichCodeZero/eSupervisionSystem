@@ -170,15 +170,14 @@ function RedirectToDashboard($userType){
                         </div>
                         <div>
                             <input value="rememberUsername" name="rememberUsername[]" id="rememberUsername" type="checkbox" checked="checked"/>
-                            <label for="rememberUsername">Remember user</label>
+                            <label for="rememberUsername" class="green-text">Remember user</label>
                         </div>
-                        <span class="red-text text-light-3 validation-error"><?php echo $outputText; ?></span>
-                        <span class="red-text text-light-3 validation-error"> <?php echo $errorListOutput; ?></span>
+                        <div class="red-text text-light-3 validation-error"><?php echo $outputText; ?><?php echo $errorListOutput; ?></div>
                     </div>
                     <div class="card-action">
-                        <button class="btn-flat green waves-effect waves-light white-text" type="submit" value="Login" id="submitLogin" name="login" onclick="return ValidateForm();">Login
+                        <button class="c_right_align btn-flat green waves-effect waves-light white-text" type="submit" value="Login" id="submitLogin" name="login" onclick="return ValidateForm();">Login
                         </button>
-                        <a class="card-link" href="http://ach-support.gre.ac.uk/general/password.asp" target="_blank">Password
+                        <a class="c_left-align card-link" href="http://ach-support.gre.ac.uk/general/password.asp" target="_blank">Password
                             reset</a>
                     </div>
                 </form>
