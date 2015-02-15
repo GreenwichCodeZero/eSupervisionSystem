@@ -66,7 +66,7 @@ if (count($errorList) > 0) {
 }
 
 // Function that redirects the user to the relevant dashboard
-function RedirectToDashboard($userType){
+function RedirectToDashboard($userType) {
     header("Location: $userType/dashboard.php");
 
 }
@@ -87,23 +87,24 @@ function RedirectToDashboard($userType){
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
     <script type="text/javascript">
-        <!--
-        // Client-side form validation
-        // Function to display any error messages on form submit
-        /**
-         * @return {boolean}
-         */
-        function ValidateForm() {
-            var isValid = true;
+        <
+        !--
+            // Client-side form validation
+            // Function to display any error messages on form submit
+            /**
+             * @return {boolean}
+             */
+                function ValidateForm() {
+                var isValid = true;
 
-            // Validate username
-            if (ValidateUsername(document.getElementById('username').value) != '') isValid = false;
+                // Validate username
+                if (ValidateUsername(document.getElementById('username').value) != '') isValid = false;
 
-            // Validate password
-            if (ValidatePassword(document.getElementById('password').value) != '') isValid = false;
+                // Validate password
+                if (ValidatePassword(document.getElementById('password').value) != '') isValid = false;
 
-            return isValid;
-        }
+                return isValid;
+            }
 
         // Function to validate the username
         function ValidateUsername(username) {
@@ -142,8 +143,6 @@ function RedirectToDashboard($userType){
     <div class="row">
         <div class="col s10 m6 l6 offset-s1 offset-m3 offset-l3">
             <div class="card">
-                <span class="card-title green-text">Login</span>
-
                 <form action="index.php" method="post" id="login">
                     <?php
                     // Sticky form fields
@@ -158,26 +157,35 @@ function RedirectToDashboard($userType){
                     ?>
 
                     <div class="card-content">
+                        <span class="card-title green-text">Login</span>
+
                         <div class="input-field">
                             <label for="username">User ID:</label>
-                            <input id="username" value="<?php echo $username; ?>" name="username" type="text" size="30" maxlength="30" onkeyup="ValidateUsername(this.value);" onblur="ValidateUsername(this.value);"/>
+                            <input id="username" value="<?php echo $username; ?>" name="username" type="text" size="30"
+                                   maxlength="30" onkeyup="ValidateUsername(this.value);"
+                                   onblur="ValidateUsername(this.value);"/>
                             <span id="usernameValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
                         <div class="input-field">
                             <label for="password">Password:</label>
-                            <input id="password" name="password" type="password" size="30" maxlength="30" onkeyup="ValidatePassword(this.value);" onblur="ValidatePassword(this.value);"/>
+                            <input id="password" name="password" type="password" size="30" maxlength="30"
+                                   onkeyup="ValidatePassword(this.value);" onblur="ValidatePassword(this.value);"/>
                             <span id="passwordValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
                         <div>
-                            <input value="rememberUsername" name="rememberUsername[]" id="rememberUsername" type="checkbox" checked="checked"/>
+                            <input value="rememberUsername" name="rememberUsername[]" id="rememberUsername"
+                                   type="checkbox" checked="checked"/>
                             <label for="rememberUsername" class="green-text">Remember user</label>
                         </div>
-                        <div class="red-text text-light-3 validation-error"><?php echo $outputText; ?><?php echo $errorListOutput; ?></div>
+                        <div
+                            class="red-text text-light-3 validation-error"><?php echo $outputText; ?><?php echo $errorListOutput; ?></div>
                     </div>
                     <div class="card-action">
-                        <button class="c_right_align btn-flat green waves-effect waves-light white-text" type="submit" value="Login" id="submitLogin" name="login" onclick="return ValidateForm();">Login
+                        <button class="c_right_align btn-flat green waves-effect waves-light white-text" type="submit"
+                                value="Login" id="submitLogin" name="login" onclick="return ValidateForm();">Login
                         </button>
-                        <a class="c_left-align card-link" href="http://ach-support.gre.ac.uk/general/password.asp" target="_blank">Password
+                        <a class="c_left-align card-link" href="http://ach-support.gre.ac.uk/general/password.asp"
+                           target="_blank">Password
                             reset</a>
                     </div>
                 </form>
@@ -186,7 +194,8 @@ function RedirectToDashboard($userType){
     </div>
 
     <div class="row">
-        <p class="col s10 m6 l6 offset-s1 offset-m3 offset-l3 notice">This website uses cookies to improve your experience. By continuing you agree to these cookies being stored on your computer.</p>
+        <p class="col s10 m6 l6 offset-s1 offset-m3 offset-l3 notice">This website uses cookies to improve your
+            experience. By continuing you agree to these cookies being stored on your computer.</p>
     </div>
 </div>
 </body>
