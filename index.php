@@ -140,51 +140,46 @@ function RedirectToDashboard($userType){
         <img id="logo" class="responsive-img" src="imgs/greenwichLogo.png" alt="University of Greenwich logo"/>
     </div>
     <div class="row">
-        <div class="col s10 m6 l6 offset-s1 offset-m3 offset-l3">
-            <div class="card">
-                <span class="card-title green-text">Login</span>
-
+        <div class="card col s10 m6 l6 offset-s1 offset-m3 offset-l3">
+            <div class="card-content">
+                <h3 class="card-title green-text">Login</h3>
                 <form action="index.php" method="post" id="login">
                     <?php
                     // Sticky form fields
                     if (isset($_COOKIE['username'])) {
-                        // Add username to username text box if cookie is saved
+                    // Add username to username text box if cookie is saved
                         $username = $_COOKIE['username'];
                     } else {
                         $username = '';
                     }
-
                     extract($_POST);
                     ?>
-
-                    <div class="card-content">
-                        <div class="input-field">
-                            <label for="username">User ID:</label>
-                            <input id="username" value="<?php echo $username; ?>" name="username" type="text" size="30" maxlength="30" onkeyup="ValidateUsername(this.value);" onblur="ValidateUsername(this.value);"/>
-                            <span id="usernameValidation" class="red-text text-light-3 validation-error"></span>
-                        </div>
-                        <div class="input-field">
-                            <label for="password">Password:</label>
-                            <input id="password" name="password" type="password" size="30" maxlength="30" onkeyup="ValidatePassword(this.value);" onblur="ValidatePassword(this.value);"/>
-                            <span id="passwordValidation" class="red-text text-light-3 validation-error"></span>
-                        </div>
-                        <div>
-                            <input value="rememberUsername" name="rememberUsername[]" id="rememberUsername" type="checkbox" checked="checked"/>
-                            <label for="rememberUsername" class="green-text">Remember user</label>
-                        </div>
-                        <div class="red-text text-light-3 validation-error"><?php echo $outputText; ?><?php echo $errorListOutput; ?></div>
+              
+                    <div class="input-field">
+                        <label for="username">User ID:</label>
+                        <input id="username" value="<?php echo $username; ?>" name="username" type="text" size="30" maxlength="30" onkeyup="ValidateUsername(this.value);" onblur="ValidateUsername(this.value);"/>
+                        <span id="usernameValidation" class="red-text text-light-3 validation-error"></span>
                     </div>
-                    <div class="card-action">
-                        <button class="c_right_align btn-flat green waves-effect waves-light white-text" type="submit" value="Login" id="submitLogin" name="login" onclick="return ValidateForm();">Login
-                        </button>
-                        <a class="c_left-align card-link" href="http://ach-support.gre.ac.uk/general/password.asp" target="_blank">Password
-                            reset</a>
+                    <div class="input-field">
+                        <label for="password">Password:</label>
+                        <input id="password" name="password" type="password" size="30" maxlength="30" onkeyup="ValidatePassword(this.value);" onblur="ValidatePassword(this.value);"/>
+                        <span id="passwordValidation" class="red-text text-light-3 validation-error"></span>
                     </div>
-                </form>
-            </div>
+                    <div>
+                        <input value="rememberUsername" name="rememberUsername[]" id="rememberUsername" type="checkbox" checked="checked"/>
+                        <label for="rememberUsername" class="green-text">Remember user</label>
+                    </div>
+                    <div class="red-text text-light-3 validation-error"><?php echo $outputText; ?><?php echo $errorListOutput; ?></div>
+                </div>
+                <div class="card-action">
+                    <button class="c_right_align btn-flat green waves-effect waves-light white-text" type="submit" value="Login" id="submitLogin" name="login" onclick="return ValidateForm();">Login
+                    </button>
+                    <a class="c_left-align card-link" href="http://ach-support.gre.ac.uk/general/password.asp" target="_blank">Password
+                        reset</a>
+                </div>
+            </form>
         </div>
     </div>
-
     <div class="row">
         <p class="col s10 m6 l6 offset-s1 offset-m3 offset-l3 notice">This website uses cookies to improve your experience. By continuing you agree to these cookies being stored on your computer.</p>
     </div>
