@@ -59,7 +59,9 @@ $u = new UserDetails ();
 $u->studentSuper($stu_id);
 $supervisor = $u->getResponse();
 
-
+$u2 = new UserDetails ();
+$u2->studentSM($stu_id);
+$secondMarker = $u2->getResponse();
 
 ?>
 <!DOCTYPE html>
@@ -132,13 +134,11 @@ $supervisor = $u->getResponse();
                     <span class="card-title green-text">Supervisor Details</span>
 
                     <p>
-                        Supervisor: <a
-                            href="#"><?php echo $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last']; ?></a>
+                        Supervisor:<?php echo "<a href=" . '"' . $supervisor[0]['staff_profile_link'] . '" target="_blank">' . $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last'] . "</a>"; ?>
                     </p>
 
                     <p>
-                        Second Marker: <a
-                            href="#"><?php echo $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last']; ?></a>
+                        Second Marker:<?php echo "<a href=" . '"' . $secondMarker[0]['staff_profile_link'] . '" target="_blank">' . $secondMarker[0]['staff_first'] . ' ' . $secondMarker[0]['staff_last'] . "</a>"; ?>
                     </p>
                 </div>
             </div>
