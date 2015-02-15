@@ -4,13 +4,6 @@ body {}
 #logo{
     max-width:200px;
 }
-span.card-title {
-    margin-left:1em;
-    line-height:2em;
-}
-h5{
-    padding:1em 0;
-}
 .c_right-align{
     float: right;
 }
