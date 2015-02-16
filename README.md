@@ -5,7 +5,7 @@ Master link: http://stuiis.cms.gre.ac.uk/codezero/
 <p>
 <b>Students:</b>
 <br />
-Active = tm112, da236, la234, tb117, bd451, la345 bl332
+Active = tm112, da236, la234, tb117, bd451, la345, bl332
 <br />
 Not active = jd119, kb528
 </p>
