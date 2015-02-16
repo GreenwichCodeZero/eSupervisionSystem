@@ -150,7 +150,7 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">List of project students</span>
-
+                    <br>
                    <?php
                    foreach($students as $student){
                     echo $student['student_first'] . " " . $student['student_last'] . "<br>";
