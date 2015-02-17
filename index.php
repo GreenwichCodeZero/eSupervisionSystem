@@ -22,31 +22,38 @@ if (isset($_POST['login'])) {
         // Validate username
         $username = mysqli_real_escape_string($link, stripslashes($_POST['username']));
         if (preg_match('/^$|\s+/', $username)) {
-            array_push($errorList, 'Username not entered');
+            array_push($errorList, 'Enter a username');
         }
 
         // Validate password
         $password = mysqli_real_escape_string($link, stripslashes($_POST['password']));
         if (preg_match('/^$|\s+/', $password)) {
-            array_push($errorList, 'Password not entered');
+            array_push($errorList, 'Enter a password');
         }
 
-        $currentUser = $_SESSION['currentUser'];
-
         // Check for user in database
-        if (($_SESSION['currentUser'] = LoginUser($link, $username, $password)) != null) {
-            // Logged in successfully
-            // Check if 'remember username' was checked
-            if (isset($_POST['rememberUsername'])) {
-                // Checked, set cookie to expire in 28 days
-                setcookie('username', $username, (time() + (3600 * 24 * 28)));
-            } else {
-                // Unchecked, set cookie to expire one hour previously
-                setcookie('username', '', (time() - 3600));
-            }
+        if (($currentUser = LoginUser($link, $username, $password)) != null) {
+            // Check if user is active
+            if ($currentUser['is_active'] === '1') {
+                // User is active
+                $_SESSION['currentUser'] = $currentUser;
 
-            // Redirect to dashboard
-            RedirectToDashboard($_SESSION['currentUser']['user_type']);
+                // Logged in successfully
+                // Check if 'remember username' was checked
+                if (isset($_POST['rememberUsername'])) {
+                    // Checked, set cookie to expire in 28 days
+                    setcookie('username', $username, (time() + (3600 * 24 * 28)));
+                } else {
+                    // Unchecked, set cookie to expire one hour previously
+                    setcookie('username', '', (time() - 3600));
+                }
+
+                // Redirect to dashboard
+                RedirectToDashboard($_SESSION['currentUser']['user_type']);
+            } else {
+                // User is not active
+                array_push($errorList, 'Your account is not active, contact student services');
+            }
 
             // Close connection
             CloseConnection($link);
@@ -68,7 +75,6 @@ if (count($errorList) > 0) {
 // Function that redirects the user to the relevant dashboard
 function RedirectToDashboard($userType) {
     header("Location: $userType/dashboard.php");
-
 }
 
 ?>
@@ -87,22 +93,22 @@ function RedirectToDashboard($userType) {
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
     <script type="text/javascript">
-            // Client-side form validation
-            // Function to display any error messages on form submit
-            /**
-             * @return {boolean}
-             */
-                function ValidateForm() {
-                var isValid = true;
+        // Client-side form validation
+        // Function to display any error messages on form submit
+        /**
+         * @return {boolean}
+         */
+        function ValidateForm() {
+            var isValid = true;
 
-                // Validate username
-                if (ValidateUsername(document.getElementById('username').value) != '') isValid = false;
+            // Validate username
+            if (ValidateUsername(document.getElementById('username').value) != '') isValid = false;
 
-                // Validate password
-                if (ValidatePassword(document.getElementById('password').value) != '') isValid = false;
+            // Validate password
+            if (ValidatePassword(document.getElementById('password').value) != '') isValid = false;
 
-                return isValid;
-            }
+            return isValid;
+        }
 
         // Function to validate the username
         function ValidateUsername(username) {

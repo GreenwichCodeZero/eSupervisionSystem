@@ -1,44 +1,29 @@
 <?php
-// A dashboard placeholder, demonstrating access to the current user
+// Student dashboard page
 
 // Initialise session
 session_start();
 
 require '../login-check.php';
 
-$currentUser = $_SESSION['currentUser'];
+$currentStudent = $_SESSION['currentUser'];
 $userDetails = '';
 
 // Determine permissions of current user
-if ($currentUser['user_type'] === 'staff') {
-    // All staff only things here
-    $userDetails = '<li>staff_first: ' . $currentUser['staff_first'] . '</li>
-                    <li>staff_last: ' . $currentUser['staff_last'] . '</li>
-                    <li>staff_username: ' . $currentUser['staff_username'] . '</li>
-                    <li>staff_banner_id: ' . $currentUser['staff_banner_id'] . '</li>
-                    <li>staff_active: ' . $currentUser['staff_active'] . '</li>
-                    <li>user_type: ' . $currentUser['user_type'] . '</li>';
-
-    if ($currentUser['staff_authorised'] === '1') {
-        // Authorised staff only things here
-        $userDetails .= '<li>staff_authorised: yes</li>';
-    } else {
-        // Unauthorised staff only things here
-        $userDetails .= '<li>staff_authorised: no</li>';
-    }
+if ($currentStudent['user_type'] === 'staff') {
+    // Redirect to staff dashboard
+    header('Location: /codezero/staff/dashboard.php');
 } else {
     // Student only things here
-    $userDetails = '<b>' . $currentUser['student_first'] . ' ' . $currentUser['student_last'] . '</b> (' . $currentUser['student_username'] . ')
-                    <p>Banner ID: ' . $currentUser['student_banner_id'] . '</p>';
+    $userDetails = '<b>' . $currentStudent['student_first'] . ' ' . $currentStudent['student_last'] . '</b> (' . $currentStudent['student_username'] . ')
+                    <p>Banner ID: ' . $currentStudent['student_banner_id'] . '</p>';
 }
-
 
 include '../classes/communication.class.php';
 include '../classes/meetings.class.php';
 include '../classes/userDetails.class.php';
 
-// $_SESSION['user']['id']
-$stu_id = $currentUser['student_id']; // (1) = demo student id
+$stu_id = $currentStudent['student_id'];
 
 $c = new Communication ();
 
@@ -74,7 +59,6 @@ $secondMarker = $u2->getResponse();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!--<link href="css/styles.css" rel="stylesheet" type="text/css"/>-->
     <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -138,7 +122,8 @@ $secondMarker = $u2->getResponse();
                     </p>
 
                     <p>
-                        Second Marker: <?php echo "<a href=" . '"' . $secondMarker[0]['staff_profile_link'] . '" target="_blank">' . $secondMarker[0]['staff_first'] . ' ' . $secondMarker[0]['staff_last'] . "</a>"; ?>
+                        Second
+                        Marker: <?php echo "<a href=" . '"' . $secondMarker[0]['staff_profile_link'] . '" target="_blank">' . $secondMarker[0]['staff_first'] . ' ' . $secondMarker[0]['staff_last'] . "</a>"; ?>
                     </p>
                 </div>
             </div>
