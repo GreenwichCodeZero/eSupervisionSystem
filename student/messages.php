@@ -20,16 +20,11 @@ if ($_POST['communication_action']){
 
     try { $c->insert (); }
 	catch (Exception $e){
-
-        // echo returns dual submit possibility 
-        // needs to be a redirect to prevent resubmission
-		// echo $e->getMessage ();
         
         $el->newList()->type('error')->message ($e->getMessage ())->go('messages.php');
 		exit;
 	}
 	
-
     $el->newList()->type('success')->message ($c->getResponse ())->go('messages.php');
     exit;
 

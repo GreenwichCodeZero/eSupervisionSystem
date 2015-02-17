@@ -8,6 +8,7 @@ $currentUser = $_SESSION['currentUser'];
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
 include '../classes/userDetails.class.php';
+include '../classes/errorList.class.php';
 
 
 $stu_id = $currentUser['student_id']; // (1) = demo student id
@@ -15,19 +16,24 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
 
 $c = new Communication ();
 if ($_POST['communication_action']){
+    $el = new errorList ();
+
     try { $c->insert (); }
 	catch (Exception $e){
-		echo $e->getMessage ();
-		return false;
-	}
-	echo $c->getResponse ();
+       $el->newList()->type('error')->message ($e->getMessage ())->go('blogs.php');
+        exit;
+    }
+    
+    $el->newList()->type('success')->message ($c->getResponse ())->go('blogs.php');
+    exit;
+
 }
 
-// echo "<pre>";
+$el = new errorList ();
+if ($el->exists ()){
+    echo $el->getResponse ();
+}
 
-// print_r ($_POST);
-
-// echo "</pre>";
 
 $c->getAll('blog', $stu_user);
 $blogs = $c->getResponse();
