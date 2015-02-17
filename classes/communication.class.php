@@ -54,17 +54,17 @@ class Communication {
 
 		switch ( $this->action ) {
 			case 'sendmessage':
-				echo "message:";
+				// echo "message:";
 				$this->add ('message');
 			break;
 
 			case 'posttoblog':
-				echo "Blog Post: id1";
+				// echo "Blog Post: id1";
 				$this->add ('blog');
 			break;
 
 			default: 
-				echo "nothing to do <pre>";
+				// echo "nothing to do <pre>";
 				print_r ($_POST);
 				exit;
 			break;
@@ -174,8 +174,8 @@ class Communication {
 			case 'message':
 				$this->type_id = 2;
 			break;
-
 		}
+		
 			$result = $this->con->prepare(
 			'SELECT `communication_id`, `communication_body`, `communication_date_added`, `communication_file_id` FROM
 			`esuper_communication` WHERE `communication_type_id` ='.$this->type_id.'
