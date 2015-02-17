@@ -63,16 +63,19 @@ $supervisor = $u->getResponse();
         <div class="nav-wrapper green">
             <ul id="nav-mobile" class="side-nav">
                 <li>
-                    <a href="#">Communication</a>
+                    <a href="dashboard.php">Dashboard</a>
                 </li>
                 <li>
-                    <a href="#">Meetings</a>
+                    <a href="messages.php">Communication</a>
                 </li>
                 <li>
-                    <a href="#">Blog/Diary</a>
+                    <a href="meetings.php">Meetings</a>
                 </li>
                 <li>
-                    <a href="#">Project Uploads</a>
+                    <a href="blogs.php">Blog/Diary</a>
+                </li>
+                <li>
+                    <a href="uploads.php">Project Uploads</a>
                 </li>
             </ul>
             <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>

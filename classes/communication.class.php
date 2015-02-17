@@ -106,6 +106,22 @@ class Communication {
 
 		}
 
+		$this->file_id = 0;
+
+		     if($_FILES['fileToUpload']['size'] > 0) {
+
+		        $f = new File ();
+		        try { $f->add ($this->from); }
+		        catch (Exception $e){
+		        	echo $e->getMessage ();
+		        	exit;
+		        }
+
+		        $this->file_id = $f->getResponse ();
+
+		        $this->response ('file uploaded: '.$this->file_id);
+		    	
+	    	}
 
 		$this->from = $_POST ['communication_from_id'];
 		$this->date_addded = time();
@@ -113,9 +129,9 @@ class Communication {
 		$this->body = $_POST ['communication_body'];
 
 		$result = $this->con->prepare(
-			"INSERT INTO `esuper_communication` (communication_from_id,communication_to_id, communication_date_added, communication_time_added, communication_type_id, communication_body)
+			"INSERT INTO `esuper_communication` (communication_from_id,communication_to_id, communication_date_added, communication_time_added, communication_type_id, communication_body, communication_file_id)
 			VALUES 
-			(:from_id,:to_id,:date_added,:time_added,:type_id ,:comm_body);");
+			(:from_id,:to_id,:date_added,:time_added,:type_id ,:comm_body, :comm_file_id);");
 
         $result->bindValue(':from_id', $this->from);
         $result->bindValue(':to_id', $this->to);
@@ -123,36 +139,28 @@ class Communication {
         $result->bindValue(':time_added', date("h:i:s"));
         $result->bindValue(':type_id', $this->type);
         $result->bindValue(':comm_body', $this->body);
+        $result->bindValue(':comm_file_id', $this->file_id);
         try {
         	$result->execute();
         }
 
         catch (PDOException $e) {
-        	echo "ERROR:";
         	echo "\n\n\r\r". $e->getMessage ();
         	exit;
         }
 
         // $row = $result->fetch(PDO::FETCH_ASSOC);
         $result = null;
-        $this->response ('Your content was successfully commited');
 
-     //    echo "trying file <br><br>";
+        if ( mail ('bd118@greenwich.ac.uk, '.$this->from.'@greenwich.ac.uk',
+        	'eSupervision
+        	System', 'A new message was submitted and is waiting for you on the eSupervision System') ){
+               $this->response ('Your content was commited successfully and your tutor has been notified .');
+        } else {
+               $this->response ('Your content was commited successfully but your tutor could not be notified.');
+        }
 
-      
-     //    if (!$_FILES['fileToUpload']['error']) {
-     //    	echo "<pre>";
-     //    	print_r ($_FILES);
 
-	    //     $f = new File ();
-	    //     try { $f->add (); }
-	    //     catch (Exception $e){
-	    //     	echo $e->getMessage ();
-	    //     	exit;
-	    //     }
-
-	    //     echo "<br><br>end test";
-    	// }	
 	}
 
 	// Find a comment by comment id, type, who posted etc.
@@ -169,7 +177,7 @@ class Communication {
 
 		}
 			$result = $this->con->prepare(
-			'SELECT `communication_body`, `communication_date_added`FROM
+			'SELECT `communication_id`, `communication_body`, `communication_date_added`, `communication_file_id` FROM
 			`esuper_communication` WHERE `communication_type_id` ='.$this->type_id.'
 			AND `communication_from_id` = "'.$user.'"');
 

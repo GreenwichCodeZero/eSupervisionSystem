@@ -64,7 +64,6 @@ class UserDetails {
 			AND
 			`esuper_staff`.`staff_username` = "'.$staff_username.'"');
         
-        $result->bindValue(':student_id', $student_id);
         try {
         	$result->execute();
         }

@@ -99,21 +99,21 @@ $secondMarker = $u2->getResponse();
 <nav>
     <div class="nav-wrapper green">
         <ul id="nav-mobile" class="side-nav">
-            <li>
-                <a href="dashboard.php">Dashboard</a>
-            </li>
-            <li>
-                <a href="meetings.php">Meetings</a>
-            </li>
-            <li>
-                <a href="messages.php">Messages</a>
-            </li>
-            <li>
-                <a href="blogs.php">Blog</a>
-            </li>
-            <li>
-                <a href="uploads.php">Uploads</a>
-            </li>
+              <li>
+                    <a href="dashboard.php">Dashboard</a>
+                </li>
+                <li>
+                    <a href="messages.php">Communication</a>
+                </li>
+                <li>
+                    <a href="meetings.php">Meetings</a>
+                </li>
+                <li>
+                    <a href="blogs.php">Blog/Diary</a>
+                </li>
+                <li>
+                    <a href="uploads.php">Project Uploads</a>
+                </li>
         </ul>
     </div>
 </nav>

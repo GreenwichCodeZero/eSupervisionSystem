@@ -65,17 +65,21 @@ $supervisor = $u->getResponse();
     <nav>
         <div class="nav-wrapper green">
             <ul id="nav-mobile" class="side-nav">
+               
                 <li>
-                    <a href="#">Communication</a>
+                    <a href="dashboard.php">Dashboard</a>
                 </li>
                 <li>
-                    <a href="#">Meetings</a>
+                    <a href="messages.php">Communication</a>
                 </li>
                 <li>
-                    <a href="#">Blog/Diary</a>
+                    <a href="meetings.php">Meetings</a>
                 </li>
                 <li>
-                    <a href="#">Project Uploads</a>
+                    <a href="blogs.php">Blog/Diary</a>
+                </li>
+                <li>
+                    <a href="uploads.php">Project Uploads</a>
                 </li>
             </ul>
             <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
@@ -111,7 +115,19 @@ $supervisor = $u->getResponse();
                 <p class="green-text">You have submitted
                     <?php echo $sent_count; ?> Message posts</p>
                 <ul class="collection">
-                    <?php foreach ($sent as $s) { echo '<li class="collection-item">'; echo $s[ 'communication_body']; echo "</li>"; } ?>
+                    <?php foreach ($sent as $s) { 
+                        echo '<li class="collection-item">'; 
+                        echo ' <form action="readfile.php" method="POST">', "<p> {$s[ 'communication_body']} </p>";
+                        
+                        if ($s['communication_file_id'] > 0 ) {
+                            echo '&emsp; 
+                           
+                            <input type="hidden" name="file_id" value="'.$s['communication_file_id'].'" />
+                            <button>View file</button>';
+                        }
+                        
+                        echo "</form>","</li>"; 
+                    } ?>
                 </ul>
             </div>
         </div>
