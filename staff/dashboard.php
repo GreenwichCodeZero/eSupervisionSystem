@@ -38,11 +38,11 @@ include '../classes/meetings.class.php';
 include '../classes/userDetails.class.php';
 
 // $_SESSION['user']['id']
-$user_id = $currentUser['staff_id']; // (1) = demo staff id
-$user_user = $currentUser['staff_username']; // (1) = demo staff id
+$user_id = $currentUser['student_id']; // (1) = demo student id
+$user_user = $currentUser['student_username']; // (1) = demo student id
 
 // PRINT USER VARIABLES                                                                                                                                                                     TO TOP OF BROWSER
-print_r ($currentUser) ;
+// print_r ($currentUser) ;
 
 $c = new Communication ();
 
@@ -99,21 +99,21 @@ $secondMarker = $u2->getResponse();
 <nav>
     <div class="nav-wrapper green">
         <ul id="nav-mobile" class="side-nav">
-            <li>
-                <a href="dashboard.php">Dashboard</a>
-            </li>
-            <li>
-                <a href="meetings.php">Meetings</a>
-            </li>
-            <li>
-                <a href="messages.php">Messages</a>
-            </li>
-            <li>
-                <a href="blogs.php">Blog</a>
-            </li>
-            <li>
-                <a href="uploads.php">Uploads</a>
-            </li>
+              <li>
+                    <a href="dashboard.php">Dashboard</a>
+                </li>
+                <li>
+                    <a href="messages.php">Communication</a>
+                </li>
+                <li>
+                    <a href="meetings.php">Meetings</a>
+                </li>
+                <li>
+                    <a href="blogs.php">Blog/Diary</a>
+                </li>
+                <li>
+                    <a href="uploads.php">Project Uploads</a>
+                </li>
         </ul>
     </div>
 </nav>

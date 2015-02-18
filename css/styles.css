@@ -1,12 +1,15 @@
-h5{
-padding:1em 0;
+* {}
+body {}
+
+#logo{
+    max-width:200px;
 }
 .c_right-align{
-float: right;
+    float: right;
 }
 .c_left-align{
-float:left;
+    float:left;
 }
 #sendMessage, #submitBlog, #requestMeeting{
-display:none;
+    display:none;
 }

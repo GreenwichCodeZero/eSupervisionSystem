@@ -1,1 +1,3 @@
-staff
+<?php
+header ('location: dashboard.php');
+?>
