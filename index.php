@@ -1,3 +1,4 @@
+<!--kinza-->
 <?php
 // Page which serves as the home page and login page
 //comment
