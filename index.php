@@ -1,6 +1,7 @@
+<!--kinza-->
 <?php
 // Page which serves as the home page and login page
-
+//comment
 error_reporting(0);
 require 'database-connection.php';
 require 'validation.php';
