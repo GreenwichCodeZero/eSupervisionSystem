@@ -50,7 +50,6 @@ class File {
 		    $fileName = addslashes($fileName);
 		}
 
-		echo "preparing";
 		$result = $this->con->prepare(
 			"INSERT INTO 
 			`esuper_file`
