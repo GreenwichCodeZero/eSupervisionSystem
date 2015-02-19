@@ -4,3 +4,7 @@
 *.json
 
 esuper.sublime-project
+
+.idea/
+
+.gitignore
