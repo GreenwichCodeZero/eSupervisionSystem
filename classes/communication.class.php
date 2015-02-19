@@ -41,7 +41,7 @@ class Communication {
 
 	}
 
-	public function insert () {
+	public function insert ($from_user) {
 
 		try { $this->validate (); }
 
@@ -49,6 +49,8 @@ class Communication {
 			throw new Exception ($e->getMessage());
 			exit;
 		}
+
+		$this->from = $from_user;
 
 		$this->action = ( isset ($_POST['communication_action']) ) ? $_POST['communication_action'] : null;
 
@@ -85,7 +87,8 @@ class Communication {
 	}
 
 	// Add a new communication to the database
-	public function add ( $type ) {
+	public function add ( $type) {
+
 
 		switch ( $type ) {
 			case 'message':
