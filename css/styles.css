@@ -1,0 +1,15 @@
+* {}
+body {}
+
+#logo{
+    max-width:200px;
+}
+.c_right-align{
+    float: right;
+}
+.c_left-align{
+    float:left;
+}
+#sendMessage, #submitBlog, #requestMeeting{
+    display:none;
+}
