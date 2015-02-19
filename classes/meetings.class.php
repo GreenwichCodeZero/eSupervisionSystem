@@ -38,7 +38,6 @@ class Meeting {
             echo $e->getMessage();
             exit;
         }
-
     }
 
     public function insert() {
@@ -68,20 +67,16 @@ class Meeting {
                 print_r($_POST);
                 exit;
                 break;
-
         }
-
     }
 
     public function validate() {
-
         foreach ($_POST as $key => $value) {
             if (empty ($value)) {
                 throw new Exception ('Please complete all fields');
                 exit;
             }
         }
-
     }
 
     // Add a new meeting to the database
@@ -167,11 +162,13 @@ class Meeting {
 
         }
         $result = $this->con->prepare(
-            'SELECT m.meeting_title, m.meeting_content, m.meeting_date, t.meeting_type_name AS meeting_type, s.meeting_status_name AS meeting_status
+            'SELECT m.meeting_id, m.meeting_title, m.meeting_content, m.meeting_date, t.meeting_type_name AS meeting_type, s.meeting_status_name AS meeting_status, st.student_first, st.student_last
              FROM esuper_meeting m
              JOIN esuper_meeting_type t ON t.meeting_type_id = m.meeting_type_id
              JOIN esuper_meeting_status s ON s.meeting_status_id = m.meeting_status_id
+             JOIN esuper_student st ON st.student_username = m.meeting_student_id
              WHERE meeting_student_id = :user_id
+             OR meeting_staff_id = :user_id
              ORDER BY m.meeting_id DESC'
         );
         $result->bindValue(':user_id', $user);

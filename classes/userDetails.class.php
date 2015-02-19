@@ -49,35 +49,27 @@ class UserDetails {
         $this->response ($row);
 	}
 
-	public function AllMyStudents ( $staff_username ) {
-			$result = $this->con->prepare(
-			'SELECT 
-			`esuper_student`.`student_first`,
-			`esuper_student`.`student_last`,
-			`esuper_student`.`student_username`,
-			FROM 
-			`esuper_students`,
-			`esuper_user_allocation`,
-			`esuper_staff`
-			WHERE
-			`esuper_user_allocation`.`supervisor_id` = `esuper_staff`.`staff_id`
-			AND
-			`esuper_staff`.`staff_username` = "'.$staff_username.'"');
-        
-        try {
-        	$result->execute();
-        }
+    public function AllMyStudents($staff_username) {
+        $result = $this->con->prepare(
+            'SELECT student.student_first, student.student_last, student.student_username
+             FROM esuper_student student
+             JOIN esuper_user_allocation allocation ON student.student_id = allocation.student_id
+             JOIN esuper_staff staff ON allocation.supervisor_id = staff.staff_id
+             WHERE staff.staff_username = :staff_username');
+        $result->bindValue(':staff_username', $staff_username);
 
-        catch (PDOException $e) {
-        	echo "ERROR:";
-        	echo "\n\n\r\r". $e->getMessage ();
-        	exit;
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
         }
 
         $row = $result->fetchAll();
         $result = null;
-        $this->response ($row);
-	}
+        $this->response($row);
+    }
 
 	public function studentSM ($student_id) {
 	

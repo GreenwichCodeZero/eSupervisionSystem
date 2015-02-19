@@ -2,25 +2,29 @@
 //todo file upload?
 //todo date format?
 
+// Initialise session
 session_start();
 
 require '../database-connection.php';
 require '../validation.php';
 require '../login-check.php';
+require '../classes/userDetails.class.php';
+require '../classes/meetings.class.php';
 
-include '../classes/security.class.php';
-include '../classes/userDetails.class.php';
-include '../classes/meetings.class.php';
-
+// Globals
 $errorList = array();
 $outputText = $errorListOutput = '';
+$currentStudent = $_SESSION['currentUser'];
 
-$currentUser = $_SESSION['currentUser'];
-$stu_id = $currentUser['student_id'];
-$stu_user = $currentUser['student_username'];
+// Determine permissions of current user
+if ($currentStudent['user_type'] === 'staff') {
+    // Redirect to staff dashboard
+    header('Location: /codezero/staff/index.php');
+}
 
+// Get student supervisor
 $u = new UserDetails ();
-$u->studentSuper($stu_id);
+$u->studentSuper($currentStudent['student_id']);
 $supervisor = $u->getResponse();
 
 if (isset($_POST['requestMeeting'])) {
@@ -56,7 +60,7 @@ if (isset($_POST['requestMeeting'])) {
             //todo adjust regex to suit required date format
         }
 
-        $meeting_from_id = $stu_user;
+        $meeting_from_id = $currentStudent['student_username'];
         $meeting_to_id = $supervisor[0]['staff_username'];
 
         // Insert into database
@@ -83,7 +87,7 @@ if (isset($_POST['requestMeeting'])) {
 }
 
 $m = new Meeting ();
-$m->getAll(null, $stu_user);
+$m->getAll(null, $currentStudent['student_username']);
 $meetings = $m->getResponse();
 $meeting_count = count($meetings);
 
@@ -200,99 +204,104 @@ if (count($errorList) > 0) {
 <div class="container">
     <!-- MEETING REQUEST SECTION START-->
     <div class="row" id="sendMessage">
-        <div class="col s12 card">
-            <i class="small mdi-content-clear c_right-align"
-               onclick="toggleForm('#sendMessage', '#newMessage');"></i>
+        <div class="col s12">
+            <div class="card">
+                <i class="small mdi-content-clear c_right-align"
+                   onclick="toggleForm('#sendMessage', '#newMessage');"></i>
 
-            <div class="card-content">
-                <span class="card-title green-text">Request Meeting</span>
+                <div class="card-content">
+                    <span class="card-title green-text">Request Meeting</span>
 
-                <p>Request a meeting
-                    with <?php echo $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last']; ?>.</p>
+                    <p>Request a meeting
+                        with <?php echo $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last']; ?>.</p>
 
-                <form name="meeting" method="post" action="meetings.php">
-                    <div class="input-field col s6">
-                        <label for="title">Title</label>
-                        <input id="title" name="title" type="text" onkeyup="ValidateTitle(this.value);"
-                               onblur="ValidateTitle(this.value);"/>
-                        <span id="titleValidation" class="red-text text-light-3 validation-error"></span>
-                    </div>
+                    <form name="meeting" method="post" action="meetings.php">
+                        <div class="input-field col s6">
+                            <label for="title">Title</label>
+                            <input id="title" name="title" type="text" onkeyup="ValidateTitle(this.value);"
+                                   onblur="ValidateTitle(this.value);"/>
+                            <span id="titleValidation" class="red-text text-light-3 validation-error"></span>
+                        </div>
 
-                    <div class="col s6">
-                        <label for="type">Type</label>
-                        <select id="type" name="type">
-                            <option value="1">Virtual</option>
-                            <option value="2">Face to Face</option>
-                        </select>
-                    </div>
+                        <div class="col s6">
+                            <label for="type">Type</label>
+                            <select id="type" name="type">
+                                <option value="1">Virtual</option>
+                                <option value="2">Face to Face</option>
+                            </select>
+                        </div>
 
-                    <div class="input-field col s12">
-                        <label for="content">Message</label>
+                        <div class="input-field col s12">
+                            <label for="content">Message</label>
                         <textarea id="content" name='content' class="materialize-textarea"
                                   onkeyup="ValidateContent(this.value);"
                                   onblur="ValidateContent(this.value);"></textarea>
-                        <span id="contentValidation" class="red-text text-light-3 validation-error"></span>
-                    </div>
+                            <span id="contentValidation" class="red-text text-light-3 validation-error"></span>
+                        </div>
 
-                    <div class="col s12">
-                        <label for="date">Date</label>
-                        <input id="date" name="date" type="date" class="datepicker" onkeyup="ValidateDate(this.value);"
-                               onblur="ValidateDate(this.value);">
-                        <span id="dateValidation" class="red-text text-light-3 validation-error"></span>
-                    </div>
+                        <div class="col s12">
+                            <label for="date">Date</label>
+                            <input id="date" name="date" type="date" class="datepicker"
+                                   onkeyup="ValidateDate(this.value);"
+                                   onblur="ValidateDate(this.value);">
+                            <span id="dateValidation" class="red-text text-light-3 validation-error"></span>
+                        </div>
 
-                    <!--<input type="file" name="fileToUpload" id="fileToUpload">-->
+                        <!--<input type="file" name="fileToUpload" id="fileToUpload">-->
 
-                    <div class="input-field col s12">
-                        <button type="submit" name="requestMeeting" onclick="return ValidateForm();"
-                                class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
-                            Submit
-                        </button>
-                    </div>
-                </form>
+                        <div class="input-field col s12">
+                            <button type="submit" name="requestMeeting" onclick="return ValidateForm();"
+                                    class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
+
         </div>
     </div>
     <!-- MEETING REQUEST SECTION END-->
 
     <!-- VIEW ALL MEETINGS START -->
     <div class="row">
-        <div class="col s12 card">
-            <a onclick="toggleForm('#sendMessage', '#newMessage');" class="c_right_align" id="newMessage">
-                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Request
-                    Meeting
+        <div class="col s12">
+            <div class="card">
+                <a onclick="toggleForm('#sendMessage', '#newMessage');" class="c_right_align" id="newMessage">
+                    <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Request
+                        Meeting
+                    </div>
+                </a>
+
+                <div class="card-content">
+                    <span class="card-title green-text">Meeting History</span>
+
+                    <p>You have <?php echo $meeting_count; ?> meeting records.</p>
+
+                    <!-- Output message text -->
+                    <?php echo $outputText; ?>
+
+                    <ul class="collection">
+                        <?php foreach ($meetings as $meeting) { ?>
+                            <li class="collection-item">
+                                <p><span class="green-text"><b><?php echo $meeting['meeting_title']; ?></b></span>
+                                    &#8212; <?php echo $meeting['meeting_date']; ?></p>
+
+                                <p><?php echo $meeting['meeting_content']; ?></p>
+
+                                <p class="grey-text text-darken-1" style="font-size: 0.8em">
+                                    <b>Type:</b> <?php echo $meeting['meeting_type']; ?>. <b>Current
+                                        status:</b> <?php echo $meeting['meeting_status']; ?></p>
+                            </li>
+                        <?php } ?>
+                    </ul>
                 </div>
-            </a>
-
-            <div class="card-content">
-                <span class="card-title green-text">Meeting History</span>
-
-                <p>You have <?php echo $meeting_count; ?> meeting records.</p>
-
-                <!-- Output message text -->
-                <?php echo $outputText; ?>
-
-                <ul class="collection">
-                    <?php foreach ($meetings as $mg) { ?>
-                        <li class="collection-item">
-                            <p><span class="green-text"><b><?php echo $mg['meeting_title']; ?></b></span>
-                                &#8212; <?php echo $mg['meeting_date']; ?></p>
-
-                            <p><?php echo $mg['meeting_content']; ?></p>
-
-                            <p class="grey-text text-darken-1" style="font-size: 0.8em">
-                                <b>Type:</b> <?php echo $mg['meeting_type']; ?>. <b>Current
-                                    status:</b> <?php echo $mg['meeting_status']; ?></p>
-                        </li>
-                    <?php } ?>
-                </ul>
             </div>
         </div>
     </div>
     <!-- VIEW ALL MEETINGS END -->
 
 </div>
-
 </body>
 <script>
     $(document).ready(function () {
