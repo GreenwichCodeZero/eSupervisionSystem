@@ -48,7 +48,7 @@ $supervisor = $u->getResponse();
         <div class="nav-wrapper green">
             <ul id="nav-mobile" class="side-nav">
                 <li>
-                    <a href="dashboard.php">Dashboard</a>
+                    <a href="index.php">Dashboard</a>
                 </li>
                 <li>
                     <a href="messages.php">Communication</a>
@@ -97,7 +97,19 @@ $supervisor = $u->getResponse();
                     <?php echo $file_count; ?> files</p>
                 <ul class="collection">
                 
-                    <?php foreach ($files as $f) { echo '<li class="collection-item">', $f[ 'file_name'], '&emsp;<a href="#">download</a>' ,"</li>"; } ?>
+                    <?php foreach ($files as $f) { 
+                        
+                        echo '<li class="collection-item">'; 
+                        echo ' <form action="readfile.php" method="POST">', "<p> {$f[ 'file_name']} </p>                      
+                            <input type='hidden' name='file_id' value='".$f['file_id']."'' />
+                            <button>View file</button>";
+
+                        echo "</form>","</li>";
+                        }
+                        
+
+                        
+                    ?>
                 </ul>
             </div>
         </div>
