@@ -19,7 +19,7 @@ if ($_POST['communication_action']){
     $el = new errorList ();
 
     try { $c->insert (); }
-	catch (Exception $e){
+    catch (Exception $e){
        $el->newList()->type('error')->message ($e->getMessage ())->go('blogs.php');
         exit;
     }
@@ -29,10 +29,6 @@ if ($_POST['communication_action']){
 
 }
 
-$el = new errorList ();
-if ($el->exists ()){
-    echo $el->getResponse ();
-}
 
 
 $c->getAll('blog', $stu_user);
@@ -68,7 +64,7 @@ $supervisor = $u->getResponse();
     <nav>
         <div class="nav-wrapper green">
             <ul id="nav-mobile" class="side-nav">
-                <li>
+                        <li>
                 <a href="index.php">Dashboard</a>
             </li>
             <li>
@@ -91,6 +87,18 @@ $supervisor = $u->getResponse();
     <div class="container">
     <div class="row">
 
+<div class="row">
+            <?php
+                $el = new errorList ();
+                if ($el->exists ()){
+                    ?>
+                    <p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+                   <?php echo $el->getResponse (); ?>
+                    </p>
+                   <?
+                }
+            ?>
+        </div>
 
 
 
