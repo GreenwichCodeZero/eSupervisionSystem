@@ -74,7 +74,7 @@ if (count($errorList) > 0) {
 
 // Function that redirects the user to the relevant dashboard
 function RedirectToDashboard($userType) {
-    header("Location: $userType/dashboard.php");
+    header("Location: $userType/index.php");
 }
 
 ?>
