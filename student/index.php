@@ -7,6 +7,7 @@ session_start();
 require '../login-check.php';
 
 $currentStudent = $_SESSION['currentUser'];
+
 $userDetails = '';
 
 // Determine permissions of current user
