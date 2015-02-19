@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-Blogs
-=======
 <?php
 
 session_start();
@@ -23,11 +20,12 @@ if ($_POST['communication_action']){
 
     try { $c->insert (); }
 	catch (Exception $e){
-       $el->newList()->type('error')->message ($e->getMessage ())->go('blogs.php');
-        exit;
-    }
-    
-    $el->newList()->type('success')->message ($c->getResponse ())->go('blogs.php');
+        
+        $el->newList()->type('error')->message ($e->getMessage ())->go('messages.php');
+		exit;
+	}
+	
+    $el->newList()->type('success')->message ($c->getResponse ())->go('messages.php');
     exit;
 
 }
@@ -37,11 +35,13 @@ if ($el->exists ()){
     echo $el->getResponse ();
 }
 
+$c->getAll('message', $stu_user);
+$sent = $c->getResponse();
+$sent_count = count($sent);
 
-$c->getAll('blog', $stu_user);
-$blogs = $c->getResponse();
-$blog_count = count($blogs);
-
+$c->received('message', $stu_user);
+$received = $c->getResponse();
+$received_count = count($received);
 
 $u = new UserDetails ();
 $u->studentSuper($stu_id);
@@ -71,6 +71,7 @@ $supervisor = $u->getResponse();
     <nav>
         <div class="nav-wrapper green">
             <ul id="nav-mobile" class="side-nav">
+               
                 <li>
                     <a href="dashboard.php">Dashboard</a>
                 </li>
@@ -93,39 +94,50 @@ $supervisor = $u->getResponse();
 
     <div class="container">
     <div class="row">
-
-
-
-
-        <!-- BLOG SECTION START -->
-        <div id="submitBlog" class="row">
-            <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
-            <form name="blogEntry" method="post" action='' enctype="multipart/form-data" class="col s10 m12 offset-s1">
-                <input type='hidden' name='communication_action' value='posttoblog' />
-                <input type='hidden' name='communication_from_id' value='<?php echo $stu_user; ?>' />
-                <input type='hidden' name='communication_to_id' value='blog' />
+ <!-- MESSAGE SECTION START-->
+        <div id="sendMessage" class="row">
+            <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#sendMessage', '#newMessage');"></i>
+            <form id='communication' action='' method='POST' enctype="multipart/form-data" class="col s10 m12 offset-s1">
+                <input type='hidden' name='communication_action' value='sendmessage' />
+          
+     	   <input type="hidden" name="communication_from_id" value="<?php echo $currentUser['student_username']; ?>" ?>
+       	 <input type="hidden" name="communication_to_id" value = "<?php echo $supervisor[0]['staff_username']; ?>" />
+                <input type='hidden' name='communication_type_id' value='2' />
                 <div class="input-field">
                     <textarea class="materialize-textarea" name='communication_body'></textarea>
-                    <label>New Blog Entry</label>
+                    <label>New Message</label>
                 </div>
+                <input class="waves-effect waves-teal waves-light btn-flat" type="file" name="fileToUpload" id="fileToUpload">
                 <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
             </form>
         </div>
+
         <div class="col s10 m12 offset-s1 card">
-            <a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry" class="c_right-align">
-                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Entry</div>
+            <a onClick="toggleForm('#sendMessage', '#newMessage');" class="c_right_align" id="newMessage">
+                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Message</div>
             </a>
             <div class="card-content">
-                <span class="card-title green-text">Blog History</span>
+                <span class="card-title green-text">Message History</span>
                 <p class="green-text">You have submitted
-                    <?php echo $blog_count; ?> Blog posts</p>
+                    <?php echo $sent_count; ?> Message posts</p>
                 <ul class="collection">
-                    <?php foreach ($blogs as $b) { echo '<li class="collection-item">'; echo $b[ 'communication_body']; echo "</li>"; } ?>
+                    <?php foreach ($sent as $s) { 
+                        echo '<li class="collection-item">'; 
+                        echo ' <form action="readfile.php" method="POST">', "<p> {$s[ 'communication_body']} </p>";
+                        
+                        if ($s['communication_file_id'] > 0 ) {
+                            echo '&emsp; 
+                           
+                            <input type="hidden" name="file_id" value="'.$s['communication_file_id'].'" />
+                            <button>View file</button>';
+                        }
+                        
+                        echo "</form>","</li>"; 
+                    } ?>
                 </ul>
             </div>
         </div>
-
-        <!-- BLOG SECTION END -->
+        <!--MESSAGING SECTION END-->
     </div>
 
 </div> <!-- end container -->
@@ -134,4 +146,3 @@ $(document).ready(function(){
     $('.modal-trigger').leanModal();
   });
 </script>
->>>>>>> branchFeature-US18

@@ -54,17 +54,29 @@ class Communication {
 
 		switch ( $this->action ) {
 			case 'sendmessage':
+<<<<<<< HEAD
 				echo "message:";
+=======
+				// echo "message:";
+>>>>>>> branchFeature-US18
 				$this->add ('message');
 			break;
 
 			case 'posttoblog':
+<<<<<<< HEAD
 				echo "Blog Post: id1";
+=======
+				// echo "Blog Post: id1";
+>>>>>>> branchFeature-US18
 				$this->add ('blog');
 			break;
 
 			default: 
+<<<<<<< HEAD
 				echo "nothing to do <pre>";
+=======
+				// echo "nothing to do <pre>";
+>>>>>>> branchFeature-US18
 				print_r ($_POST);
 				exit;
 			break;
@@ -77,7 +89,11 @@ class Communication {
 
 		foreach($_POST as $key => $value) {
  			if (empty ($value)) {
+<<<<<<< HEAD
  				throw new Exception ('Please complete all fields');
+=======
+ 				throw new Exception ('Please complete all fields: '.$key.' was empty');
+>>>>>>> branchFeature-US18
  				exit;
  			}
 		}
@@ -106,6 +122,25 @@ class Communication {
 
 		}
 
+<<<<<<< HEAD
+=======
+		$this->file_id = 0;
+
+		     if($_FILES['fileToUpload']['size'] > 0) {
+
+		        $f = new File ();
+		        try { $f->add ($this->from); }
+		        catch (Exception $e){
+		        	echo $e->getMessage ();
+		        	exit;
+		        }
+
+		        $this->file_id = $f->getResponse ();
+
+		        $this->response ('file uploaded: '.$this->file_id);
+		    	
+	    	}
+>>>>>>> branchFeature-US18
 
 		$this->from = $_POST ['communication_from_id'];
 		$this->date_addded = time();
@@ -113,6 +148,7 @@ class Communication {
 		$this->body = $_POST ['communication_body'];
 
 		$result = $this->con->prepare(
+<<<<<<< HEAD
 			"INSERT INTO `esuper_communication` (communication_from_id,communication_to_id, communication_date_added, communication_time_added, communication_type_id, communication_body)
 			VALUES 
 			(:from_id,:to_id,:date_added,:time_added,:type_id ,:comm_body);");
@@ -123,18 +159,35 @@ class Communication {
         $result->bindValue(':time_added', $this->date_addded );
         $result->bindValue(':type_id', $this->type);
         $result->bindValue(':comm_body', $this->body);
+=======
+			"INSERT INTO `esuper_communication` (communication_from_id,communication_to_id, communication_date_added, communication_time_added, communication_type_id, communication_body, communication_file_id)
+			VALUES 
+			(:from_id,:to_id,:date_added,:time_added,:type_id ,:comm_body, :comm_file_id);");
+
+        $result->bindValue(':from_id', $this->from);
+        $result->bindValue(':to_id', $this->to);
+        $result->bindValue(':date_added', date("Y-m-d"));
+        $result->bindValue(':time_added', date("h:i:s"));
+        $result->bindValue(':type_id', $this->type);
+        $result->bindValue(':comm_body', $this->body);
+        $result->bindValue(':comm_file_id', $this->file_id);
+>>>>>>> branchFeature-US18
         try {
         	$result->execute();
         }
 
         catch (PDOException $e) {
+<<<<<<< HEAD
         	echo "ERROR:";
+=======
+>>>>>>> branchFeature-US18
         	echo "\n\n\r\r". $e->getMessage ();
         	exit;
         }
 
         // $row = $result->fetch(PDO::FETCH_ASSOC);
         $result = null;
+<<<<<<< HEAD
         $this->response ('Your content was successfully commited');
 
      //    echo "trying file <br><br>";
@@ -153,6 +206,18 @@ class Communication {
 
 	    //     echo "<br><br>end test";
     	// }	
+=======
+
+        if ( mail ('bd118@greenwich.ac.uk, '.$this->from.'@greenwich.ac.uk',
+        	'eSupervision
+        	System', 'A new message was submitted and is waiting for you on the eSupervision System') ){
+               $this->response ('Your content was commited successfully and your tutor has been notified .');
+        } else {
+               $this->response ('Your content was commited successfully but your tutor could not be notified.');
+        }
+
+
+>>>>>>> branchFeature-US18
 	}
 
 	// Find a comment by comment id, type, who posted etc.
@@ -166,11 +231,53 @@ class Communication {
 			case 'message':
 				$this->type_id = 2;
 			break;
+<<<<<<< HEAD
 
 		}
 			$result = $this->con->prepare(
 			'SELECT `communication_body`, `communication_date_added`FROM `esuper_communication` WHERE `communication_type_id` ='.$this->type_id);
         	$result->bindValue(':type_id', 2);
+=======
+		}
+		
+			$result = $this->con->prepare(
+			'SELECT `communication_id`, `communication_body`, `communication_date_added`, `communication_file_id` FROM
+			`esuper_communication` WHERE `communication_type_id` ='.$this->type_id.'
+			AND `communication_from_id` = "'.$user.'"');
+
+        try {
+        	$result->execute();
+        }
+
+        catch (PDOException $e) {
+        	echo "ERROR:";
+        	echo "\n\n\r\r". $e->getMessage ();
+        	exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response ($row);
+	}
+
+	public function received ( $type, $user ) { 
+		
+		switch ($type) {
+			case 'blog': 
+				$this->type_id = 1;
+			break;
+
+			case 'message':
+				$this->type_id = 2;
+			break;
+
+		}
+			$result = $this->con->prepare(
+			'SELECT `communication_body`, `communication_date_added`FROM
+			`esuper_communication` WHERE `communication_type_id` ='.$this->type_id.'
+			AND `communication_to_id` = "'.$user.'"');
+
+>>>>>>> branchFeature-US18
         try {
         	$result->execute();
         }

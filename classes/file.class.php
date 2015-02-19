@@ -11,12 +11,19 @@ class File {
 // * @authors       Dwayne Brown & Mark Tickner 
 // * @version    	1.1
 
+<<<<<<< HEAD
 	// Load variables from POST into object 
+=======
+	private $response;
+
+	// Load variable from POST into object 
+>>>>>>> branchFeature-US18
 	public function __construct () {
 
 		$s = new Security (); 
 			$s->clean ($_POST);
 
+<<<<<<< HEAD
 	}
 
 
@@ -99,6 +106,128 @@ class File {
  //        $row = $result->fetch(PDO::FETCH_ASSOC);
 
 	// }
+=======
+
+		try { $this->con = $s->db (); }
+
+		catch (Exception $e) {
+			echo $e->getMessage ();
+		}
+
+	}
+
+
+	// Add a new File to the database
+	public function add ( $user ) {
+
+	
+		// Create database record
+		// 
+		$fileName = $_FILES['fileToUpload']['name'];
+		$tmpName  = $_FILES['fileToUpload']['tmp_name'];
+		$fileSize = $_FILES['fileToUpload']['size'];
+		$fileType = $_FILES['fileToUpload']['type'];
+
+		$fp      = fopen($tmpName, 'r');
+		$content = fread($fp, filesize($tmpName));
+		$content = addslashes($content);
+		fclose($fp);
+
+		if(!get_magic_quotes_gpc())
+		{
+		    $fileName = addslashes($fileName);
+		}
+
+		echo "preparing";
+		$result = $this->con->prepare(
+			"INSERT INTO 
+			`esuper_file`
+			(file_id, file_owner, file_name, file_type, file_size, file_content ) 
+			VALUES 
+			(null, '".$user."', '$fileName', '$fileSize', '$fileType', '$content')"
+			);
+        $result->execute();
+
+        $this->response ($this->con->lastInsertId());
+
+
+	}
+
+	private function response ( $var ) {
+		$this->response = $var ;
+	}
+
+	public function getResponse () {
+		return $this->response;
+	}
+	
+	// Find a comment by comment id, type, who posted etc.
+	public function getAll ( $user ) { 
+
+		switch ($type) {
+			case 'blog': 
+				$this->type_id = 1;
+			break;
+
+			case 'message':
+				$this->type_id = 2;
+			break;
+
+		}
+			$result = $this->con->prepare(
+			'SELECT  
+			`file_id`, 
+			`file_name`
+			FROM
+			`esuper_file` 
+			WHERE 
+			`file_owner` = "'.$user.'"');
+
+        try {
+        	$result->execute();
+        }
+
+        catch (PDOException $e) {
+        	echo "ERROR:";
+        	echo "\n\n\r\r". $e->getMessage ();
+        	exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response ($row);
+	}
+
+	public function readFile ($file_id) {
+
+         $result = $this->con->prepare(
+			'SELECT  
+			`file_id`, 
+			`file_name`,
+			`file_type`,
+			`file_size`,
+			`file_content`
+			FROM
+			`esuper_file` 
+			WHERE 
+			`file_id` = "'.$file_id.'"');
+
+        try {
+        	$result->execute();
+        }
+
+        catch (PDOException $e) {
+        	echo "ERROR:";
+        	echo "\n\n\r\r". $e->getMessage ();
+        	exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response ($row);
+	}
+
+>>>>>>> branchFeature-US18
 
 }
 

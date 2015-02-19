@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-Blogs
-=======
 <?php
 
 session_start();
@@ -11,36 +8,15 @@ $currentUser = $_SESSION['currentUser'];
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
 include '../classes/userDetails.class.php';
-include '../classes/errorList.class.php';
 
 
 $stu_id = $currentUser['student_id']; // (1) = demo student id
 $stu_user = $currentUser['student_username']; // (1) = demo student id
 
-$c = new Communication ();
-if ($_POST['communication_action']){
-    $el = new errorList ();
-
-    try { $c->insert (); }
-	catch (Exception $e){
-       $el->newList()->type('error')->message ($e->getMessage ())->go('blogs.php');
-        exit;
-    }
-    
-    $el->newList()->type('success')->message ($c->getResponse ())->go('blogs.php');
-    exit;
-
-}
-
-$el = new errorList ();
-if ($el->exists ()){
-    echo $el->getResponse ();
-}
-
-
-$c->getAll('blog', $stu_user);
-$blogs = $c->getResponse();
-$blog_count = count($blogs);
+$f = new File ();
+$f->getAll($stu_user);
+$files = $f->getResponse();
+$file_count = count($files);
 
 
 $u = new UserDetails ();
@@ -51,7 +27,7 @@ $supervisor = $u->getResponse();
 ?>
 
 
-  <title>Messages</title>
+  <title>Uploads</title>
     <link href="../css/styles.css" rel="stylesheet" type="text/css" />
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection" />
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -116,11 +92,12 @@ $supervisor = $u->getResponse();
                 <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Entry</div>
             </a>
             <div class="card-content">
-                <span class="card-title green-text">Blog History</span>
-                <p class="green-text">You have submitted
-                    <?php echo $blog_count; ?> Blog posts</p>
+                <span class="card-title green-text">Upload History</span>
+                <p class="green-text">You have uploaded
+                    <?php echo $file_count; ?> files</p>
                 <ul class="collection">
-                    <?php foreach ($blogs as $b) { echo '<li class="collection-item">'; echo $b[ 'communication_body']; echo "</li>"; } ?>
+                
+                    <?php foreach ($files as $f) { echo '<li class="collection-item">', $f[ 'file_name'], '&emsp;<a href="#">download</a>' ,"</li>"; } ?>
                 </ul>
             </div>
         </div>
@@ -134,4 +111,3 @@ $(document).ready(function(){
     $('.modal-trigger').leanModal();
   });
 </script>
->>>>>>> branchFeature-US18
