@@ -42,7 +42,7 @@ $user_id = $currentUser['student_id']; // (1) = demo student id
 $user_user = $currentUser['student_username']; // (1) = demo student id
 
 // PRINT USER VARIABLES                                                                                                                                                                     TO TOP OF BROWSER
-// print_r ($currentUser) ;
+print_r ($currentUser) ;
 
 $c = new Communication ();
 

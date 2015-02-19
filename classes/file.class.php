@@ -40,6 +40,11 @@ class File {
 		$fileSize = $_FILES['fileToUpload']['size'];
 		$fileType = $_FILES['fileToUpload']['type'];
 
+		// echo "<pre>";
+		// 	print_r ($_FILES);
+		// echo "</pre>";
+		// exit;
+		// die; 
 		$fp      = fopen($tmpName, 'r');
 		$content = fread($fp, filesize($tmpName));
 		$content = addslashes($content);
@@ -53,7 +58,7 @@ class File {
 		$result = $this->con->prepare(
 			"INSERT INTO 
 			`esuper_file`
-			(file_id, file_owner, file_name, file_type, file_size, file_content ) 
+			(file_id, file_owner, file_name, file_size, file_type,  file_content ) 
 			VALUES 
 			(null, '".$user."', '$fileName', '$fileSize', '$fileType', '$content')"
 			);
