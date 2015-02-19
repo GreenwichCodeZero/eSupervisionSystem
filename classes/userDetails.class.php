@@ -4,7 +4,11 @@ class UserDetails {
 	
 	private $response;
 
+<<<<<<< HEAD
 	public function studentSuper ($student_id) {
+=======
+	function __construct () {
+>>>>>>> branchFeature-US18
 		$s = new Security (); 
 			try { $this->con = $s->db (); }
 
@@ -13,12 +17,24 @@ class UserDetails {
 				exit;
 			}
 
+<<<<<<< HEAD
+=======
+	}
+
+	public function studentSuper ($student_id) {
+		
+>>>>>>> branchFeature-US18
 		$result = $this->con->prepare(
 			'SELECT 
 			`esuper_staff`.`staff_first`,
 			`esuper_staff`.`staff_last`,
 			`esuper_staff`.`staff_id`,
+<<<<<<< HEAD
 			`esuper_staff`.`staff_profile_link`
+=======
+			`esuper_staff`.`staff_profile_link`,
+			`esuper_staff`.`staff_username`
+>>>>>>> branchFeature-US18
 
 			FROM 
 			`esuper_user_allocation`, 
@@ -44,6 +60,7 @@ class UserDetails {
         $this->response ($row);
 	}
 
+<<<<<<< HEAD
 	public function studentSM ($student_id) {
 		$s = new Security (); 
 			try { $this->con = $s->db (); }
@@ -97,6 +114,23 @@ class UserDetails {
 		$result = $this->con->prepare(
 			'SELECT * FROM esuper_user_allocation, esuper_staff, esuper_student WHERE esuper_user_allocation.supervisor_id = ' . $staff_id . ' AND esuper_user_allocation.supervisor_id = esuper_staff.staff_id AND  esuper_user_allocation.student_id = esuper_student.student_id');
         $result->bindValue(':student_id', $student_id);
+=======
+	public function AllMyStudents ( $staff_username ) {
+			$result = $this->con->prepare(
+			'SELECT 
+			`esuper_student`.`student_first`,
+			`esuper_student`.`student_last`,
+			`esuper_student`.`student_username`,
+			FROM 
+			`esuper_students`,
+			`esuper_user_allocation`,
+			`esuper_staff`
+			WHERE
+			`esuper_user_allocation`.`supervisor_id` = `esuper_staff`.`staff_id`
+			AND
+			`esuper_staff`.`staff_username` = "'.$staff_username.'"');
+        
+>>>>>>> branchFeature-US18
         try {
         	$result->execute();
         }
@@ -112,6 +146,7 @@ class UserDetails {
         $this->response ($row);
 	}
 
+<<<<<<< HEAD
 		public function noSupervisor () {
 		$s = new Security (); 
 			try { $this->con = $s->db (); }
@@ -152,6 +187,27 @@ class UserDetails {
 		$result = $this->con->prepare(
 'SELECT esuper_student.student_id, esuper_student.student_first, esuper_student.student_last from esuper_student WHERE esuper_student.student_id NOT IN (SELECT student_id from esuper_user_allocation) UNION SELECT esuper_student.student_id, esuper_student.student_first, esuper_student.student_last FROM esuper_user_allocation, esuper_student WHERE esuper_user_allocation.student_id = esuper_student.student_id AND esuper_user_allocation.second_id IS NULL ');
   //      $result->bindValue();
+=======
+	public function studentSM ($student_id) {
+	
+
+		$result = $this->con->prepare(
+			'SELECT 
+			`esuper_staff`.`staff_first`,
+			`esuper_staff`.`staff_last`,
+			`esuper_staff`.`staff_id`,
+			`esuper_staff`.`staff_profile_link`
+
+			FROM 
+			`esuper_user_allocation`, 
+			`esuper_staff`
+			WHERE
+			`esuper_user_allocation`.`student_id` = :student_id
+			AND 
+			`esuper_user_allocation`.`second_id` = `esuper_staff`.`staff_id`');
+        
+        $result->bindValue(':student_id', $student_id);
+>>>>>>> branchFeature-US18
         try {
         	$result->execute();
         }

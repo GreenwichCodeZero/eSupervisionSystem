@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-Blogs
-=======
 <?php
 
 session_start();
@@ -134,4 +131,3 @@ $(document).ready(function(){
     $('.modal-trigger').leanModal();
   });
 </script>
->>>>>>> branchFeature-US18
