@@ -63,4 +63,16 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
 
         return mysqli_query($link, $sql);
     }
+
+    // Function that updates the specified meetings status and the returns the students username
+    function UpdateMeetingStatus($link, $meetingId, $newStatus) {
+        $sql = "UPDATE esuper_meeting SET meeting_status_id = $newStatus WHERE meeting_id = $meetingId;";
+        mysqli_query($link, $sql);
+
+        $sql = "SELECT meeting_student_id FROM esuper_meeting WHERE meeting_id = $meetingId;";
+        $result = mysqli_query($link, $sql);
+        $studentUsername = mysqli_fetch_assoc($result);
+
+        return $studentUsername['meeting_student_id'];
+    }
 }
