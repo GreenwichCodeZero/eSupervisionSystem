@@ -160,7 +160,6 @@ class Communication {
                $this->response ('Your content was commited successfully but your tutor could not be notified.');
         }
 
-
 	}
 
 	// Find a comment by comment id, type, who posted etc.
