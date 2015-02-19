@@ -186,10 +186,6 @@ class Meeting {
         $this->response($row);
     }
 
-    // Remove a meeting from the database
-    public function remove() {
-    }
-
     public function response($var) {
         $this->response = $var;
     }
@@ -197,7 +193,6 @@ class Meeting {
     public function getResponse() {
         return $this->response;
     }
-
 }
 
 ?>
