@@ -54,4 +54,13 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
             return null;
         }
     }
+
+    // Function that inserts a meeting into the database
+    function InsertMeeting($link, $date, $title, $content, $type, $student_id, $staff_id) {
+        $sql = "INSERT
+                  INTO  esuper_meeting (meeting_date, meeting_title, meeting_content, meeting_type_id, meeting_student_id, meeting_staff_id)
+                  VALUES ('$date', '$title', '$content', $type, '$student_id', '$staff_id')";
+
+        return mysqli_query($link, $sql);
+    }
 }

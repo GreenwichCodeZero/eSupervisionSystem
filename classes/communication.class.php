@@ -152,9 +152,13 @@ class Communication {
         // $row = $result->fetch(PDO::FETCH_ASSOC);
         $result = null;
 
+        $headers = 'From: eSupervision System <esupervision@greenwich.ac.uk>' . "\r\n" .
+            'MIME-Version: 1.0' . "\r\n" .
+            'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
+
         if ( mail ('bd118@greenwich.ac.uk, '.$this->from.'@greenwich.ac.uk',
-        	'eSupervision
-        	System', 'A new message was submitted and is waiting for you on the eSupervision System') ){
+        	'New Message Received', 'A new message was submitted and is waiting for you on the eSupervision System.', $headers) ){
                $this->response ('Your content was commited successfully and your tutor has been notified .');
         } else {
                $this->response ('Your content was commited successfully but your tutor could not be notified.');
