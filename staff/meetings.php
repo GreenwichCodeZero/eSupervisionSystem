@@ -334,7 +334,7 @@ if (count($errorList) > 0) {
                 <div class="card-content">
                     <span class="card-title green-text">Meeting History</span>
 
-                    <p>You have <?php echo $meeting_count; ?> meeting records.</p><!-- todo -->
+                    <p>You have <?php echo $meeting_count; ?> meeting records.</p>
 
                     <!-- Output message text -->
                     <?php echo $outputText; ?>
@@ -381,12 +381,11 @@ if (count($errorList) > 0) {
                             </p>
                         </div>
                         <div class="card-action">
-                            <!-- todo actions -->
                             <a href="meetings.php?meeting=<?php echo $meeting['meeting_id']; ?>&status=2"
                                title="Accept">Accept</a>
                             <a href="meetings.php?meeting=<?php echo $meeting['meeting_id']; ?>&status=3"
                                title="Decline">Decline</a>
-                            <!--<a href="#" title="Record">Record Details</a>todo-->
+                            <!--<a href="#" title="Record">Record Details</a>todo record-->
                         </div>
                     </div>
                 </div>
