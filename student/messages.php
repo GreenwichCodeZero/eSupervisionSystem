@@ -18,7 +18,7 @@ $c = new Communication ();
 if ($_POST['communication_action']){
     $el = new errorList ();
 
-    try { $c->insert (); }
+    try { $c->insert ( $stu_user ); }
 	catch (Exception $e){
         
         $el->newList()->type('error')->message ($e->getMessage ())->go('messages.php');
@@ -28,11 +28,6 @@ if ($_POST['communication_action']){
     $el->newList()->type('success')->message ($c->getResponse ())->go('messages.php');
     exit;
 
-}
-
-$el = new errorList ();
-if ($el->exists ()){
-    echo $el->getResponse ();
 }
 
 $c->getAll('message', $stu_user);
@@ -94,6 +89,20 @@ $supervisor = $u->getResponse();
     <div class="container">
     <div class="row">
  <!-- MESSAGE SECTION START-->
+
+        <div class="row">
+            <?php
+                $el = new errorList ();
+                if ($el->exists ()){
+                    ?>
+                    <p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+                   <?php echo $el->getResponse (); ?>
+                    </p>
+                   <?
+                }
+            ?>
+        </div>
+
         <div id="sendMessage" class="row">
             <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#sendMessage', '#newMessage');"></i>
             <form id='communication' action='' method='POST' enctype="multipart/form-data" class="col s10 m12 offset-s1">
