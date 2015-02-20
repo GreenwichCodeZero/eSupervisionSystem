@@ -54,4 +54,25 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
             return null;
         }
     }
+
+    // Function that inserts a meeting into the database
+    function InsertMeeting($link, $date, $title, $content, $type, $student_id, $staff_id) {
+        $sql = "INSERT
+                  INTO  esuper_meeting (meeting_date, meeting_title, meeting_content, meeting_type_id, meeting_student_id, meeting_staff_id)
+                  VALUES ('$date', '$title', '$content', $type, '$student_id', '$staff_id')";
+
+        return mysqli_query($link, $sql);
+    }
+
+    // Function that updates the specified meetings status and the returns the students username
+    function UpdateMeetingStatus($link, $meetingId, $newStatus) {
+        $sql = "UPDATE esuper_meeting SET meeting_status_id = $newStatus WHERE meeting_id = $meetingId;";
+        mysqli_query($link, $sql);
+
+        $sql = "SELECT meeting_student_id FROM esuper_meeting WHERE meeting_id = $meetingId;";
+        $result = mysqli_query($link, $sql);
+        $studentUsername = mysqli_fetch_assoc($result);
+
+        return $studentUsername['meeting_student_id'];
+    }
 }

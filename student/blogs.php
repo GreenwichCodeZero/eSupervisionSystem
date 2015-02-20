@@ -48,23 +48,22 @@ $supervisor = $u->getResponse();
 
 ?>
 
+<head>
+    <title>Messages</title>
+    <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
+    <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../js/materialize.min.js"></script>
+    <script>
+        function toggleForm(elemID, newButtonID) {
+            $(elemID).toggle();
+            $(newButtonID).toggle();
+        }
 
-<title>Messages</title>
-<link href="../css/styles.css" rel="stylesheet" type="text/css"/>
-<link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="../js/materialize.min.js"></script>
-<script>
-    function toggleForm(elemID, newButtonID) {
-        $(elemID).toggle();
-        $(newButtonID).toggle();
-    }
-    ;
-
-    $(document).ready(function () {
-        $(".button-collapse").sideNav();
-    });
-</script>
+        $(document).ready(function () {
+            $(".button-collapse").sideNav();
+        });
+    </script>
 </head>
 <body>
 <nav>
