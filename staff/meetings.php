@@ -1,5 +1,4 @@
 <?php
-//todo file upload?
 //todo date format?
 
 // Initialise session
@@ -71,9 +70,8 @@ if (!($link = GetConnection())) {
         // Insert into database
         if (InsertMeeting($link, $date, $title, $content, $type, $meeting_to_id, $meeting_from_id)) {
             // Send email to supervisor
-            //todo remove tm112 after testing
             mail(
-                'tm112@greenwich.ac.uk, ' . $meeting_to_id . '@greenwich.ac.uk',
+                $meeting_to_id . '@greenwich.ac.uk',
                 'New Meeting Request Received',
                 'A new meeting request was submitted and is waiting for you on the eSupervision System.',
                 $headers
@@ -86,17 +84,15 @@ if (!($link = GetConnection())) {
     } elseif (isset($_GET['meeting']) && isset($_GET['status'])) {
         // Change meeting status
         // Get meeting ID and new status from GET
-        //todo clean
-        $meetingId = $_GET['meeting'];
-        $newStatus = $_GET['status'];
+        $meetingId = mysqli_real_escape_string($link, stripslashes($_GET['meeting']));
+        $newStatus = mysqli_real_escape_string($link, stripslashes($_GET['status']));
 
         // Update meeting status
         $studentUsername = UpdateMeetingStatus($link, $meetingId, $newStatus);
 
         // Send email to student
-        //todo remove tm112 after testing
         mail(
-            'tm112@greenwich.ac.uk, ' . $studentUsername . '@greenwich.ac.uk',
+            $studentUsername . '@greenwich.ac.uk',
             'Meeting Request Updated',
             'The status of a meeting request has been updated and is waiting for you on the eSupervision System.',
             $headers

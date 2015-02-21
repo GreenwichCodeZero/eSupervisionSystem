@@ -1,5 +1,4 @@
 <?php
-//todo file upload?
 //todo date format?
 
 // Initialise session
@@ -66,14 +65,13 @@ if (isset($_POST['requestMeeting'])) {
         // Insert into database
         if (InsertMeeting($link, $date, $title, $content, $type, $meeting_from_id, $meeting_to_id)) {
             // Send email to supervisor
-            //todo remove tm112 after testing
             $headers = 'From: eSupervision System <esupervision@greenwich.ac.uk>' . "\r\n" .
                 'MIME-Version: 1.0' . "\r\n" .
                 'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
 
             mail(
-                'tm112@greenwich.ac.uk, ' . $supervisor[0]['staff_username'] . '@greenwich.ac.uk',
+                $supervisor[0]['staff_username'] . '@greenwich.ac.uk',
                 'New Meeting Request Received',
                 'A new meeting request was submitted and is waiting for you on the eSupervision System.',
                 $headers
