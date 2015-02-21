@@ -108,7 +108,7 @@ if (!($link = GetConnection())) {
 
 // Get students
 $u = new UserDetails ();
-$u->AllMyStudents($currentStaff['staff_username']);
+$u->GetAllocatedStudents($currentStaff['staff_username']);
 $students = $u->getResponse();
 
 // Create HTML option list of students
