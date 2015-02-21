@@ -36,7 +36,7 @@ if (!($link = GetConnection())) {
         // 'Create Meeting' button pressed
         // Server-side validation
         // Validate meeting title
-        $title = mysqli_real_escape_string($link, stripslashes($_POST['title']));
+        $title = mysqli_real_escape_string($link, stripslashes(strip_tags($_POST['title'])));
         if (preg_match('/^\s*$/', $title)) {
             array_push($errorList, 'Title is required');
         }
@@ -48,7 +48,7 @@ if (!($link = GetConnection())) {
         }
 
         // Validate meeting message
-        $content = mysqli_real_escape_string($link, stripslashes($_POST['content']));
+        $content = mysqli_real_escape_string($link, stripslashes(strip_tags($_POST['content'])));
         if (preg_match('/^\s*$/', $content)) {
             array_push($errorList, 'Message is required');
         }
