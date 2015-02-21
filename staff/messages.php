@@ -11,14 +11,14 @@ include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
 
 
-$stu_id = $currentUser['student_id']; // (1) = demo student id
-$stu_user = $currentUser['student_username']; // (1) = demo student id
+$sta_id = $currentUser['staff_id']; // (1) = demo staff id
+$sta_user = $currentUser['staff_username']; // (1) = demo staff id
 
 $c = new Communication ();
 if ($_POST['communication_action']){
     $el = new errorList ();
 
-    try { $c->insert (); }
+    try { $c->insert ($sta_user); }
 	catch (Exception $e){
         
         $el->newList()->type('error')->message ($e->getMessage ())->go('messages.php');
@@ -35,18 +35,18 @@ if ($el->exists ()){
     echo $el->getResponse ();
 }
 
-$c->getAll('message', $stu_user);
+$c->getAll('message', $sta_user, 'staff');
 $sent = $c->getResponse();
 $sent_count = count($sent);
 
-$c->received('message', $stu_user);
+
+$c->received($sta_user, 'staff');
 $received = $c->getResponse();
 $received_count = count($received);
 
 $u = new UserDetails ();
-$u->studentSuper($stu_id);
-$supervisor = $u->getResponse();
-
+$u->AllMystudents($sta_id);
+$students = $u->getResponse();
 
 ?>
 
@@ -99,14 +99,27 @@ $supervisor = $u->getResponse();
             <form id='communication' action='' method='POST' enctype="multipart/form-data" class="col s10 m12 offset-s1">
                 <input type='hidden' name='communication_action' value='sendmessage' />
           
-     	   <input type="hidden" name="communication_from_id" value="<?php echo $currentUser['student_username']; ?>" ?>
-       	 <input type="hidden" name="communication_to_id" value = "<?php echo $supervisor[0]['staff_username']; ?>" />
+     	   <input type="hidden" name="communication_from_id" value="<?php echo $sta_user; ?>" ?>
+
+
+       	     
+
                 <input type='hidden' name='communication_type_id' value='2' />
+                    <label>Select a student</label>
+                  <select name="communication_to_id">
+                        <?php foreach ($students as $stu) {
+                                        echo "<option value='".$stu['student_username']."'>".$stu['student_first']." ".$stu['student_last']." (".$stu['student_username'].") </option>";
+                                    }
+                                    ?>
+                  </select>
                 <div class="input-field">
                     <textarea class="materialize-textarea" name='communication_body'></textarea>
                     <label>New Message</label>
                 </div>
-                <input class="waves-effect waves-teal waves-light btn-flat" type="file" name="fileToUpload" id="fileToUpload">
+
+                          <input class="waves-effect waves-teal waves-light btn-flat" type="file" name="fileToUpload" id="fileToUpload">
+
+
                 <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
             </form>
         </div>
@@ -117,18 +130,28 @@ $supervisor = $u->getResponse();
             </a>
             <div class="card-content">
                 <span class="card-title green-text">Message History</span>
+
+                <?php 
+                if ($received_count > 0) {
+                    echo "<div><a href='receivedmessages.php'>Click here to view messages you have received</a></div>";
+                }
+                ?>
+
                 <p class="green-text">You have submitted
                     <?php echo $sent_count; ?> Message posts</p>
                 <ul class="collection">
                     <?php foreach ($sent as $s) { 
                         echo '<li class="collection-item">'; 
-                        echo ' <form action="readfile.php" method="POST">', "<p> {$s[ 'communication_body']} </p>";
+                        echo ' <form action="readfile.php" method="POST">',
+                                "<span><p><b> ".$s[ 'communication_body']."</b></p>",
+                                "<p>eCommunication to ".$s['student_first']." ".$s['student_last']." added on ". $s['communication_date_added']." at ". $s['communication_time_added']. "</p></span>";
                         
                         if ($s['communication_file_id'] > 0 ) {
                             echo '&emsp; 
                            
                             <input type="hidden" name="file_id" value="'.$s['communication_file_id'].'" />
-                            <button>View file</button>';
+                             <button class="btn waves-light" >Submit
+                                View <i class="mdi-content-send right"></i> </button>';
                         }
                         
                         echo "</form>","</li>"; 
@@ -141,7 +164,7 @@ $supervisor = $u->getResponse();
 
 </div> <!-- end container -->
 </body><script>
-$(document).ready(function(){
-    $('.modal-trigger').leanModal();
+ $(document).ready(function() {
+    $('select').material_select();
   });
 </script>

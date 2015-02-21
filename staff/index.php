@@ -38,8 +38,8 @@ include '../classes/meetings.class.php';
 include '../classes/userDetails.class.php';
 
 // $_SESSION['user']['id']
-$user_id = $currentUser['student_id']; // (1) = demo student id
-$user_user = $currentUser['student_username']; // (1) = demo student id
+$user_id = $currentUser['staff_id']; // (1) = demo staff id
+$user_user = $currentUser['staff_username']; // (1) = demo staff id
 
 // PRINT USER VARIABLES                                                                                                                                                                     TO TOP OF BROWSER
 
@@ -50,11 +50,11 @@ $c->getAll('blog', $user_user);
 $blogs = $c->getResponse();
 $blog_count = count($blogs);
 
-$c->getAll('message', $user_user);
+$c->getAll('message', $user_user, 'staff');
 $messages = $c->getResponse();
 $message_count = count($messages);
 
-$c->received('message', $user_user);
+$c->received($user_user, 'staff');
 $received = $c->getResponse();
 $received_count = count($received);
 
