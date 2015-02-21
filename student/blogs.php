@@ -30,11 +30,6 @@ if ($_POST['communication_action']) {
 
 }
 
-$el = new errorList ();
-if ($el->exists()) {
-    echo $el->getResponse();
-}
-
 
 $c->getAll('blog', $stu_user);
 $blogs = $c->getResponse();
@@ -92,6 +87,18 @@ $supervisor = $u->getResponse();
 <div class="container">
     <div class="row">
 
+<div class="row">
+            <?php
+                $el = new errorList ();
+                if ($el->exists ()){
+                    ?>
+                    <p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+                   <?php echo $el->getResponse (); ?>
+                    </p>
+                   <?
+                }
+            ?>
+        </div>
 
         <!-- BLOG SECTION START -->
         <div id="submitBlog" class="row">

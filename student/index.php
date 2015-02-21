@@ -28,15 +28,15 @@ $user_user = $currentStudent['student_username'];
 
 $c = new Communication ();
 
-$c->getAll('blog', $user_user);
+$c->getAll('blog', $user_user, 'student');
 $blogs = $c->getResponse();
 $blog_count = count($blogs);
 
-$c->getAll('message', $user_user);
+$c->getAll('message', $user_user, 'student');
 $messages = $c->getResponse();
 $message_count = count($messages);
 
-$c->received('message', $user_user);
+$c->received($user_user, 'student');
 $received = $c->getResponse();
 $received_count = count($received);
 

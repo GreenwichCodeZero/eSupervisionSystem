@@ -45,28 +45,28 @@ $supervisor = $u->getResponse();
     </script>
 </head>
 <body>
-<nav>
-    <div class="nav-wrapper green">
-        <ul id="nav-mobile" class="side-nav">
-            <li>
-                <a href="index.php">Dashboard</a>
-            </li>
-            <li>
-                <a href="meetings.php">Meetings</a>
-            </li>
-            <li>
-                <a href="messages.php">Messages</a>
-            </li>
-            <li>
-                <a href="blogs.php">Blog</a>
-            </li>
-            <li>
-                <a href="uploads.php">Uploads</a>
-            </li>
-        </ul>
-        <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
-    </div>
-</nav>
+    <nav>
+        <div class="nav-wrapper green">
+            <ul id="nav-mobile" class="side-nav">
+                <li>
+                    <a href="index.php">Dashboard</a>
+                </li>
+                <li>
+                    <a href="messages.php">Communication</a>
+                </li>
+                <li>
+                    <a href="meetings.php">Meetings</a>
+                </li>
+                <li>
+                    <a href="blogs.php">Blog/Diary</a>
+                </li>
+                <li>
+                    <a href="uploads.php">Project Uploads</a>
+                </li>
+            </ul>
+            <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
+        </div>
+    </nav>
 
 <div class="container">
     <div class="row">
@@ -100,10 +100,15 @@ $supervisor = $u->getResponse();
                 <p class="green-text">You have uploaded
                     <?php echo $file_count; ?> files</p>
                 <ul class="collection">
+				<?php foreach ($files as $f) {
+                        echo '<li class="collection-item">'; 
+                        echo ' <form action="readfile.php" method="POST">', "<p> {$f[ 'file_name']} </p>                      
+                            <input type='hidden' name='file_id' value='".$f['file_id']."'' />
+                            <button>View file</button>";
+                        echo "</form>","</li>";
+                        }
+                    ?>
 
-                    <?php foreach ($files as $f) {
-                        echo '<li class="collection-item">', $f['file_name'], '&emsp;<a href="#">download</a>', "</li>";
-                    } ?>
                 </ul>
             </div>
         </div>

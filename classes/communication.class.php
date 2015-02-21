@@ -41,7 +41,7 @@ class Communication {
 
 	}
 
-	public function insert () {
+	public function insert ($from_user) {
 
 		try { $this->validate (); }
 
@@ -49,6 +49,8 @@ class Communication {
 			throw new Exception ($e->getMessage());
 			exit;
 		}
+
+		$this->from = $from_user;
 
 		$this->action = ( isset ($_POST['communication_action']) ) ? $_POST['communication_action'] : null;
 
@@ -85,7 +87,8 @@ class Communication {
 	}
 
 	// Add a new communication to the database
-	public function add ( $type ) {
+	public function add ( $type) {
+
 
 		switch ( $type ) {
 			case 'message':
@@ -164,29 +167,82 @@ class Communication {
                $this->response ('Your content was commited successfully but your tutor could not be notified.');
         }
 
-
 	}
 
 	// Find a comment by comment id, type, who posted etc.
-	public function getAll ( $type, $user ) { 
+	public function getAll ( $type, $user, $user_type = null) { 
 
 		switch ($type) {
 			case 'blog': 
 				$this->type_id = 1;
+				$this->result = $this->con->prepare(
+						'SELECT 
+						`esuper_communication`.`communication_id`
+						, `esuper_communication`.`communication_body`
+						, `esuper_communication`.`communication_date_added`
+						, `esuper_communication`.`communication_time_added`
+						, `esuper_communication`.`communication_file_id` 
+						FROM
+						`esuper_communication`
+						 WHERE 
+						`esuper_communication`.`communication_type_id` ='.$this->type_id);
 			break;
 
 			case 'message':
 				$this->type_id = 2;
+				switch ($user_type) {
+
+					case 'staff';
+					$this->result = $this->con->prepare(
+						'SELECT 
+						`esuper_communication`.`communication_id`
+						, `esuper_communication`.`communication_body`
+						, `esuper_communication`.`communication_date_added`
+						, `esuper_communication`.`communication_time_added`
+						, `esuper_communication`.`communication_file_id` 
+						, `esuper_student`.`student_first`
+						, `esuper_student`.`student_last`
+						FROM
+						`esuper_communication`,
+						`esuper_student`
+						 WHERE 
+						`esuper_communication`.`communication_type_id` ='.$this->type_id.'
+						AND 
+						`esuper_communication`.`communication_from_id` = "'.$user.'"
+						AND 
+						`esuper_student`.`student_username` = `esuper_communication`.`communication_to_id`'	
+					);
+					break;
+
+					case 'student':
+						$this->result = $this->con->prepare(
+						'SELECT 
+						`esuper_communication`.`communication_id`
+						, `esuper_communication`.`communication_body`
+						, `esuper_communication`.`communication_date_added`
+						, `esuper_communication`.`communication_time_added`
+						, `esuper_communication`.`communication_file_id` 
+						, `esuper_staff`.`staff_first`
+						, `esuper_staff`.`staff_last`
+						FROM
+						`esuper_communication`,
+						`esuper_staff`
+						 WHERE 
+						`esuper_communication`.`communication_type_id` ='.$this->type_id.'
+						AND 
+						`esuper_communication`.`communication_from_id` = "'.$user.'"
+						AND 
+						`esuper_staff`.`staff_username` = `esuper_communication`.`communication_to_id`'	
+					);
+					break;
+			}
 			break;
 		}
 		
-			$result = $this->con->prepare(
-			'SELECT `communication_id`, `communication_body`, `communication_date_added`, `communication_file_id` FROM
-			`esuper_communication` WHERE `communication_type_id` ='.$this->type_id.'
-			AND `communication_from_id` = "'.$user.'"');
+		
 
         try {
-        	$result->execute();
+        	$this->result->execute();
         }
 
         catch (PDOException $e) {
@@ -195,30 +251,63 @@ class Communication {
         	exit;
         }
 
-        $row = $result->fetchAll();
-        $result = null;
+        $row = $this->result->fetchAll();
+        $this->result = null;
         $this->response ($row);
 	}
 
-	public function received ( $type, $user ) { 
+	public function received ( $user, $user_type ) { 
 		
-		switch ($type) {
-			case 'blog': 
-				$this->type_id = 1;
-			break;
+		$this->type_id = 2;
+				switch ($user_type) {
 
-			case 'message':
-				$this->type_id = 2;
-			break;
+					case 'staff';
+					$this->result = $this->con->prepare(
+						'SELECT 
+						`esuper_communication`.`communication_id`
+						, `esuper_communication`.`communication_body`
+						, `esuper_communication`.`communication_date_added`
+						, `esuper_communication`.`communication_time_added`
+						, `esuper_communication`.`communication_file_id` 
+						, `esuper_student`.`student_first`
+						, `esuper_student`.`student_last`
+						FROM
+						`esuper_communication`,
+						`esuper_student`
+						 WHERE 
+						`esuper_communication`.`communication_type_id` ='.$this->type_id.'
+						AND 
+						`esuper_communication`.`communication_to_id` = "'.$user.'"
+						AND 
+						`esuper_student`.`student_username` = `esuper_communication`.`communication_from_id`'	
+					);
+					break;
 
-		}
-			$result = $this->con->prepare(
-			'SELECT `communication_body`, `communication_date_added`FROM
-			`esuper_communication` WHERE `communication_type_id` ='.$this->type_id.'
-			AND `communication_to_id` = "'.$user.'"');
+					case 'student':
+						$this->result = $this->con->prepare(
+						'SELECT 
+						`esuper_communication`.`communication_id`
+						, `esuper_communication`.`communication_body`
+						, `esuper_communication`.`communication_date_added`
+						, `esuper_communication`.`communication_time_added`
+						, `esuper_communication`.`communication_file_id` 
+						, `esuper_staff`.`staff_first`
+						, `esuper_staff`.`staff_last`
+						FROM
+						`esuper_communication`,
+						`esuper_staff`
+						 WHERE 
+						`esuper_communication`.`communication_type_id` ='.$this->type_id.'
+						AND 
+						`esuper_communication`.`communication_to_id` = "'.$user.'"
+						AND 
+						`esuper_staff`.`staff_username` = `esuper_communication`.`communication_from_id`'	
+					);
+					break;
+				}
 
         try {
-        	$result->execute();
+        	$this->result->execute();
         }
 
         catch (PDOException $e) {
@@ -227,8 +316,8 @@ class Communication {
         	exit;
         }
 
-        $row = $result->fetchAll();
-        $result = null;
+        $row = $this->result->fetchAll();
+        $this->result = null;
         $this->response ($row);
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// Staff dashboard page
+// A dashboard placeholder, demonstrating access to the current user
 
 // Initialise session
 session_start();
@@ -10,33 +10,38 @@ $currentStaff = $_SESSION['currentUser'];
 $userDetails = '';
 
 // Determine permissions of current user
-if ($currentStaff['user_type'] === 'student') {
-    // Redirect to student dashboard
-    header('Location: /codezero/student/index.php');
-} else {
+if ($currentUser['user_type'] === 'staff') {
     // All staff only things here
-    $userDetails = '<li>staff_first: ' . $currentStaff['staff_first'] . '</li>
-                    <li>staff_last: ' . $currentStaff['staff_last'] . '</li>
-                    <li>staff_username: ' . $currentStaff['staff_username'] . '</li>
-                    <li>staff_banner_id: ' . $currentStaff['staff_banner_id'] . '</li>
-                    <li>staff_active: ' . $currentStaff['is_active'] . '</li>
-                    <li>user_type: ' . $currentStaff['user_type'] . '</li>';
+    $userDetails = '<li>staff_first: ' . $currentUser['staff_first'] . '</li>
+                    <li>staff_last: ' . $currentUser['staff_last'] . '</li>
+                    <li>staff_username: ' . $currentUser['staff_username'] . '</li>
+                    <li>staff_banner_id: ' . $currentUser['staff_banner_id'] . '</li>
+                    <li>staff_active: ' . $currentUser['staff_active'] . '</li>
+                    <li>user_type: ' . $currentUser['user_type'] . '</li>';
 
-    if ($currentStaff['staff_authorised'] === '1') {
+    if ($currentUser['staff_authorised'] === '1') {
         // Authorised staff only things here
         $userDetails .= '<li>staff_authorised: yes</li>';
     } else {
         // Unauthorised staff only things here
         $userDetails .= '<li>staff_authorised: no</li>';
     }
+} else {
+    // Student only things here
+    $userDetails = '<b>' . $currentUser['student_first'] . ' ' . $currentUser['student_last'] . '</b> (' . $currentUser['student_username'] . ')
+                    <p>Banner ID: ' . $currentUser['student_banner_id'] . '</p>';
 }
 
 include '../classes/communication.class.php';
 include '../classes/meetings.class.php';
 include '../classes/userDetails.class.php';
 
-$user_id = $currentStaff['student_id'];
-$user_user = $currentStaff['student_username'];
+// $_SESSION['user']['id']
+$user_id = $currentUser['staff_id']; // (1) = demo staff id
+$user_user = $currentUser['staff_username']; // (1) = demo staff id
+
+// PRINT USER VARIABLES TO TOP OF BROWSER
+
 
 $c = new Communication ();
 
@@ -44,11 +49,11 @@ $c->getAll('blog', $user_user);
 $blogs = $c->getResponse();
 $blog_count = count($blogs);
 
-$c->getAll('message', $user_user);
+$c->getAll('message', $user_user, 'staff');
 $messages = $c->getResponse();
 $message_count = count($messages);
 
-$c->received('message', $user_user);
+$c->received($user_user, 'staff');
 $received = $c->getResponse();
 $received_count = count($received);
 
@@ -136,12 +141,12 @@ $secondMarker = $u2->getResponse();
                 <div class="card-content">
                     <span class="card-title green-text">Supervisor Details</span>
 
-                    <p>
-                        Supervisor: <?php echo "<a href=" . '"' . $supervisor[0]['staff_profile_link'] . '" target="_blank">' . $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last'] . "</a>"; ?>
+<p>
+                        Supervisor:<?php echo "<a href=" . '"' . $supervisor[0]['staff_profile_link'] . '" target="_blank">' . $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last'] . "</a>"; ?>
                     </p>
 
                     <p>
-                        Second Marker: <?php echo "<a href=" . '"' . $secondMarker[0]['staff_profile_link'] . '" target="_blank">' . $secondMarker[0]['staff_first'] . ' ' . $secondMarker[0]['staff_last'] . "</a>"; ?>
+                        Second Marker:<?php echo "<a href=" . '"' . $secondMarker[0]['staff_profile_link'] . '" target="_blank">' . $secondMarker[0]['staff_first'] . ' ' . $secondMarker[0]['staff_last'] . "</a>"; ?>
                     </p>
                 </div>
             </div>
@@ -191,6 +196,7 @@ $secondMarker = $u2->getResponse();
 
     </div>
 </div>
+
 
 <!-- Start New Message Modal -->
 <div id="newMessageModal" class="modal modal-fixed-footer">

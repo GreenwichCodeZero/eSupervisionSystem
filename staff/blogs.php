@@ -18,10 +18,9 @@ $c = new Communication ();
 if ($_POST['communication_action']) {
     $el = new errorList ();
 
-    try {
-        $c->insert();
-    } catch (Exception $e) {
-        $el->newList()->type('error')->message($e->getMessage())->go('blogs.php');
+    try { $c->insert (); }
+    catch (Exception $e){
+       $el->newList()->type('error')->message ($e->getMessage ())->go('blogs.php');
         exit;
     }
 
@@ -30,10 +29,6 @@ if ($_POST['communication_action']) {
 
 }
 
-$el = new errorList ();
-if ($el->exists()) {
-    echo $el->getResponse();
-}
 
 
 $c->getAll('blog', $stu_user);
@@ -58,8 +53,7 @@ $supervisor = $u->getResponse();
         function toggleForm(elemID, newButtonID) {
             $(elemID).toggle();
             $(newButtonID).toggle();
-        }
-        ;
+        };
 
         $(document).ready(function () {
             $(".button-collapse").sideNav();
@@ -93,11 +87,23 @@ $supervisor = $u->getResponse();
 <div class="container">
     <div class="row">
 
+<div class="row">
+            <?php
+                $el = new errorList ();
+                if ($el->exists ()){
+                    ?>
+                    <p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+                   <?php echo $el->getResponse (); ?>
+                    </p>
+                   <?
+                }
+            ?>
+        </div>
 
         <!-- BLOG SECTION START -->
         <div id="submitBlog" class="row">
             <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
-
+            
             <form name="blogEntry" method="post" action='' enctype="multipart/form-data" class="col s10 m12 offset-s1">
                 <input type='hidden' name='communication_action' value='posttoblog'/>
                 <input type='hidden' name='communication_from_id' value='<?php echo $stu_user; ?>'/>
@@ -107,8 +113,7 @@ $supervisor = $u->getResponse();
                     <textarea class="materialize-textarea" name='communication_body'></textarea>
                     <label>New Blog Entry</label>
                 </div>
-                <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit
-                </button>
+                <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
             </form>
         </div>
         <div class="col s10 m12 offset-s1 card">
@@ -122,11 +127,7 @@ $supervisor = $u->getResponse();
                 <p class="green-text">You have submitted
                     <?php echo $blog_count; ?> Blog posts</p>
                 <ul class="collection">
-                    <?php foreach ($blogs as $b) {
-                        echo '<li class="collection-item">';
-                        echo $b['communication_body'];
-                        echo "</li>";
-                    } ?>
+                    <?php foreach ($blogs as $b) { echo '<li class="collection-item">'; echo $b['communication_body']; echo "</li>";} ?>
                 </ul>
             </div>
         </div>

@@ -178,6 +178,7 @@ if (count($errorList) > 0) {
     </script>
 </head>
 <body>
+
 <nav>
     <div class="nav-wrapper green">
         <ul id="nav-mobile" class="side-nav">
@@ -258,7 +259,6 @@ if (count($errorList) > 0) {
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
     <!-- MEETING REQUEST SECTION END-->
