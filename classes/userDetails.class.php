@@ -49,20 +49,14 @@ class UserDetails {
         $this->response ($row);
 	}
 
-	public function AllMyStudents ( $staff_username ) {
+	public function AllMyStudents ( $staff_id ) {
 			$result = $this->con->prepare(
-			'SELECT 
-			`esuper_student`.`student_first`,
-			`esuper_student`.`student_last`,
-			`esuper_student`.`student_username`,
-			FROM 
-			`esuper_students`,
-			`esuper_user_allocation`,
-			`esuper_staff`
-			WHERE
-			`esuper_user_allocation`.`supervisor_id` = `esuper_staff`.`staff_id`
-			AND
-			`esuper_staff`.`staff_username` = "'.$staff_username.'"');
+			"SELECT  `esuper_student`.`student_first` ,  `esuper_student`.`student_last` ,  `esuper_student`.`student_username` 
+FROM  `esuper_student` ,  `esuper_user_allocation` ,  `esuper_staff`  
+WHERE
+`esuper_student`.`student_id` = `esuper_user_allocation`.`student_id` AND  
+ `esuper_user_allocation`.`supervisor_id` =  `esuper_staff`.`staff_id`
+AND   `esuper_staff`.`staff_id` =  '".$staff_id."'");
         
         try {
         	$result->execute();

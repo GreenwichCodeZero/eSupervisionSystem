@@ -30,11 +30,9 @@ if ($_POST['communication_action']){
 
 }
 
-$c->getAll('message', $stu_user, 'student');
-$sent = $c->getResponse();
-$sent_count = count($sent);
 
 $c->received($stu_user, 'student');
+print ($stu_user);
 $received = $c->getResponse();
 $received_count = count($received);
 
@@ -125,26 +123,20 @@ $supervisor = $u->getResponse();
                 <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Message</div>
             </a>
             <div class="card-content">
-                <span class="card-title green-text">Message History</span>
-                
-                <?php 
-                if ($received_count > 0) {
-                    echo "<div><a href='receivedmessages.php'>Click here to view messages you have received</a></div>";
-                }
-                ?>
-                <p class="green-text">You have submitted
-                    <?php echo $sent_count; ?> Message posts</p>
+                <span class="card-title green-text">Messages you have received</span>
+                <p class="green-text">You have received
+                    <?php echo $received_count; ?> Message posts</p>
                 <ul class="collection">
-                    <?php foreach ($sent as $s) { 
+                    <?php foreach ($received as $r) { 
                         echo '<li class="collection-item">'; 
                         echo ' <form action="readfile.php" method="POST">',
-                                "<span><p><b> ".$s[ 'communication_body']."</b></p>",
-                                "<p>eCommunication to ".$s['staff_first']." ".$s['staff_last']." added on ". $s['communication_date_added']." at ". $s['communication_time_added']. "</p></span>";
+                                "<span><p><b> ".$r[ 'communication_body']."</b></p>",
+                                "<p>eCommunication sent by ".$r['staff_first']." ".$r['staff_last']." on ". $r['communication_date_added']." at ". $r['communication_time_added']. "</p></span>";
                         
-                        if ($s['communication_file_id'] > 0 ) {
+                        if ($r['communication_file_id'] > 0 ) {
                             echo '&emsp; 
                            
-                            <input type="hidden" name="file_id" value="'.$s['communication_file_id'].'" />
+                            <input type="hidden" name="file_id" value="'.$r['communication_file_id'].'" />
                              <button class="btn waves-light" >Submit
                                 View <i class="mdi-content-send right"></i> </button>';
                         }
