@@ -18,29 +18,23 @@ $c = new Communication ();
 if ($_POST['communication_action']) {
     $el = new errorList ();
 
-    try {
-        $c->insert();
-    } catch (Exception $e) {
-
-        $el->newList()->type('error')->message($e->getMessage())->go('messages.php');
-        exit;
-    }
-
-    $el->newList()->type('success')->message($c->getResponse())->go('messages.php');
+    try { $c->insert ( $stu_user ); }
+	catch (Exception $e){
+        
+        $el->newList()->type('error')->message ($e->getMessage ())->go('messages.php');
+		exit;
+	}
+	
+    $el->newList()->type('success')->message ($c->getResponse ())->go('messages.php');
     exit;
 
 }
 
-$el = new errorList ();
-if ($el->exists()) {
-    echo $el->getResponse();
-}
-
-$c->getAll('message', $stu_user);
+$c->getAll('message', $stu_user, 'student');
 $sent = $c->getResponse();
 $sent_count = count($sent);
 
-$c->received('message', $stu_user);
+$c->received($stu_user, 'student');
 $received = $c->getResponse();
 $received_count = count($received);
 
@@ -95,7 +89,22 @@ $supervisor = $u->getResponse();
 
 <div class="container">
     <div class="row">
-        <!-- MESSAGE SECTION START-->
+	
+ <!-- MESSAGE SECTION START-->
+
+        <div class="row">
+            <?php
+                $el = new errorList ();
+                if ($el->exists ()){
+                    ?>
+                    <p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+                   <?php echo $el->getResponse (); ?>
+                    </p>
+                   <?
+                }
+            ?>
+        </div>
+
         <div id="sendMessage" class="row">
             <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#sendMessage', '#newMessage');"></i>
 
@@ -128,21 +137,27 @@ $supervisor = $u->getResponse();
 
             <div class="card-content">
                 <span class="card-title green-text">Message History</span>
-
+				<?php 
+                if ($received_count > 0) {
+                    echo "<div><a href='receivedmessages.php'>Click here to view messages you have received</a></div>";
+                }
+                ?>
                 <p class="green-text">You have submitted
                     <?php echo $sent_count; ?> Message posts</p>
                 <ul class="collection">
-                    <?php foreach ($sent as $s) {
-                        echo '<li class="collection-item">';
-                        echo ' <form action="readfile.php" method="POST">', "<p> {$s[ 'communication_body']} </p>";
-
-                        if ($s['communication_file_id'] > 0) {
+                    <?php foreach ($sent as $s) { 
+                        echo '<li class="collection-item">'; 
+                        echo ' <form action="readfile.php" method="POST">',
+                                "<span><p><b> ".$s[ 'communication_body']."</b></p>",
+                                "<p>eCommunication to ".$s['staff_first']." ".$s['staff_last']." added on ". $s['communication_date_added']." at ". $s['communication_time_added']. "</p></span>";
+                        
+                        if ($s['communication_file_id'] > 0 ) {
                             echo '&emsp; 
                            
-                            <input type="hidden" name="file_id" value="' . $s['communication_file_id'] . '" />
-                            <button>View file</button>';
+                            <input type="hidden" name="file_id" value="'.$s['communication_file_id'].'" />
+                             <button class="btn waves-light" >Submit
+                                View <i class="mdi-content-send right"></i> </button>';
                         }
-
                         echo "</form>", "</li>";
                     } ?>
                 </ul>
