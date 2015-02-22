@@ -1,5 +1,4 @@
 <?php
-//todo date format?
 
 // Initialise session
 session_start();
@@ -21,18 +20,23 @@ if ($currentStudent['user_type'] === 'staff') {
     header('Location: /codezero/staff/index.php');
 }
 
+$emailHeaders = 'From: eSupervision System <esupervision@greenwich.ac.uk>' . "\r\n" .
+    'MIME-Version: 1.0' . "\r\n" .
+    'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
+    'X-Mailer: PHP/' . phpversion();
+
 // Get student supervisor
 $u = new UserDetails ();
 $u->studentSuper($currentStudent['student_id']);
 $supervisor = $u->getResponse();
 
-if (isset($_POST['requestMeeting'])) {
-    // 'Create Meeting' button pressed
-    // Create database connection
-    if (!($link = GetConnection())) {
-        // Database connection error occurred
-        $outputText .= '<p class="error">Error connecting to database, please try again.</p>';
-    } else {
+// Create database connection
+if (!($link = GetConnection())) {
+    // Database connection error occurred
+    $outputText .= '<p class="error">Error connecting to database, please try again.</p>';
+} else {
+    if (isset($_POST['requestMeeting'])) {
+        // 'Create Meeting' button pressed
         // Server-side validation
         // Validate meeting title
         $title = mysqli_real_escape_string($link, stripslashes(strip_tags($_POST['title'])));
@@ -52,42 +56,110 @@ if (isset($_POST['requestMeeting'])) {
             array_push($errorList, 'Message is required');
         }
 
-        // Validate meeting date
-        $date = mysqli_real_escape_string($link, stripslashes($_POST['date']));
-        if (preg_match('/^\s*$/', $date)) {
-            array_push($errorList, 'Date not valid');
-            //todo adjust regex to suit required date format
+        // Validate meeting timeslot
+        $selectedTimeslot = mysqli_real_escape_string($link, stripslashes($_POST['timeslot']));
+        $timeslotId = $meetingDate = null;
+        if (!preg_match('/^[0-9]{1,},[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $selectedTimeslot)) {
+            array_push($errorList, 'Time slot not valid');
+        } else {
+            // Get timeslot ID and meeting date
+            $timeslotId = explode(',', $selectedTimeslot)[0];
+            $meetingDate = explode(',', $selectedTimeslot)[1];
         }
 
-        $meeting_from_id = $currentStudent['student_username'];
-        $meeting_to_id = $supervisor[0]['staff_username'];
-
-        // Insert into database
-        if (InsertMeeting($link, $date, $title, $content, $type, $meeting_from_id, $meeting_to_id)) {
-            // Send email to supervisor
-            $headers = 'From: eSupervision System <esupervision@greenwich.ac.uk>' . "\r\n" .
-                'MIME-Version: 1.0' . "\r\n" .
-                'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
-                'X-Mailer: PHP/' . phpversion();
-
-            mail(
-                $supervisor[0]['staff_username'] . '@greenwich.ac.uk',
-                'New Meeting Request Received',
-                'A new meeting request was submitted and is waiting for you on the eSupervision System.',
-                $headers
-            );
-
-            $outputText = '<p class="success">Meeting saved.</p>';
+        // Check for and display any errors
+        if (count($errorList) > 0) {
+            $errorListOutput = DisplayErrorMessages($errorList);
         } else {
-            $outputText = '<p class="error">Database error.</p>';
+            // No errors
+            // Insert into database
+            if (InsertMeeting($link, $timeslotId, $meetingDate, $title, $content, $type, $currentStudent['student_username'], $supervisor[0]['staff_username'])) {
+                // Send email to supervisor
+                mail(
+                    $supervisor[0]['staff_username'] . '@greenwich.ac.uk',
+                    'New Meeting Request Received',
+                    'A new meeting request was submitted and is waiting for you on the eSupervision System.',
+                    $emailHeaders
+                );
+
+                $outputText = '<p class="success">Meeting saved.</p>';
+            } else {
+                $outputText = '<p class="error">Database error.</p>';
+            }
         }
     }
-}
 
-$m = new Meeting ();
-$m->getAll(null, $currentStudent['student_username']);
-$meetings = $m->getResponse();
-$meeting_count = count($meetings);
+    // Create HTML option list of timeslots
+    //todo make sure available and not already taken
+    $timeslots = GetStaffTimeslots($link, $supervisor[0]['staff_username']);
+    if ((count($timeslots)) > 0) {
+        // Staff has timeslots
+        $timeslotsOptionList = '<option value="" disabled="disabled" selected="selected">Choose...</option>';
+
+        // Loop over how many weeks should be displayed. Default is 2
+        for ($i = 0; $i < 2; $i++) {
+            // Loop over each individual timeslot
+            foreach ($timeslots as $timeslot) {
+
+                // Initialise value with timeslot ID
+                $timeslotValue = $timeslot['timeslot_id'] . ',';
+
+                switch ($timeslot['timeslot_day']) {
+                    case 'M':
+                        // Get date of the Monday specified i weeks away
+                        $timeslotDateTime = strtotime("This Monday + $i Weeks");
+
+                        break;
+                    case 'TU':
+                        // Get date of the Tuesday specified i weeks away
+                        $timeslotDateTime = strtotime("This Tuesday + $i Weeks");
+
+                        break;
+                    case 'W':
+                        // Get date of the Wednesday specified i weeks away
+                        $timeslotDateTime = strtotime("This Wednesday + $i Weeks");
+
+                        break;
+                    case 'TH':
+                        // Get date of the Thursday specified i weeks away
+                        $timeslotDateTime = strtotime("This Thursday + $i Weeks");
+
+                        break;
+                    case 'F':
+                        // Get date of the Friday specified i weeks away
+                        $timeslotDateTime = strtotime("This Friday + $i Weeks");
+
+                        break;
+                }
+
+                // Add date to the value
+                $timeslotValue .= date('Y-m-d', $timeslotDateTime); // 2015-12-31
+
+                // Pretty format the date
+                $timeslotDisplay = date('l j M', $timeslotDateTime); // Thursday 31 Dec
+
+                // Pretty format the time
+                $timeStart = gmdate('H:i', floor($timeslot['timeslot_time'] * 3600)); // HH:MM
+                $timeEnd = gmdate('H:i', floor(($timeslot['timeslot_time'] + 0.5) * 3600)); // HH:MM
+
+                // Add date and time
+                $timeslotDisplay .= ', ' . $timeStart . '-' . $timeEnd;
+
+                // Output timeslot as drop down item
+                $timeslotsOptionList .= '<option value="' . $timeslotValue . '">' . $timeslotDisplay . '</option>';
+            }
+        }
+    } else {
+        // Staff has no timeslots
+        $timeslotsOptionList = '<option value="" disabled="disabled" selected="selected">None available</option>';
+    }
+
+    // Get all students meetings
+    $m = new Meeting ();
+    $m->getAll(null, $currentStudent['student_username']);
+    $meetings = $m->getResponse();
+    $meeting_count = count($meetings);
+}
 
 // Check for and display any errors
 if (count($errorList) > 0) {
@@ -95,9 +167,16 @@ if (count($errorList) > 0) {
 }
 
 ?>
+<!DOCTYPE html>
+<html>
 
 <head>
-    <title>Meetings</title>
+    <title>eSupervision - Meetings</title>
+
+    <meta name="author" content="Code Zero"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -127,8 +206,8 @@ if (count($errorList) > 0) {
             // Validate meeting message
             if (ValidateContent(document.getElementById('content').value) != '') isValid = false;
 
-            // Validate meeting date
-            if (ValidateDate(document.getElementById('date').value) != '') isValid = false;
+            // Validate meeting timeslot
+            if (ValidateTimeslot(document.getElementById('timeslot').value) != '') isValid = false;
 
             return isValid;
         }
@@ -159,18 +238,16 @@ if (count($errorList) > 0) {
             return output;
         }
 
-        // Function to validate the meeting date
-        function ValidateDate(date) {
-            //todo adjust regex to suit required date format
-
+        // Function to validate the meeting timeslot
+        function ValidateTimeslot(timeslot) {
             var output;
-            if (/^\s*$/.test(date)) {
-                output = 'Date is required';
+            if (!/^[0-9]{1,},[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(timeslot)) {
+                output = 'Time slot is required';
             } else {
                 output = '';
             }
 
-            document.getElementById('dateValidation').innerHTML = output;
+            document.getElementById('timeslotValidation').innerHTML = output;
             return output;
         }
     </script>
@@ -201,6 +278,11 @@ if (count($errorList) > 0) {
 </nav>
 
 <div class="container">
+
+    <!-- Output message text -->
+    <div
+        class="red-text text-light-3 validation-error"><?php echo $outputText; ?><?php echo $errorListOutput; ?></div>
+
     <!-- MEETING REQUEST SECTION START-->
     <div class="row" id="sendMessage">
         <div class="col s12">
@@ -238,15 +320,14 @@ if (count($errorList) > 0) {
                             <span id="contentValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
 
-                        <div class="col s12">
-                            <label for="date">Date</label>
-                            <input id="date" name="date" type="date" class="datepicker"
-                                   onkeyup="ValidateDate(this.value);"
-                                   onblur="ValidateDate(this.value);">
-                            <span id="dateValidation" class="red-text text-light-3 validation-error"></span>
+                        <div class="col s6">
+                            <label for="timeslot">Time slot</label>
+                            <select id="timeslot" name="timeslot" onkeyup="ValidateTimeslot(this.value);"
+                                    onblur="ValidateTimeslot(this.value);">
+                                <?php echo $timeslotsOptionList; ?>
+                            </select>
+                            <span id="timeslotValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
-
-                        <!--<input type="file" name="fileToUpload" id="fileToUpload">-->
 
                         <div class="input-field col s12">
                             <button type="submit" name="requestMeeting" onclick="return ValidateForm();"
@@ -276,14 +357,25 @@ if (count($errorList) > 0) {
 
                     <p>You have <?php echo $meeting_count; ?> meeting records.</p>
 
-                    <!-- Output message text -->
-                    <?php echo $outputText; ?>
-
                     <ul class="collection">
                         <?php foreach ($meetings as $meeting) { ?>
                             <li class="collection-item">
                                 <p><span class="green-text"><b><?php echo $meeting['meeting_title']; ?></b></span>
-                                    &#8212; <?php echo $meeting['meeting_date']; ?></p>
+                                    &#8212;
+
+                                    <?php
+                                    // Pretty format the date
+                                    $date = strtotime($meeting['meeting_date']);
+                                    $prettyDate = date('l j F Y', $date);
+
+                                    // Pretty format the time
+                                    $timeStart = gmdate('H:i', floor($meeting['meeting_time'] * 3600)); // HH:MM
+                                    $timeEnd = gmdate('H:i', floor(($meeting['meeting_time'] + 0.5) * 3600)); // HH:MM
+                                    $prettyTime = $timeStart . '-' . $timeEnd;
+
+                                    // Output date and time
+                                    echo $prettyDate . ', ' . $prettyTime; ?>
+                                </p>
 
                                 <p><?php echo $meeting['meeting_content']; ?></p>
 
@@ -301,8 +393,5 @@ if (count($errorList) > 0) {
 
 </div>
 </body>
-<script>
-    $(document).ready(function () {
-        $('.modal-trigger').leanModal();
-    });
-</script>
+
+</html>

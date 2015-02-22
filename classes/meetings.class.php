@@ -149,7 +149,7 @@ class Meeting {
     }
 
     // Find a comment by comment id, type, who posted etc.
-    public function getAll($type, $user) {
+    public function getAll($type, $username) {
 
         switch ($type) {
             case 'blog':
@@ -162,16 +162,17 @@ class Meeting {
 
         }
         $result = $this->con->prepare(
-            'SELECT m.meeting_id, m.meeting_title, m.meeting_content, m.meeting_date, t.meeting_type_name AS meeting_type, s.meeting_status_name AS meeting_status, st.student_first, st.student_last
+            'SELECT m.meeting_id, m.meeting_date, mt.timeslot_time AS meeting_time, m.meeting_title, m.meeting_content, s.meeting_status_name AS meeting_status, t.meeting_type_name AS meeting_type, st.student_first, st.student_last
              FROM esuper_meeting m
-             JOIN esuper_meeting_type t ON t.meeting_type_id = m.meeting_type_id
+             JOIN esuper_meeting_timeslot mt ON mt.timeslot_id = m.meeting_timeslot_id
              JOIN esuper_meeting_status s ON s.meeting_status_id = m.meeting_status_id
+             JOIN esuper_meeting_type t ON t.meeting_type_id = m.meeting_type_id
              JOIN esuper_student st ON st.student_username = m.meeting_student_id
-             WHERE meeting_student_id = :user_id
-             OR meeting_staff_id = :user_id
+             WHERE meeting_student_id = :username
+             OR meeting_staff_id = :username
              ORDER BY m.meeting_id DESC'
         );
-        $result->bindValue(':user_id', $user);
+        $result->bindValue(':username', $username);
 
         try {
             $result->execute();
