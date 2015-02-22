@@ -202,7 +202,14 @@ $projectTitle = $p->getResponse ();
 
                     <p>
                        
-                           Latest Upload: <?php echo ( $proposal[0]['file_id'] > 0 ? "<a href='readfile.php?file_id=".$proposal[0]['file_id']."'>".$proposal[0]['file_name']."</a>" : "no file uploaded yet" ); ?>
+                           Latest Upload: 
+                           <?php echo ( 
+                            $proposal[0]['file_id'] > 0 ? 
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$proposal[0]['file_id']."'/><a>".$proposal[0]['file_name']."</a><button>download</button>
+                            </form>"
+                            : "no file uploaded yet" 
+                            );  
+                        ?>
                     </p>
                 </div>
             </div>
@@ -216,7 +223,14 @@ $projectTitle = $p->getResponse ();
                     <span class="card-title green-text">Inital Report</span>
 
                     <p>
-                           Latest Upload: <?php echo ( $initial[0]['file_id'] > 0 ? "<a href='readfile.php?file_id=".$initial[0]['file_id']."'>".$initial[0]['file_name']."</a>" : "no file uploaded yet" );  
+                        
+                           Latest Upload: 
+                           <?php echo ( 
+                            $initial[0]['file_id'] > 0 ? 
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$initial[0]['file_id']."'/><a>".$initial[0]['file_name']."</a><button>download</button>
+                            </form>"
+                            : "no file uploaded yet" 
+                            );  
                         ?>
                     </p>
                 </div>
@@ -230,7 +244,13 @@ $projectTitle = $p->getResponse ();
                     <span class="card-title green-text">Interim Report</span>
 
                     <p>
-                           Latest Upload: <?php echo ( $interim[0]['file_id'] > 0 ? "<a href='readfile.php?file_id=".$interim[0]['file_id']."'>".$interim[0]['file_name']."</a>" : "no file uploaded yet" );  
+                           Latest Upload: 
+                           <?php echo ( 
+                            $interim[0]['file_id'] > 0 ? 
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$interim[0]['file_id']."'/><a>".$interim[0]['file_name']."</a><button>download</button>
+                            </form>"
+                            : "no file uploaded yet" 
+                            );  
                         ?>
                     </p>
 
@@ -246,7 +266,13 @@ $projectTitle = $p->getResponse ();
                     <span class="card-title green-text">Project Report</span>
 
                     <p>
-                        Latest Upload: <?php echo ( $project[0]['file_id'] > 0 ? "<a href='readfile.php?file_id=".$project[0]['file_id']."'>".$project[0]['file_name']."</a>" : "no file uploaded yet" );  
+                           Latest Upload: 
+                           <?php echo ( 
+                            $project[0]['file_id'] > 0 ? 
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$project[0]['file_id']."'/><a>".$project[0]['file_name']."</a><button>download</button>
+                            </form>"
+                            : "no file uploaded yet" 
+                            );  
                         ?>
                     </p>
                 </div>
@@ -257,11 +283,16 @@ $projectTitle = $p->getResponse ();
         <div class="col s12 m12 l6">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">Research Ethics
-                    Form</span>
+                    <span class="card-title green-text">Research Ethics</span>
 
                     <p>
-                           Latest Upload: <?php echo ( $ethics[0]['file_id'] > 0 ? "<a href='readfile.php?file_id=".$ethics[0]['file_id']."'>".$ethics[0]['file_name']."</a>" : "no file uploaded yet" );  
+                           Latest Upload: 
+                           <?php echo ( 
+                            $ethics[0]['file_id'] > 0 ? 
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$ethics[0]['file_id']."'/><a>".$ethics[0]['file_name']."</a><button>download</button>
+                            </form>"
+                            : "no file uploaded yet" 
+                            );  
                         ?>
                     </p>
 
@@ -288,11 +319,11 @@ $projectTitle = $p->getResponse ();
                     <?php foreach ($superFiles as $sf) { 
                         
                         echo '<li class="collection-item">'; 
-                        echo ' <form action="readfile.php" method="POST">', "<p> {$sf[ 'file_name']} </p>                      
+                        echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                            <button>View file</button>";
+                            <button>download</button></form>";
                             
-                        echo "</form>","</li>";
+                        echo "</li>";
                         }
                         
 
