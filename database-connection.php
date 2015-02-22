@@ -55,11 +55,31 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         }
     }
 
+    // Function that returns timeslots by staff username
+    function GetStaffTimeslots($link, $staffUsername) {
+        //$sql = "SELECT timeslot_id, timeslot_day, timeslot_time FROM esuper_meeting_timeslot WHERE staff_id = $staffId AND timeslot_active = 1 ORDER BY FIELD(timeslot_day, 'M', 'TU', 'W', 'TH', 'F') ASC, timeslot_time ASC";
+        $sql = "SELECT mt.timeslot_id, mt.timeslot_day, mt.timeslot_time
+                FROM esuper_meeting_timeslot mt
+                JOIN esuper_staff s ON mt.staff_id = s.staff_id
+                WHERE s.staff_username = '$staffUsername'
+                AND mt.timeslot_active = 1
+                ORDER BY FIELD(mt.timeslot_day, 'M', 'TU', 'W', 'TH', 'F') ASC, mt.timeslot_time ASC";
+        $result = mysqli_query($link, $sql);
+
+        $timeslots = array();
+
+        // Add each timeslot to an array
+        while ($timeslot = mysqli_fetch_assoc($result)) {
+            array_push($timeslots, $timeslot);
+        }
+
+        return $timeslots;
+    }
+
     // Function that inserts a meeting into the database
-    function InsertMeeting($link, $date, $title, $content, $type, $student_id, $staff_id) {
-        $sql = "INSERT
-                  INTO  esuper_meeting (meeting_date, meeting_title, meeting_content, meeting_type_id, meeting_student_id, meeting_staff_id)
-                  VALUES ('$date', '$title', '$content', $type, '$student_id', '$staff_id')";
+    function InsertMeeting($link, $timeslotId, $meetingDate, $title, $content, $type, $studentUsername, $staffUsername) {
+        $sql = "INSERT INTO  esuper_meeting (meeting_date, meeting_timeslot_id, meeting_title, meeting_content, meeting_type_id, meeting_student_id, meeting_staff_id)
+                VALUES ('$meetingDate', $timeslotId, '$title', '$content', $type, '$studentUsername', '$staffUsername')";
 
         return mysqli_query($link, $sql);
     }
