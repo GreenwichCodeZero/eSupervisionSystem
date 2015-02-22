@@ -73,9 +73,8 @@ if (!($link = GetConnection())) {
             $errorListOutput = DisplayErrorMessages($errorList);
         } else {
             // No errors
-            // todo Insert into database
-            // todo timeslot ID
-            if (InsertMeeting($link, 1, $meetingDate, $title, $content, $type, $meetingToStudentUsername, $currentStaff['staff_username'])) {
+            // Insert into database
+            if (InsertMeeting($link, $timeslotId, $meetingDate, $title, $content, $type, $meetingToStudentUsername, $currentStaff['staff_username'])) {
                 // Send email to student
                 mail(
                     $meetingToStudentUsername . '@greenwich.ac.uk',
@@ -89,10 +88,37 @@ if (!($link = GetConnection())) {
                 $outputText = '<p class="error">Database error.</p>';
             }
         }
+    } elseif (isset($_POST['recordMeeting'])) {
+        // 'Record Meeting' button pressed
+        // Server-side validation
+        // Validate meeting message
+        $contentRecord = mysqli_real_escape_string($link, stripslashes(strip_tags($_POST['contentRecord'])));
+        if (preg_match('/^\s*$/', $contentRecord)) {
+            array_push($errorList, 'Meeting record message is required');
+        }
+
+        // Get meeting ID and new status from GET
+        $meetingId = mysqli_real_escape_string($link, stripslashes($_POST['meeting']));
+
+        // Check for and display any errors
+        if (count($errorList) > 0) {
+            $errorListOutput = DisplayErrorMessages($errorList);
+        } else {
+            // No errors
+
+            echo '<script type="text/javascript">alert("' . $meetingId . ' ' . $contentRecord . '");</script>';
+
+            // Insert record into database
+            if (UpdateRecordMeeting($link, $meetingId, $contentRecord)) {
+                // Saved
+                $outputText = '<p class="success">Meeting recorded.</p>';
+            } else {
+                $outputText = '<p class="error">Database error.</p>';
+            }
+        }
     } elseif (isset($_GET['meeting']) && isset($_GET['status'])) {
         // Change meeting status
-        //todo held status
-        //todo meeting record/response
+        // Server-side validation
         // Get meeting ID and new status from GET
         $meetingId = mysqli_real_escape_string($link, stripslashes($_GET['meeting']));
         $newStatus = mysqli_real_escape_string($link, stripslashes($_GET['status']));
@@ -108,11 +134,10 @@ if (!($link = GetConnection())) {
             $emailHeaders
         );
 
-        $outputText = '<p class="success">Meeting status updated.</p>';
+        $outputText = '<p class="success">Meeting status updated. Optionally record a message below.</p>';
     }
 
     // Create HTML option list of timeslots
-    //todo make sure available and not already taken
     $timeslots = GetStaffTimeslots($link, $currentStaff['staff_username']);
     if ((count($timeslots)) > 0) {
         // Staff has timeslots
@@ -195,7 +220,7 @@ if (!($link = GetConnection())) {
 
     // Get all staff's meetings
     $m = new Meeting ();
-    $m->getAll(null, $currentStaff['staff_username']);
+    $m->getAll($currentStaff['staff_username']);
     $meetings = $m->getResponse();
     $meeting_count = count($meetings);
 }
@@ -236,14 +261,14 @@ if (count($errorList) > 0) {
         /**
          * @return {boolean}
          */
-        function ValidateForm() {
+        function ValidateRequestForm() {
             var isValid = true;
 
             // Validate meeting title
             if (ValidateTitle(document.getElementById('title').value) != '') isValid = false;
 
             // Validate meeting message
-            if (ValidateContent(document.getElementById('content').value) != '') isValid = false;
+            if (ValidateContentRequest(document.getElementById('content').value) != '') isValid = false;
 
             // Validate meeting timeslot
             if (ValidateTimeslot(document.getElementById('timeslot').value) != '') isValid = false;
@@ -268,7 +293,7 @@ if (count($errorList) > 0) {
         }
 
         // Function to validate the meeting message
-        function ValidateContent(content) {
+        function ValidateContentRequest(content) {
             var output;
             if (/^\s*$/.test(content)) {
                 output = 'Message is required';
@@ -305,9 +330,37 @@ if (count($errorList) > 0) {
             document.getElementById('studentValidation').innerHTML = output;
             return output;
         }
+
+        // Client-side form validation
+        // Function to display any error messages on form submit
+        /**
+         * @return {boolean}
+         */
+        function ValidateRecordForm() {
+            var isValid = true;
+
+            // Validate meeting message
+            if (ValidateContentRecord(document.getElementById('contentRecord').value) != '') isValid = false;
+
+            return isValid;
+        }
+
+        // Function to validate the meeting message
+        function ValidateContentRecord(content) {
+            var output;
+            if (/^\s*$/.test(content)) {
+                output = 'Message is required';
+            } else {
+                output = '';
+            }
+
+            document.getElementById('contentRecordValidation').innerHTML = output;
+            return output;
+        }
     </script>
 </head>
 <body>
+
 <nav>
     <div class="nav-wrapper green">
         <ul id="nav-mobile" class="side-nav">
@@ -336,6 +389,91 @@ if (count($errorList) > 0) {
     <!-- Output message text -->
     <div
         class="red-text text-light-3 validation-error"><?php echo $outputText; ?><?php echo $errorListOutput; ?></div>
+
+    <!-- MEETING RECORD DETAILS SECTION START-->
+    <?php
+    if (isset($_GET['meeting']) && isset($_GET['status'])) {
+        // Get meeting details
+        $m->getSingle($meetingId);
+        $updatedmeeting = $m->getResponse();
+        ?>
+
+        <div class="row" id="recordMeeting">
+            <div class="col s12">
+                <div class="card">
+                    <i class="small mdi-content-clear c_right-align"
+                       onclick="toggleForm('#recordMeeting', null);"></i>
+
+                    <div class="card-content">
+                        <span class="card-title green-text">Record Meeting Details</span>
+
+                        <p>
+                            <b>Title:</b> <?php echo $updatedmeeting[0]['meeting_title']; ?>
+                        </p>
+
+                        <p>
+                            <?php
+                            // Pretty format the date
+                            $date = strtotime($updatedmeeting[0]['meeting_date']);
+                            $prettyDate = date('l j F Y', $date);
+
+                            // Pretty format the time
+                            $timeStart = gmdate('H:i', floor($updatedmeeting[0]['meeting_time'] * 3600)); // HH:MM
+                            $timeEnd = gmdate('H:i', floor(($updatedmeeting[0]['meeting_time'] + 0.5) * 3600)); // HH:MM
+                            $prettyTime = $timeStart . '-' . $timeEnd;
+
+                            // Output date and time
+                            echo '<b>Date:</b> ' . $prettyDate . ', ' . $prettyTime; ?>
+                        </p>
+
+                        <p>
+                            <b>Student:</b> <?php echo $updatedmeeting[0]['student_first'] . ' ' . $updatedmeeting[0]['student_last']; ?>
+                        </p>
+
+                        <p>
+                            <b>Message:</b> <?php echo $updatedmeeting[0]['meeting_content']; ?>
+                        </p>
+
+                        <p class="grey-text text-darken-1" style="font-size: 0.8em">
+                            <b>Type:</b> <?php echo $updatedmeeting[0]['meeting_type']; ?>.
+                            <b>Current status:</b> <?php echo $updatedmeeting[0]['meeting_status']; ?>
+                        </p>
+
+                        <hr/>
+
+                        <form name="meetingRecord" method="post" action="meetings.php">
+                            <div class="input-field col s12">
+                                <label for="contentRecord">Message</label>
+                                                <textarea id="contentRecord" name='contentRecord'
+                                                          class="materialize-textarea"
+                                                          onkeyup="ValidateContentRecord(this.value);"
+                                                          onblur="ValidateContentRecord(this.value);"><?php echo $updatedmeeting[0]['meeting_status_content']; ?></textarea>
+                                <span id="contentRecordValidation"
+                                      class="red-text text-light-3 validation-error"></span>
+                            </div>
+
+                            <div class="input-field col s12">
+                                <input type="hidden" name="meeting"
+                                       value="<?php echo $updatedmeeting[0]['meeting_id']; ?>">
+
+                                <button type="submit" name="recordMeeting" onclick="return ValidateRecordForm();"
+                                        class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+                                    Submit
+                                </button>
+
+                                <a href="meetings.php" title="Cancel"
+                                   class="c_right-align waves-effect waves-teal waves-light btn-flat">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <?php
+    }
+    ?>
+    <!-- MEETING RECORD DETAILS SECTION END-->
 
     <!-- MEETING REQUEST SECTION START-->
     <div class="row" id="sendMessage">
@@ -366,8 +504,8 @@ if (count($errorList) > 0) {
                         <div class="input-field col s12">
                             <label for="content">Message</label>
                         <textarea id="content" name='content' class="materialize-textarea"
-                                  onkeyup="ValidateContent(this.value);"
-                                  onblur="ValidateContent(this.value);"></textarea>
+                                  onkeyup="ValidateContentRequest(this.value);"
+                                  onblur="ValidateContentRequest(this.value);"></textarea>
                             <span id="contentValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
 
@@ -390,7 +528,7 @@ if (count($errorList) > 0) {
                         </div>
 
                         <div class="input-field col s12">
-                            <button type="submit" name="requestMeeting" onclick="return ValidateForm();"
+                            <button type="submit" name="requestMeeting" onclick="return ValidateRequestForm();"
                                     class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
                                 Submit
                             </button>
@@ -451,22 +589,24 @@ if (count($errorList) > 0) {
                             </p>
 
                             <p>
-                                Requested by <?php echo $meeting['student_first'] . ' ' . $meeting['student_last']; ?>.
+                                Requested by <?php echo $meeting['student_first'] . ' ' . $meeting['student_last']; ?>
                             </p>
 
                             <hr/>
 
                             <p>
-                                <b>Message:</b> <?php echo $meeting['meeting_content']; ?>
+                                <b>Request message:</b> <?php echo $meeting['meeting_content']; ?>
                             </p>
+
+                            <?php if ($meeting['meeting_status_content'] != '') { ?>
+                                <p>
+                                    <b>Status message:</b> <?php echo $meeting['meeting_status_content']; ?>
+                                </p>
+                            <?php } ?>
 
                             <p class="grey-text text-darken-1" style="font-size: 0.8em">
                                 <b>Type:</b> <?php echo $meeting['meeting_type']; ?>.
                                 <b>Current status:</b> <?php echo $meeting['meeting_status']; ?>
-                            </p>
-
-                            <p>
-                                <?php echo $userDetails; ?>
                             </p>
                         </div>
                         <div class="card-action">
@@ -474,7 +614,8 @@ if (count($errorList) > 0) {
                                title="Accept">Accept</a>
                             <a href="meetings.php?meeting=<?php echo $meeting['meeting_id']; ?>&status=3"
                                title="Decline">Decline</a>
-                            <!--<a href="#" title="Record">Record Details</a>todo record-->
+                            <a href="meetings.php?meeting=<?php echo $meeting['meeting_id']; ?>&status=4"
+                               title="Decline">Held</a>
                         </div>
                     </div>
                 </div>
@@ -490,4 +631,5 @@ if (count($errorList) > 0) {
 
 </div>
 </body>
+
 </html>

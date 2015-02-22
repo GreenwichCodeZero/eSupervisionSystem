@@ -58,7 +58,7 @@ $received = $c->getResponse();
 $received_count = count($received);
 
 $m = new Meeting ();
-$m->getAll(null, $user_user);
+$m->getAll($user_user);
 $meetings = $m->getResponse();
 $meeting_count = count($meetings);
 

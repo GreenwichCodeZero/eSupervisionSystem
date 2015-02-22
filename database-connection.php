@@ -57,7 +57,7 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
 
     // Function that returns timeslots by staff username
     function GetStaffTimeslots($link, $staffUsername) {
-        //$sql = "SELECT timeslot_id, timeslot_day, timeslot_time FROM esuper_meeting_timeslot WHERE staff_id = $staffId AND timeslot_active = 1 ORDER BY FIELD(timeslot_day, 'M', 'TU', 'W', 'TH', 'F') ASC, timeslot_time ASC";
+        //todo make sure timeslot is available and not already taken
         $sql = "SELECT mt.timeslot_id, mt.timeslot_day, mt.timeslot_time
                 FROM esuper_meeting_timeslot mt
                 JOIN esuper_staff s ON mt.staff_id = s.staff_id
@@ -86,13 +86,20 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
 
     // Function that updates the specified meetings status and the returns the students username
     function UpdateMeetingStatus($link, $meetingId, $newStatus) {
-        $sql = "UPDATE esuper_meeting SET meeting_status_id = $newStatus WHERE meeting_id = $meetingId;";
+        $sql = "UPDATE esuper_meeting SET meeting_status_id = $newStatus WHERE meeting_id = $meetingId";
         mysqli_query($link, $sql);
 
-        $sql = "SELECT meeting_student_id FROM esuper_meeting WHERE meeting_id = $meetingId;";
+        $sql = "SELECT meeting_student_id FROM esuper_meeting WHERE meeting_id = $meetingId";
         $result = mysqli_query($link, $sql);
         $studentUsername = mysqli_fetch_assoc($result);
 
         return $studentUsername['meeting_student_id'];
+    }
+
+    // Function that updates the specified meetings content record
+    function UpdateRecordMeeting($link, $meetingId, $contentRecord) {
+        $sql = "UPDATE esuper_meeting SET meeting_status_content = '$contentRecord' WHERE meeting_id = $meetingId";
+
+        return mysqli_query($link, $sql);
     }
 }
