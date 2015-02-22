@@ -39,6 +39,7 @@ include '../classes/userDetails.class.php';
 // $_SESSION['user']['id']
 $user_id = $currentUser['staff_id']; // (1) = demo staff id
 $user_user = $currentUser['staff_username']; // (1) = demo staff id
+$staff_id = $currentStaff['staff_id'];
 
 // PRINT USER VARIABLES TO TOP OF BROWSER
 
@@ -70,6 +71,18 @@ $u2 = new UserDetails ();
 $u2->studentSM($user_id);
 $secondMarker = $u2->getResponse();
 
+
+$studentsSupervised = new UserDetails ();
+$studentsSupervised->supervisorStudents($staff_id);
+$students = $studentsSupervised->getResponse();
+
+$noSupervisorQ = new UserDetails ();
+$noSupervisorQ->noSupervisor();
+$noSupervisors = $noSupervisorQ->getResponse();
+
+$noSecondMarkerQ = new UserDetails ();
+$noSecondMarkerQ->noSecondMarker();
+$noSecondMarkers = $noSecondMarkerQ->getResponse();
 ?>
 <!DOCTYPE html>
 <html>
@@ -136,21 +149,7 @@ $secondMarker = $u2->getResponse();
                 </div>
             </div>
         </div>
-        <div class="col s12 m12 l6">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title green-text">Supervisor Details</span>
 
-<p>
-                        Supervisor:<?php echo "<a href=" . '"' . $supervisor[0]['staff_profile_link'] . '" target="_blank">' . $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last'] . "</a>"; ?>
-                    </p>
-
-                    <p>
-                        Second Marker:<?php echo "<a href=" . '"' . $secondMarker[0]['staff_profile_link'] . '" target="_blank">' . $secondMarker[0]['staff_first'] . ' ' . $secondMarker[0]['staff_last'] . "</a>"; ?>
-                    </p>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="row">
         <div class="col s12 m6 l4">
@@ -193,6 +192,91 @@ $secondMarker = $u2->getResponse();
                 </div>
             </div>
         </div>
+
+
+
+
+        <!-- new stuff -->
+
+ <!--  Project students starts here -->
+        <div class="col s12 m12 l4">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">List of project students</span>
+                    <br>
+                    <?php
+                    foreach ($students as $student) {
+                        echo $student['student_first'] . " " . $student['student_last'] . "<br>";
+                    }
+                    ?>
+                </div>
+                <div class="card-action">
+                    <a href="#" title="View all students">View all</a>
+                </div>
+            </div>
+        </div>
+        <!--  Project students ends here -->
+
+        <!--  Search for students starts here -->
+        <div class="col s12 m12 l4">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Search for student</span>
+
+                    <form>
+                        <input type="search" name="searchForStudent" id="searchForStudent"
+                               placeholder="Enter student name...">
+                        <input type="submit" value="Search">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  Search for students ends here -->
+
+    <!--  Students without supervisor starts here -->
+    <div class="row">
+        <div class="col s12 m6 l4">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Students without a supervisor</span>
+                    <br>
+                    <?php
+
+                    foreach ($noSupervisors as $noSupervisor) {
+                        echo $noSupervisor['student_first'] . " " . $noSupervisor['student_last'] . "<br>";
+                    }
+                    ?>
+                </div>
+                <div class="card-action">
+                    <a href="#" title="View all students without a supervisor">View all</a>
+                </div>
+            </div>
+        </div>
+        <!--  Students without supervisor ends here -->
+
+        <!--  Students without second marker starts here -->
+        <div class="row">
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title green-text">Students without a second marker</span>
+                        <br>
+                        <?php
+
+                        foreach ($noSecondMarkers as $noSecondMarker) {
+                            echo $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'] . "<br>";
+                        }
+                        ?>
+                    </div>
+                    <div class="card-action">
+                        <a href="#" title="View all students without a second marker">View all</a>
+                    </div>
+                </div>
+            </div>
+            <!--  Students without second marker ends here -->
+
+        <!-- end of new -->
 
     </div>
 </div>
