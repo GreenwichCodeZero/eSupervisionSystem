@@ -100,7 +100,7 @@ class File {
 			);
         $result->execute();
 
-        $this->response ($this->con->lastInsertId());
+        $this->response ('File ['.$fileName.'] successfully submitted');
 
 
 	}
@@ -212,6 +212,98 @@ class File {
         $this->response ($row);
 	}
 
+	public function get($username, $file_type) {
+
+		switch ($file_type) {
+			case "interim":
+			$type_id = 5;
+			break;
+			case "project":
+			$type_id = 2;
+			break;
+			case "ethics":
+			$type_id =6;
+
+			break;
+			case "initial":
+			$type_id = 8;
+			break;
+
+			case "proposal":
+			$type_id = 3;
+			break;
+
+			default: 
+			$type_id = 1;
+			break;
+
+		}
+
+		 $result = $this->con->prepare(
+			"SELECT  
+			`file_id`, 
+			`file_name`,
+			`file_type`,
+			`file_size`
+			FROM
+			`esuper_file` 
+			WHERE 
+			`file_type_id` = ".$type_id."
+			AND
+			`file_owner` = '".$username."'
+			ORDER BY
+			`file_id` DESC
+			LIMIT 1");
+  try {
+        	$result->execute();
+        }
+
+        catch (PDOException $e) {
+        	echo "ERROR:";
+        	echo "\n\n\r\r". $e->getMessage ();
+        	exit;
+        }
+
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response ($row);
+    
+
+	}
+
+	public function supervisorUploads ($staff, $student) {
+
+		$result = $this->con->prepare(
+			'SELECT   
+			`esuper_file`.`file_id`,
+			`esuper_file`.`file_name`
+			FROM
+			`esuper_communication`,
+			`esuper_file` 
+			WHERE 
+
+			`esuper_file`.`file_id` = `esuper_communication`.`communication_file_id`
+AND
+			`esuper_communication`.`communication_from_id` = "'.$staff.'"
+			AND
+			`esuper_communication`.`communication_to_id` = "'.$student.'"');
+
+	try {
+        	$result->execute();
+        }
+
+        catch (PDOException $e) {
+        	echo "ERROR:";
+        	echo "\n\n\r\r". $e->getMessage ();
+        	exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response ($row);
+    
+	}
 
 }
 
