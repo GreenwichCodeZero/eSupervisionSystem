@@ -81,6 +81,12 @@ class File {
         }
 
 
+		if 
+		($fileSize > 40000000) {
+			throw new exception ('File size exceeds the allowed limit: 40MB');
+			exit;
+		}
+
 		$fp      = fopen($tmpName, 'r');
 		$content = fread($fp, filesize($tmpName));
 		$content = addslashes($content);
@@ -105,18 +111,37 @@ class File {
 
 	}
 
-
+	private function validate () {
+		
+	}
 
 
 	// Add a new File to the database
 	public function add ( $user ) {
 
-		// Create database record
-		// 
 		$fileName = $_FILES['fileToUpload']['name'];
 		$tmpName  = $_FILES['fileToUpload']['tmp_name'];
 		$fileSize = $_FILES['fileToUpload']['size'];
 		$fileType = $_FILES['fileToUpload']['type'];
+
+		// print_r($_FILES);
+		$result = $this->con->prepare(
+			'SELECT 
+			`file_mime_type`
+			FROM
+			`esuper_file_type`
+			WHERE
+			`file_type_id` = '.$file_type_id
+			
+		);
+        $result->execute();
+        
+        $mimeType = $result->fetchAll();
+
+        if ( $_FILES['fileToUpload']['type'] != $mimeType[0]['file_mime_type']) {
+        	throw new Exception ("The file you are trying to upload is not the correct file type for this submission.<br>File type allowed: ".$mimeType[0]['file_mime_type']);
+        	exit;
+        }
 
 		if 
 		($fileSize > 40000000) {
@@ -277,7 +302,8 @@ class File {
 		$result = $this->con->prepare(
 			'SELECT   
 			`esuper_file`.`file_id`,
-			`esuper_file`.`file_name`
+			`esuper_file`.`file_name`,
+			`esuper_communication`.`communication_body`
 			FROM
 			`esuper_communication`,
 			`esuper_file` 
