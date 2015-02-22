@@ -8,26 +8,46 @@ $currentUser = $_SESSION['currentUser'];
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
 include '../classes/userDetails.class.php';
+include '../classes/errorList.class.php';
 
 
 $stu_id = $currentUser['student_id']; // (1) = demo student id
 $stu_user = $currentUser['student_username']; // (1) = demo student id
 
 $f = new File ();
+if ($_POST['file_action']){
+    $el = new errorList ();
+
+    try { $f->submit ( $stu_user, $_POST['file_type_id']); }
+    catch (Exception $e){
+        
+        $el->newList()->type('error')->message ($e->getMessage ())->go('uploads.php');
+        exit;
+    }
+    
+    $el->newList()->type('success')->message ($c->getResponse ())->go('messages.php');
+    exit;
+
+}
+
 $f->getAll($stu_user);
 $files = $f->getResponse();
 $file_count = count($files);
 
+$f2 = new File ();
+$f2->fileTypes ();
+$fileTypes = $f2->getResponse ();
 
 $u = new UserDetails ();
 $u->studentSuper($stu_id);
 $supervisor = $u->getResponse();
 
+// $f->getSubmissions ();
 
 ?>
 
 
-  <title>Uploads</title>
+  <title>Submissions</title>
     <link href="../css/styles.css" rel="stylesheet" type="text/css" />
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection" />
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -73,17 +93,35 @@ $supervisor = $u->getResponse();
 
 
 
-        <!-- BLOG SECTION START -->
+        <!-- Uploads SECTION START -->
+         <div class="row">
+            <?php
+                $el = new errorList ();
+                if ($el->exists ()){
+                    ?>
+                    <p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+                   <?php echo $el->getResponse (); ?>
+                    </p>
+                   <?
+                }
+            ?>
+        </div>
         <div id="submitBlog" class="row">
             <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
             <form name="blogEntry" method="post" action='' enctype="multipart/form-data" class="col s10 m12 offset-s1">
-                <input type='hidden' name='communication_action' value='posttoblog' />
-                <input type='hidden' name='communication_from_id' value='<?php echo $stu_user; ?>' />
-                <input type='hidden' name='communication_to_id' value='blog' />
-                <div class="input-field">
-                    <textarea class="materialize-textarea" name='communication_body'></textarea>
-                    <label>New Blog Entry</label>
-                </div>
+
+                <input type='hidden' name='file_owner' value='<?php echo $stu_user; ?>' />
+                <input type='hidden' name='file_action' value='submit' />
+                
+                    <select name="file_type_id">
+                        <?php foreach ($fileTypes as $ft) {
+                                        echo "<option value='".$ft['file_type_id']."'>".$ft['file_type_name']."</option>";
+                                    }
+                                    ?>
+                  </select>
+
+                          <input class="waves-effect waves-teal waves-light btn-flat" type="file" name="fileToUpload" id="fileToUpload">
+             
                 <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
             </form>
         </div>
@@ -119,7 +157,7 @@ $supervisor = $u->getResponse();
 
 </div> <!-- end container -->
 </body><script>
-$(document).ready(function(){
-    $('.modal-trigger').leanModal();
+ $(document).ready(function() {
+    $('select').material_select();
   });
 </script>

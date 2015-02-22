@@ -28,10 +28,30 @@ class File {
 
 	}
 
+	public function fileTypes () {
 
-	// Add a new File to the database
-	public function add ( $user ) {
+		$result = $this->con->prepare(
+			'SELECT 
+			`file_type_id`
+			,`file_type_name`
+			,`file_type_desc`
+			,`file_mime_type`
+			FROM
+			`esuper_file_type`
+			'
+		);
+        $result->execute();
 
+        
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response ($row);
+
+	}
+
+
+
+	public function submit ( $user, $file_type_id ) {
 	
 		// Create database record
 		// 
@@ -40,11 +60,27 @@ class File {
 		$fileSize = $_FILES['fileToUpload']['size'];
 		$fileType = $_FILES['fileToUpload']['type'];
 
-		// echo "<pre>";
-		// 	print_r ($_FILES);
-		// echo "</pre>";
-		// exit;
-		// die; 
+		// print_r($_FILES);
+		$result = $this->con->prepare(
+			'SELECT 
+			`file_mime_type`
+			FROM
+			`esuper_file_type`
+			WHERE
+			`file_type_id` = '.$file_type_id
+			
+		);
+        $result->execute();
+
+        
+        $mimeType = $result->fetchAll();
+
+        if ( $_FILES['fileToUpload']['type'] != $mimeType[0]['file_mime_type']) {
+        	throw new Exception ("The file you are trying to upload is not the correct file type for this submission.<br>File type allowed: ".$mimeType[0]['file_mime_type']);
+        	exit;
+        }
+
+
 		$fp      = fopen($tmpName, 'r');
 		$content = fread($fp, filesize($tmpName));
 		$content = addslashes($content);
@@ -58,14 +94,56 @@ class File {
 		$result = $this->con->prepare(
 			"INSERT INTO 
 			`esuper_file`
-			(file_id, file_owner, file_name, file_size, file_type,  file_content ) 
+			(file_id, file_owner, file_name, file_size, file_type,  file_content, file_type_id ) 
 			VALUES 
-			(null, '".$user."', '$fileName', '$fileSize', '$fileType', '$content')"
+			(null, '".$user."', '$fileName', '$fileSize', '$fileType', '$content', '$file_type_id')"
 			);
         $result->execute();
 
         $this->response ($this->con->lastInsertId());
 
+
+	}
+
+
+
+
+	// Add a new File to the database
+	public function add ( $user ) {
+
+		// Create database record
+		// 
+		$fileName = $_FILES['fileToUpload']['name'];
+		$tmpName  = $_FILES['fileToUpload']['tmp_name'];
+		$fileSize = $_FILES['fileToUpload']['size'];
+		$fileType = $_FILES['fileToUpload']['type'];
+
+		if 
+		($fileSize > 40000000) {
+			throw new exception ('File size exceeds the allowed limit: 40MB');
+			exit;
+		}
+
+		$fp      = fopen($tmpName, 'r');
+		$content = fread($fp, filesize($tmpName));
+		$content = addslashes($content);
+		fclose($fp);
+
+		if(!get_magic_quotes_gpc())
+		{
+		    $fileName = addslashes($fileName);
+		}
+
+		$result = $this->con->prepare(
+			"INSERT INTO 
+			`esuper_file`
+			(file_id, file_owner, file_name, file_size, file_type,  file_content, file_type_id ) 
+			VALUES 
+			(null, '".$user."', '$fileName', '$fileSize', '$fileType', '$content', 1)"
+			);
+        $result->execute();
+
+        $this->response ($this->con->lastInsertId());
 
 	}
 
@@ -78,18 +156,9 @@ class File {
 	}
 	
 	// Find a comment by comment id, type, who posted etc.
-	public function getAll ( $user ) { 
+	public function getAll ( $user, $type ) { 
 
-		switch ($type) {
-			case 'blog': 
-				$this->type_id = 1;
-			break;
-
-			case 'message':
-				$this->type_id = 2;
-			break;
-
-		}
+		
 			$result = $this->con->prepare(
 			'SELECT  
 			`file_id`, 
