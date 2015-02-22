@@ -90,7 +90,6 @@ if (!($link = GetConnection())) {
     }
 
     // Create HTML option list of timeslots
-    //todo make sure available and not already taken
     $timeslots = GetStaffTimeslots($link, $supervisor[0]['staff_username']);
     if ((count($timeslots)) > 0) {
         // Staff has timeslots
@@ -156,7 +155,7 @@ if (!($link = GetConnection())) {
 
     // Get all students meetings
     $m = new Meeting ();
-    $m->getAll(null, $currentStudent['student_username']);
+    $m->getAll($currentStudent['student_username']);
     $meetings = $m->getResponse();
     $meeting_count = count($meetings);
 }
@@ -377,7 +376,16 @@ if (count($errorList) > 0) {
                                     echo $prettyDate . ', ' . $prettyTime; ?>
                                 </p>
 
-                                <p><?php echo $meeting['meeting_content']; ?></p>
+                                <p>
+                                    <?php echo $meeting['meeting_content']; ?>
+                                </p>
+
+                                <?php if ($meeting['meeting_status_content'] != '') { ?>
+                                    <p style="font-size: 0.9em">
+                                        <b>Message from
+                                            supervisor:</b> <?php echo $meeting['meeting_status_content']; ?>
+                                    </p>
+                                <?php } ?>
 
                                 <p class="grey-text text-darken-1" style="font-size: 0.8em">
                                     <b>Type:</b> <?php echo $meeting['meeting_type']; ?>. <b>Current
