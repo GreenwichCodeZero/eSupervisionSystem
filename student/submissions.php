@@ -9,38 +9,77 @@ include '../classes/security.class.php';
 include '../classes/communication.class.php';
 include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
+include '../classes/projectDetails.class.php';
 
 
 $stu_id = $currentUser['student_id']; // (1) = demo student id
 $stu_user = $currentUser['student_username']; // (1) = demo student id
 
-// $f = new File ();
-// if ($_POST['file_action']){
-//     $el = new errorList ();
+$f = $f2 = $f3 = $f4 = $f5 = $f6 = $f7 = new File ();
 
-//     try { $f->submit ( $stu_user, $_POST['file_type_id']); }
-//     catch (Exception $e){
+if ($_POST['file_action']){
+    $el = new errorList ();
+
+    try { $f->submit ( $stu_user, $_POST['file_type_id']); }
+    catch (Exception $e){
         
-//         $el->newList()->type('error')->message ($e->getMessage ())->go('uploads.php');
-//         exit;
-//     }
+        $el->newList()->type('error')->message ($e->getMessage ())->go('submissions.php');
+        exit;
+    }
     
-//     $el->newList()->type('success')->message ($c->getResponse ())->go('messages.php');
-//     exit;
+    $el->newList()->type('success')->message ($f->getResponse ())->go('submissions.php');
+    exit;
 
-// }
+}
 
-// $f->getAll($stu_user);
-// $files = $f->getResponse();
-// $file_count = count($files);
+$p = new projectDetails ();
 
-// $f2 = new File ();
-// $f2->fileTypes ();
-// $fileTypes = $f2->getResponse ();
+if ($_POST['projectDetails_action']){
+    $el = new errorList ();
 
-// $u = new UserDetails ();
-// $u->studentSuper($stu_id);
-// $supervisor = $u->getResponse();
+    try { $p->newTitle ( $stu_user); }
+    catch (Exception $e){
+        
+        $el->newList()->type('error')->message ($e->getMessage ())->go('submissions.php');
+        exit;
+    }
+    
+    $el->newList()->type('success')->message ($p->getResponse ())->go('submissions.php');
+    exit;
+
+}
+
+
+$f2->fileTypes ();
+$fileTypes = $f2->getResponse ();
+
+$f3->get ( $stu_user, 'interim');
+$interim = $f3->getResponse ();
+
+$f3->get ( $stu_user, 'initial');
+$initial = $f3->getResponse ();
+
+$f3->get ( $stu_user, 'ethics');
+$ethics = $f3->getResponse ();
+
+$f3->get ( $stu_user, 'proposal');
+$proposal = $f3->getResponse ();
+
+$f7->get ( $stu_user, 'project');
+$project = $f7->getResponse ();
+
+$u = new UserDetails ();
+$u->studentSuper($stu_id);
+$supervisor = $u->getResponse();
+
+
+$f5->supervisorUploads ($supervisor[0]['staff_username'], $stu_user);
+$superFiles = $f5->getResponse ();
+$super_count = count ($superFiles);
+
+$p->studentProject($stu_user);
+$projectTitle = $p->getResponse ();
+
 
 // // $f->getSubmissions ();
 
@@ -71,7 +110,7 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
                     <a href="index.php">Dashboard</a>
                 </li>
                 <li>
-                    <a href="messages.php">Communication</a>
+                    <a href="messages.php">Messages</a>
                 </li>
                 <li>
                     <a href="meetings.php">Meetings</a>
@@ -80,7 +119,7 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
                     <a href="blogs.php">Blog/Diary</a>
                 </li>
                 <li>
-                    <a href="uploads.php">Project Uploads</a>
+                    <a href="submissions.php">Project Uploads</a>
                 </li>
             </ul>
             <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
@@ -107,20 +146,51 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
     <div class="row">
         <h5 class="center-align">Project Uploads</h5>
     </div>
+
+
+        <div id="submitBlog" class="row">
+            <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
+            <form name="blogEntry" method="post" action='' enctype="multipart/form-data" class="col s10 m12 offset-s1">
+
+                <input type='hidden' name='file_owner' value='<?php echo $stu_user; ?>' />
+                <input type='hidden' name='file_action' value='submit' />
+                
+                    <select name="file_type_id">
+                        <?php foreach ($fileTypes as $ft) {
+                                        echo "<option value='".$ft['file_type_id']."'>".$ft['file_type_name']."</option>";
+                                    }
+                                    ?>
+                  </select>
+
+                          <input class="waves-effect waves-teal waves-light btn-flat" type="file" name="fileToUpload" id="fileToUpload">
+             
+                <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
+            </form>
+        </div>
+
+
+    <div class="row">
+  <a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry" class="c_right-align"> 
+                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit new file</div>
+            </a>
+    </div>     
+
+
+
     <div class="row">
         <div class="col s12 m12 l6">
             <div class="card">
-            <form>
+            <form method = 'post'>
                 <div class="card-content">
                     <span class="card-title green-text">Project Title</span>
 
                     <p>
-                        <input type='text' placehoder='Title' />
+                        <input type='text' name ='title' placeholder='<?php echo ( $projectTitle ? $projectTitle[0]['project_title'] : 'Insert title ...' ); ?>' />
+                        <input type='hidden' name='projectDetails_action' value = 'projectDetails_action' />
+                        <button>Update</button>
                     </p>
                 </div>
-                <div class="card-action">
-                    <button class='waves'>Update</button>
-                </div>
+                </form>
             </div>
         </div>
 
@@ -131,7 +201,8 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
                     <span class="card-title green-text">Project Proposal</span>
 
                     <p>
-                        Supervisor: <?php echo "<a href=" . '"' . $supervisor[0]['staff_profile_link'] . '" target="_blank">' . $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last'] . "</a>"; ?>
+                       
+                           Latest Upload: <?php echo ( $proposal[0]['file_id'] > 0 ? "<a href='readfile.php?file_id=".$proposal[0]['file_id']."'>".$proposal[0]['file_name']."</a>" : "no file uploaded yet" ); ?>
                     </p>
                 </div>
             </div>
@@ -145,11 +216,9 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
                     <span class="card-title green-text">Inital Report</span>
 
                     <p>
-                        <?php echo $userDetails; ?>
+                           Latest Upload: <?php echo ( $initial[0]['file_id'] > 0 ? "<a href='readfile.php?file_id=".$initial[0]['file_id']."'>".$initial[0]['file_name']."</a>" : "no file uploaded yet" );  
+                        ?>
                     </p>
-                </div>
-                <div class="card-action">
-                    <a href="../Upload.php" title="Upload">Upload</a>
                 </div>
             </div>
         </div>
@@ -161,13 +230,11 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
                     <span class="card-title green-text">Interim Report</span>
 
                     <p>
-                        Supervisor: <?php echo "<a href=" . '"' . $supervisor[0]['staff_profile_link'] . '" target="_blank">' . $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last'] . "</a>"; ?>
+                           Latest Upload: <?php echo ( $interim[0]['file_id'] > 0 ? "<a href='readfile.php?file_id=".$interim[0]['file_id']."'>".$interim[0]['file_name']."</a>" : "no file uploaded yet" );  
+                        ?>
                     </p>
 
-                    <p>
-                        Second
-                        Marker: <?php echo "<a href=" . '"' . $secondMarker[0]['staff_profile_link'] . '" target="_blank">' . $secondMarker[0]['staff_first'] . ' ' . $secondMarker[0]['staff_last'] . "</a>"; ?>
-                    </p>
+                    
                 </div>
             </div>
         </div>
@@ -176,14 +243,12 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
         <div class="col s12 m12 l6">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">Final Report</span>
+                    <span class="card-title green-text">Project Report</span>
 
                     <p>
-                        <?php echo $userDetails; ?>
+                        Latest Upload: <?php echo ( $project[0]['file_id'] > 0 ? "<a href='readfile.php?file_id=".$project[0]['file_id']."'>".$project[0]['file_name']."</a>" : "no file uploaded yet" );  
+                        ?>
                     </p>
-                </div>
-                <div class="card-action">
-                    <a href="../Upload.php" title="Upload">Upload</a>
                 </div>
             </div>
         </div>
@@ -196,19 +261,62 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
                     Form</span>
 
                     <p>
-                        Supervisor: <?php echo "<a href=" . '"' . $supervisor[0]['staff_profile_link'] . '" target="_blank">' . $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last'] . "</a>"; ?>
+                           Latest Upload: <?php echo ( $ethics[0]['file_id'] > 0 ? "<a href='readfile.php?file_id=".$ethics[0]['file_id']."'>".$ethics[0]['file_name']."</a>" : "no file uploaded yet" );  
+                        ?>
                     </p>
 
-                    <p>
-                        Second
-                        Marker: <?php echo "<a href=" . '"' . $secondMarker[0]['staff_profile_link'] . '" target="_blank">' . $secondMarker[0]['staff_first'] . ' ' . $secondMarker[0]['staff_last'] . "</a>"; ?>
-                    </p>
+                   
                 </div>
             </div>
         </div>
     </div>
     
+    <div class="row">
+ <div class="col s10 m12 offset-s1 card">
+            
+            <div class="card-content">
+                <span class="card-title green-text">Supervisor Uploads</span>
+                <p class="green-text"><?php echo $supervisor[0]['staff_first']." ".$supervisor[0]['staff_last'];?> has uploaded
+                    <?php echo $super_count; ?> files</p>
+                
+                <ul class="collection">
+                <?php 
+                if ($super_count > 0) {
+?>
 
+                
+                    <?php foreach ($superFiles as $sf) { 
+                        
+                        echo '<li class="collection-item">'; 
+                        echo ' <form action="readfile.php" method="POST">', "<p> {$sf[ 'file_name']} </p>                      
+                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                            <button>View file</button>";
+                            
+                        echo "</form>","</li>";
+                        }
+                        
+
+                        
+                    ?>
+                </ul>
+
+                <?php 
+            } else {
+                ?>
+
+                <li class="collection-item">
+                No files uploaded
+                </li> 
+
+                <?php 
+
+            }
+
+?>
+    </ul>
+            </div>
+        </div>
+    </div>
 
 </div> <!-- end container -->
 </body><script>

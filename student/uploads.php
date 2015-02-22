@@ -126,9 +126,7 @@ $supervisor = $u->getResponse();
             </form>
         </div>
         <div class="col s10 m12 offset-s1 card">
-            <a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry" class="c_right-align">
-                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Entry</div>
-            </a>
+            
             <div class="card-content">
                 <span class="card-title green-text">Upload History</span>
                 <p class="green-text">You have uploaded
