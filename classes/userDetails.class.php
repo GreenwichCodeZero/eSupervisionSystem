@@ -73,8 +73,10 @@ AND   `esuper_staff`.`staff_id` =  '" . $staff_id . "'");
             'SELECT student.student_first, student.student_last, student.student_username
              FROM esuper_student student
              JOIN esuper_user_allocation allocation ON student.student_id = allocation.student_id
-             JOIN esuper_staff staff ON allocation.supervisor_id = staff.staff_id
-             WHERE staff.staff_username = :staff_username');
+             JOIN esuper_staff spv ON allocation.supervisor_id = spv.staff_id
+             JOIN esuper_staff snd ON allocation.second_id = snd.staff_id
+             WHERE spv.staff_username = :staff_username
+             OR snd.staff_username = :staff_username');
         $result->bindValue(':staff_username', $staff_username);
 
         try {
