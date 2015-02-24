@@ -179,21 +179,25 @@ if (!($link = GetConnection())) {
                         break;
                 }
 
-                // Add date to the value
-                $timeslotValue .= date('Y-m-d', $timeslotDateTime); // 2015-12-31
+                // Check timeslot is available
+                if (CheckTimeslotAvailability($link, $timeslot['timeslot_id'], date('Y-m-d', $timeslotDateTime))) {
+                    // Timeslot is available
+                    // Add date to the value
+                    $timeslotValue .= date('Y-m-d', $timeslotDateTime); // 2015-12-31
 
-                // Pretty format the date
-                $timeslotDisplay = date('l j M', $timeslotDateTime); // Thursday 31 Dec
+                    // Pretty format the date
+                    $timeslotDisplay = date('l j M', $timeslotDateTime); // Thursday 31 Dec
 
-                // Pretty format the time
-                $timeStart = gmdate('H:i', floor($timeslot['timeslot_time'] * 3600)); // HH:MM
-                $timeEnd = gmdate('H:i', floor(($timeslot['timeslot_time'] + 0.5) * 3600)); // HH:MM
+                    // Pretty format the time
+                    $timeStart = gmdate('H:i', floor($timeslot['timeslot_time'] * 3600)); // HH:MM
+                    $timeEnd = gmdate('H:i', floor(($timeslot['timeslot_time'] + 0.5) * 3600)); // HH:MM
 
-                // Add date and time
-                $timeslotDisplay .= ', ' . $timeStart . '-' . $timeEnd;
+                    // Add date and time
+                    $timeslotDisplay .= ', ' . $timeStart . '-' . $timeEnd;
 
-                // Output timeslot as drop down item
-                $timeslotsOptionList .= '<option value="' . $timeslotValue . '">' . $timeslotDisplay . '</option>';
+                    // Output timeslot as drop down item
+                    $timeslotsOptionList .= '<option value="' . $timeslotValue . '">' . $timeslotDisplay . '</option>';
+                }
             }
         }
     } else {
