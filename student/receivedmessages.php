@@ -32,7 +32,7 @@ if ($_POST['communication_action']){
 
 
 $c->received($stu_user, 'student');
-
+print ($stu_user);
 $received = $c->getResponse();
 $received_count = count($received);
 
@@ -77,7 +77,7 @@ $supervisor = $u->getResponse();
                 <a href="blogs.php">Blog</a>
             </li>
             <li>
-                <a href="submissions.php">Project Uploads</a>
+                <a href="uploads.php">Uploads</a>
             </li>
             </ul>
             <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>

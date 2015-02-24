@@ -31,7 +31,7 @@ class Communication {
 	    date_default_timezone_set('Europe/London'); 
 
 		$s = new Security (); 
-			$this->postVars = $s->clean ($_POST);
+			$s->clean ($_POST);
 			try { $this->con = $s->db (); }
 
 			catch (Exception $e) {
@@ -39,11 +39,9 @@ class Communication {
 				exit;
 			}
 
-
 	}
 
 	public function insert ($from_user) {
-
 
 		try { $this->validate (); }
 
@@ -54,7 +52,7 @@ class Communication {
 
 		$this->from = $from_user;
 
-		$this->action = ( isset ($this->postVars['communication_action']) ) ? $this->postVars['communication_action'] : null;
+		$this->action = ( isset ($_POST['communication_action']) ) ? $_POST['communication_action'] : null;
 
 		switch ( $this->action ) {
 			case 'sendmessage':
@@ -69,7 +67,7 @@ class Communication {
 
 			default: 
 				// echo "nothing to do <pre>";
-				print_r ($this->postVars);
+				print_r ($_POST);
 				exit;
 			break;
 
@@ -79,7 +77,7 @@ class Communication {
 
 	public function validate () {
 
-		foreach($this->postVars as $key => $value) {
+		foreach($_POST as $key => $value) {
  			if (empty ($value)) {
  				throw new Exception ('Please complete all fields: '.$key.' was empty');
  				exit;
@@ -95,7 +93,7 @@ class Communication {
 		switch ( $type ) {
 			case 'message':
 				$this->type = 2;
-				$this->to = $this->postVars ['communication_to_id'];
+				$this->to = $_POST ['communication_to_id'];
 			break;
 
 			case 'blog':
@@ -105,7 +103,7 @@ class Communication {
 
 			default: 
 				echo "<br>NO POST VALUES<br>";
-				print_r ($this->postVars);
+				print_r ($_POST);
 				exit;
 			break;
 
@@ -128,10 +126,10 @@ class Communication {
 		    	
 	    	}
 
-		$this->from = $this->postVars ['communication_from_id'];
+		$this->from = $_POST ['communication_from_id'];
 		$this->date_addded = time();
 		$this->time_addded = time();
-		$this->body = $this->postVars ['communication_body'];
+		$this->body = $_POST ['communication_body'];
 
 		$result = $this->con->prepare(
 			"INSERT INTO `esuper_communication` (communication_from_id,communication_to_id, communication_date_added, communication_time_added, communication_type_id, communication_body, communication_file_id)

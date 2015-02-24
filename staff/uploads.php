@@ -23,10 +23,6 @@ $u = new UserDetails ();
 $u->studentSuper($stu_id);
 $supervisor = $u->getResponse();
 
-$u = new UserDetails ();
-$u->AllMystudents($sta_id);
-$students = $u->getResponse();
-
 
 ?>
 
