@@ -76,6 +76,20 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         return $timeslots;
     }
 
+    // Function that checks the availability of a meeting timeslot on the specified date
+    function CheckTimeslotAvailability($link, $timeslotId, $timeslotDate) {
+        $sql = "SELECT meeting_id FROM esuper_meeting WHERE meeting_date = '$timeslotDate' AND meeting_timeslot_id = $timeslotId";
+        $result = mysqli_query($link, $sql);
+
+        if (mysqli_num_rows($result) == 1) {
+            // False means timeslot is not available
+            return false;
+        } else {
+            // True means timeslot is available
+            return true;
+        }
+    }
+
     // Function that inserts a meeting into the database
     function InsertMeeting($link, $timeslotId, $meetingDate, $title, $content, $type, $studentUsername, $staffUsername) {
         $sql = "INSERT INTO  esuper_meeting (meeting_date, meeting_timeslot_id, meeting_title, meeting_content, meeting_type_id, meeting_student_id, meeting_staff_id)
