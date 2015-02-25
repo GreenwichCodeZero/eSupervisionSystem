@@ -13,6 +13,9 @@ require '../classes/meetings.class.php';
 $errorList = array();
 $outputText = $errorListOutput = '';
 $currentStaff = $_SESSION['currentUser'];
+$currentStaff = $_SESSION['currentUser'];
+
+$staff_id = $currentStaff['staff_id'];
 
 // Determine permissions of current user
 if ($currentStaff['user_type'] === 'student') {
@@ -234,6 +237,13 @@ if (count($errorList) > 0) {
     $errorListOutput = DisplayErrorMessages($errorList);
 }
 
+$getStaffDetailsQ = new UserDetails ();
+$getStaffDetailsQ->isStaffAuthorised($staff_id);
+$getStaffDetails = $getStaffDetailsQ->getResponse();
+
+foreach($getStaffDetails as $staffDetail){
+    $staffAuthorsied = $staffDetail['staff_authorised'];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -381,8 +391,16 @@ if (count($errorList) > 0) {
                 <a href="blogs.php">Blog</a>
             </li>
             <li>
-                <a href="uploads.php">Uploads</a>
+                <a href="uploads.php">Project Uploads</a>
             </li>
+                        <?php
+            if($staffAuthorsied == 1){
+            
+            echo '<li>
+                <a href="search.php">Search</a>
+            </li>';
+        }
+        ?>
         </ul>
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
     </div>

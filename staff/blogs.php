@@ -5,6 +5,8 @@ session_start();
 require '../login-check.php';
 
 $currentUser = $_SESSION['currentUser'];
+$currentStaff = $_SESSION['currentUser'];
+
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
 include '../classes/userDetails.class.php';
@@ -13,6 +15,7 @@ include '../classes/errorList.class.php';
 
 $stu_id = $currentUser['student_id']; // (1) = demo student id
 $stu_user = $currentUser['student_username']; // (1) = demo student id
+$staff_id = $currentStaff['staff_id'];
 
 $c = new Communication ();
 if ($_POST['communication_action']) {
@@ -40,7 +43,13 @@ $u = new UserDetails ();
 $u->studentSuper($stu_id);
 $supervisor = $u->getResponse();
 
+$getStaffDetailsQ = new UserDetails ();
+$getStaffDetailsQ->isStaffAuthorised($staff_id);
+$getStaffDetails = $getStaffDetailsQ->getResponse();
 
+foreach($getStaffDetails as $staffDetail){
+    $staffAuthorsied = $staffDetail['staff_authorised'];
+}
 ?>
 
 <head>
@@ -77,8 +86,16 @@ $supervisor = $u->getResponse();
                 <a href="blogs.php">Blog</a>
             </li>
             <li>
-                <a href="uploads.php">Uploads</a>
+                <a href="uploads.php">Project Uploads</a>
             </li>
+                        <?php
+            if($staffAuthorsied == 1){
+            
+            echo '<li>
+                <a href="search.php">Search</a>
+            </li>';
+        }
+        ?>
         </ul>
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
     </div>
