@@ -9,7 +9,8 @@ $currentStaff = $_SESSION['currentUser'];
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
 include '../classes/userDetails.class.php';
-
+include '../classes/search.class.php';
+include 'searchCheck.php';
 
 $stu_id = $currentUser['student_id']; // (1) = demo student id
 $stu_user = $currentUser['student_username']; // (1) = demo student id
@@ -22,6 +23,14 @@ $getStaffDetailsQ = new UserDetails ();
 $getStaffDetailsQ->isStaffAuthorised($staff_id);
 $getStaffDetails = $getStaffDetailsQ->getResponse();
 
+$searchProgrammesQ = new Search ();
+$searchProgrammesQ->searchProgrammes();
+$searchProgrammes = $searchProgrammesQ->getResponse();
+
+$searchStudentsByProgrammeQ = new UserDetails ();
+$searchStudentsByProgrammeQ->searchStudentsByProgramme($programmeID);
+$searchStudentsByProgrammes = $searchStudentsByProgrammeQ->getResponse();
+
 foreach($getStaffDetails as $staffDetail){
     $staffAuthorsied = $staffDetail['staff_authorised'];
 }
@@ -29,12 +38,17 @@ foreach($getStaffDetails as $staffDetail){
 if($staffAuthorsied != 1){  //quick fix to not allow access to unauthorised staff
     header('Location: index.php');
 } 
+
+
+$searchStudentsQ = new UserDetails ();
+$searchStudentsQ->searchStudents($name);
+$searchStudents = $searchStudentsQ->getResponse();
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>eSupervision - Meetings</title>
+    <title>eSupervision - Search</title>
 
     <meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
@@ -44,6 +58,11 @@ if($staffAuthorsied != 1){  //quick fix to not allow access to unauthorised staf
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="../js/materialize.min.js"></script>
+      <script type="text/javascript">
+        $(document).ready(function () {
+            $('select').material_select();
+        });
+</script>
 </head>
 <body>
 
@@ -80,6 +99,58 @@ if($staffAuthorsied != 1){  //quick fix to not allow access to unauthorised staf
 
 <div class="container">
 <h1>Search</h1>
+<!-- Start of search by name -->
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
+<label for="searchByName">Enter a first or full name:</label>
+<input type="search" name="searchByName" id="searchByName" placeholder="Enter a students name to search">
+
+<input type="submit" name="searchSubmit" id="searchSubmit" value="Search by name">
+</form>
+<!-- End of search by name -->
+<br>
+<!-- Start of search by programme -->
+
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
+<label for="searchProgramme">Search students by programme:</label>
+<select name="searchProgramme" id="searchProgramme">
+<?php
+foreach($searchProgrammes as $programme){
+    echo "<option value=" . '"' . $programme['programme_id'] . '">' . $programme['programme_title'] . "</option>";
+}
+?>
+
+</select>
+
+<input type="submit" name="searchProgrammeSubmit" id="searchSubmit" value="Search by programme">
+</form>
+<!-- End of search by programme -->
+
+<!-- Start of display students found by searching their name -->
+<?php
+if($searchStudents != null){
+    echo "<h2>Studets found:</h2>";
+
+foreach($searchStudents as $students){
+    echo $students['student_first'] . " " . $students['student_last'] . "<br>";
+}
+}else{
+    echo $noStudentsFound;
+}
+//End of display students found by searching their name -->
+
+//Start of display students found by programme -->
+
+if($searchStudentsByProgrammes != null){
+    echo "<h2>Studets found:</h2>";
+
+foreach($searchStudentsByProgrammes as $studentsProgramme){
+    echo $studentsProgramme['student_first'] . " " . $studentsProgramme['student_last'] . "<br>";
+}
+}else{
+    echo $noProgrameStudents;
+}
+?>
+<!-- End of display students found by programme -->
 
 </div>
 
