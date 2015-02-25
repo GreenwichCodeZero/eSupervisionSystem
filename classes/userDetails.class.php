@@ -206,6 +206,22 @@ AND   `esuper_staff`.`staff_id` =  '" . $staff_id . "'");
     }
 
 
+public function isStaffAuthorised($staff_id) {
+        $result = $this->con->prepare("SELECT staff_authorised FROM esuper_staff WHERE staff_id = " . '"' . $staff_id . '"');
+
+        $result->bindValue(':staff_id', $staff_id);
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
 
 
     public function getResponse() {
