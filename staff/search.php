@@ -25,6 +25,10 @@ $getStaffDetails = $getStaffDetailsQ->getResponse();
 foreach($getStaffDetails as $staffDetail){
     $staffAuthorsied = $staffDetail['staff_authorised'];
 }
+
+if($staffAuthorsied != 1){  //quick fix to not allow access to unauthorised staff
+    header('Location: index.php');
+} 
 ?>
 <!DOCTYPE html>
 <html>
@@ -75,3 +79,10 @@ foreach($getStaffDetails as $staffDetail){
 </nav>
 
 <div class="container">
+<h1>Search</h1>
+
+</div>
+
+</body>
+
+</html>

@@ -33,8 +33,8 @@ $getStaffDetails = $getStaffDetailsQ->getResponse();
 foreach($getStaffDetails as $staffDetail){
     $staffAuthorsied = $staffDetail['staff_authorised'];
 }
-?>
 
+?>
 <head>
     <title>Uploads</title>
     <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
