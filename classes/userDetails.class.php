@@ -224,6 +224,41 @@ public function isStaffAuthorised($staff_id) {
     }
 
 
+    public function searchStudents($student_first) {
+        $result = $this->con->prepare("SELECT * FROM esuper_student WHERE esuper_student.student_first = " . '"' . $student_first . '"' . "OR " . '"' . $student_first . '"');
+
+        $result->bindValue(':student_first', $student_first);
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
+
+    public function searchStudentsByProgramme($programme_id) {
+        $result = $this->con->prepare("SELECT * FROM esuper_student, esuper_programme, esuper_user_programme WHERE esuper_programme.programme_id =  " . '"' . $programme_id . '"' . " AND esuper_programme.programme_id = esuper_user_programme.programme_id AND esuper_user_programme.student_id = esuper_student.student_id");
+
+        $result->bindValue(':student_first', $student_first);
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
+
+
     public function getResponse() {
         return $this->response;
     }
