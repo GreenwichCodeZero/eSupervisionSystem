@@ -16,7 +16,7 @@ if ($currentStaff['user_type'] === 'staff') {
                     <li>staff_last: ' . $currentStaff['staff_last'] . '</li>
                     <li>staff_username: ' . $currentStaff['staff_username'] . '</li>
                     <li>staff_banner_id: ' . $currentStaff['staff_banner_id'] . '</li>
-                    <li>staff_active: ' . $currentStaff['staff_active'] . '</li>
+                    <li>staff_active: ' . $currentStaff['is_active'] . '</li>
                     <li>user_type: ' . $currentStaff['user_type'] . '</li>';
 
     if ($currentUser['staff_authorised'] === '1') {
