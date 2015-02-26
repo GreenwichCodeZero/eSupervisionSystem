@@ -10,14 +10,14 @@ $currentStaff = $_SESSION['currentUser'];
 $userDetails = '';
 
 // Determine permissions of current user
-if ($currentUser['user_type'] === 'staff') {
+if ($currentStaff['user_type'] === 'staff') {
     // All staff only things here
-    $userDetails = '<li>staff_first: ' . $currentUser['staff_first'] . '</li>
-                    <li>staff_last: ' . $currentUser['staff_last'] . '</li>
-                    <li>staff_username: ' . $currentUser['staff_username'] . '</li>
-                    <li>staff_banner_id: ' . $currentUser['staff_banner_id'] . '</li>
-                    <li>staff_active: ' . $currentUser['staff_active'] . '</li>
-                    <li>user_type: ' . $currentUser['user_type'] . '</li>';
+    $userDetails = '<li>staff_first: ' . $currentStaff['staff_first'] . '</li>
+                    <li>staff_last: ' . $currentStaff['staff_last'] . '</li>
+                    <li>staff_username: ' . $currentStaff['staff_username'] . '</li>
+                    <li>staff_banner_id: ' . $currentStaff['staff_banner_id'] . '</li>
+                    <li>staff_active: ' . $currentStaff['is_active'] . '</li>
+                    <li>user_type: ' . $currentStaff['user_type'] . '</li>';
 
     if ($currentUser['staff_authorised'] === '1') {
         // Authorised staff only things here
@@ -26,10 +26,6 @@ if ($currentUser['user_type'] === 'staff') {
         // Unauthorised staff only things here
         $userDetails .= '<li>staff_authorised: no</li>';
     }
-} else {
-    // Student only things here
-    $userDetails = '<b>' . $currentUser['student_first'] . ' ' . $currentUser['student_last'] . '</b> (' . $currentUser['student_username'] . ')
-                    <p>Banner ID: ' . $currentUser['student_banner_id'] . '</p>';
 }
 
 include '../classes/communication.class.php';
@@ -37,8 +33,7 @@ include '../classes/meetings.class.php';
 include '../classes/userDetails.class.php';
 
 // $_SESSION['user']['id']
-$user_id = $currentUser['staff_id']; // (1) = demo staff id
-$user_user = $currentUser['staff_username']; // (1) = demo staff id
+$staff_username = $currentStaff['staff_username']; // (1) = demo staff id
 $staff_id = $currentStaff['staff_id'];
 
 // PRINT USER VARIABLES TO TOP OF BROWSER
@@ -46,29 +41,29 @@ $staff_id = $currentStaff['staff_id'];
 
 $c = new Communication ();
 
-$c->getAll('blog', $user_user);
+$c->getAll('blog', $staff_username);
 $blogs = $c->getResponse();
 $blog_count = count($blogs);
 
-$c->getAll('message', $user_user, 'staff');
+$c->getAll('message', $staff_username, 'staff');
 $messages = $c->getResponse();
 $message_count = count($messages);
 
-$c->received($user_user, 'staff');
+$c->received($staff_username, 'staff');
 $received = $c->getResponse();
 $received_count = count($received);
 
 $m = new Meeting ();
-$m->getAll($user_user);
+$m->getAll($staff_username);
 $meetings = $m->getResponse();
 $meeting_count = count($meetings);
 
 $u = new UserDetails ();
-$u->studentSuper($user_id);
+$u->studentSuper($staff_id);
 $supervisor = $u->getResponse();
 
 $u2 = new UserDetails ();
-$u2->studentSM($user_id);
+$u2->studentSM($staff_id);
 $secondMarker = $u2->getResponse();
 
 
@@ -136,12 +131,12 @@ foreach($getStaffDetails as $staffDetail){
             </li>
             <?php
             if($staffAuthorsied == 1){
-            
-            echo '<li>
+
+                echo '<li>
                 <a href="search.php">Search</a>
             </li>';
-        }
-        ?>
+            }
+            ?>
         </ul>
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
     </div>
@@ -214,7 +209,7 @@ foreach($getStaffDetails as $staffDetail){
 
         <!-- new stuff -->
 
- <!--  Project students starts here -->
+        <!--  Project students starts here -->
         <div class="col s12 m12 l4">
             <div class="card">
                 <div class="card-content">
@@ -292,49 +287,49 @@ foreach($getStaffDetails as $staffDetail){
             </div>
             <!--  Students without second marker ends here -->
 
-        <!-- end of new -->
+            <!-- end of new -->
 
+        </div>
     </div>
-</div>
 
 
-<!-- Start New Message Modal -->
-<div id="newMessageModal" class="modal modal-fixed-footer">
-    <form method="post" action = "messages.php">
-        <div class="modal-content">
-            <h4>Send a message to supervisor</h4>
+    <!-- Start New Message Modal -->
+    <div id="newMessageModal" class="modal modal-fixed-footer">
+        <form method="post" action = "messages.php">
+            <div class="modal-content">
+                <h4>Send a message to supervisor</h4>
 
-            <textarea name="communication_body"></textarea>
-            <input type="hidden" name="communication_action" value = "sendmessage" />
-            <input type="hidden" name="communication_from_id" value="<?php echo $currentStaff['student_username']; ?>" ?>
-            <input type="hidden" name="communication_to_id" value = "<?php echo $supervisor[0]['staff_username']; ?>" />
-        </div>
-        <div class="modal-footer">
+                <textarea name="communication_body"></textarea>
+                <input type="hidden" name="communication_action" value = "sendmessage" />
+                <input type="hidden" name="communication_from_id" value="<?php echo $currentStaff['student_username']; ?>" ?>
+                <input type="hidden" name="communication_to_id" value = "<?php echo $supervisor[0]['staff_username']; ?>" />
+            </div>
+            <div class="modal-footer">
 
-            <button class="waves-effect waves-green btn-flat ">Submit</button>
-        </div>
-    </form>
-</div>
-<!-- End New Message Modal -->
+                <button class="waves-effect waves-green btn-flat ">Submit</button>
+            </div>
+        </form>
+    </div>
+    <!-- End New Message Modal -->
 
-<!-- Start New Message Modal -->
-<div id="newBlogModal" class="modal modal-fixed-footer">
-    <form method="post" action = "blogs.php">
-        <div class="modal-content">
-            <h4>New blog post</h4>
+    <!-- Start New Message Modal -->
+    <div id="newBlogModal" class="modal modal-fixed-footer">
+        <form method="post" action = "blogs.php">
+            <div class="modal-content">
+                <h4>New blog post</h4>
 
-            <textarea name="communication_body"></textarea>
-            <input type="hidden" name="communication_action" value="posttoblog" />
-            <input type="hidden" name="communication_from_id" value="<?php echo $currentStaff['student_username']; ?>" ?>
-            <input type="hidden" name="communication_to_id" value="blog" />
-        </div>
-        <div class="modal-footer">
+                <textarea name="communication_body"></textarea>
+                <input type="hidden" name="communication_action" value="posttoblog" />
+                <input type="hidden" name="communication_from_id" value="<?php echo $currentStaff['student_username']; ?>" ?>
+                <input type="hidden" name="communication_to_id" value="blog" />
+            </div>
+            <div class="modal-footer">
 
-            <button class="waves-effect waves-green btn-flat ">Submit</button>
-        </div>
-    </form>
-</div>
-<!-- End New Message Modal -->
+                <button class="waves-effect waves-green btn-flat ">Submit</button>
+            </div>
+        </form>
+    </div>
+    <!-- End New Message Modal -->
 </body>
 <script>
     $(document).ready(function(){
