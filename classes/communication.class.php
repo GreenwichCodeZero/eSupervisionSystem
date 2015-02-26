@@ -117,6 +117,7 @@ class Communication {
         }
 
         $this->from = $_POST ['communication_from_id'];
+        $this->to = $_POST ['communication_to_id'];
         $this->date_addded = time();
         $this->time_addded = time();
         $this->body = $_POST ['communication_body'];
@@ -128,7 +129,7 @@ class Communication {
         $result->bindValue(':from_id', $this->from);
         $result->bindValue(':to_id', $this->to);
         $result->bindValue(':date_added', date("Y-m-d"));
-        $result->bindValue(':time_added', date("h:i:s"));
+        $result->bindValue(':time_added', date("H:i:s"));
         $result->bindValue(':type_id', $this->type);
         $result->bindValue(':comm_body', $this->body);
         $result->bindValue(':comm_file_id', $this->file_id);
@@ -156,11 +157,11 @@ class Communication {
     }
 
     // Find a comment by comment id, type, who posted etc.
-    public function getAll($type, $user, $user_type = null) {
+    public function getAll($type, $user, $user_type = null, $filter_username = null) {
         switch ($type) {
             case 'blog':
-                $this->type_id = 1;
-                $this->result = $this->con->prepare(
+                $type_id = 1;
+                $result = $this->con->prepare(
                     'SELECT
 						`esuper_communication`.`communication_id`
 						, `esuper_communication`.`communication_body`
@@ -170,55 +171,70 @@ class Communication {
 						FROM
 						`esuper_communication`
 						 WHERE 
-						`esuper_communication`.`communication_type_id` =' . $this->type_id);
+						`esuper_communication`.`communication_type_id` = :type_id');
+                $result->bindValue(':type_id', $type_id);
 
                 break;
             case 'message':
-                $this->type_id = 2;
                 switch ($user_type) {
-
                     case 'staff';
-                        $this->result = $this->con->prepare(
-                            'SELECT
-						`esuper_communication`.`communication_id`
-						, `esuper_communication`.`communication_body`
-						, `esuper_communication`.`communication_date_added`
-						, `esuper_communication`.`communication_time_added`
-						, `esuper_communication`.`communication_file_id` 
-						, `esuper_student`.`student_first`
-						, `esuper_student`.`student_last`
-						FROM
-						`esuper_communication`,
-						`esuper_student`
-						 WHERE 
-						`esuper_communication`.`communication_type_id` =' . $this->type_id . '
-						AND 
-						`esuper_communication`.`communication_from_id` = "' . $user . '"
-						AND 
-						`esuper_student`.`student_username` = `esuper_communication`.`communication_to_id`'
-                        );
+                        $sql = 'SELECT
+                                  c.communication_id,
+                                  c.communication_body,
+                                  c.communication_date_added,
+                                  c.communication_time_added,
+                                  c.communication_file_id,
+                                  s.student_first,
+                                  s.student_last,
+                                  c.communication_from_id,
+                                  c.communication_to_id
+                                FROM
+                                  esuper_communication c,
+                                  esuper_student s
+                                WHERE
+                                  c.communication_type_id = 2
+                                AND
+                                  (s.student_username = c.communication_from_id OR s.student_username = c.communication_to_id)';
+
+                        // Add filter if necessary
+                        if ($filter_username != null) {
+                            $sql .= ' AND
+                                        (
+                                          (c.communication_from_id = :staff_username AND c.communication_to_id = :student_username)
+                                        OR
+                                          (c.communication_from_id = :student_username AND c.communication_to_id = :staff_username)
+                                        )';
+                        }
+
+                        $sql .= ' ORDER BY c.communication_date_added DESC, c.communication_time_added DESC';
+
+                        $result = $this->con->prepare($sql);
+                        $result->bindValue(':staff_username', $user);
+                        $result->bindValue(':student_username', $filter_username);
 
                         break;
                     case 'student':
-                        $this->result = $this->con->prepare(
+                        $result = $this->con->prepare(
                             'SELECT
 						`esuper_communication`.`communication_id`
 						, `esuper_communication`.`communication_body`
 						, `esuper_communication`.`communication_date_added`
 						, `esuper_communication`.`communication_time_added`
-						, `esuper_communication`.`communication_file_id` 
+						, `esuper_communication`.`communication_file_id`
 						, `esuper_staff`.`staff_first`
 						, `esuper_staff`.`staff_last`
 						FROM
 						`esuper_communication`,
 						`esuper_staff`
-						 WHERE 
-						`esuper_communication`.`communication_type_id` =' . $this->type_id . '
-						AND 
-						`esuper_communication`.`communication_from_id` = "' . $user . '"
-						AND 
-						`esuper_staff`.`staff_username` = `esuper_communication`.`communication_to_id`'
-                        );
+						 WHERE
+						`esuper_communication`.`communication_type_id` = :type_id
+						AND
+						`esuper_communication`.`communication_from_id` = :user
+						AND
+						`esuper_staff`.`staff_username` = `esuper_communication`.`communication_to_id`
+						ORDER BY `esuper_communication`.communication_date_added DESC, `esuper_communication`.communication_time_added DESC');
+                        $result->bindValue(':type_id', $type_id);
+                        $result->bindValue(':user', $user);
 
                         break;
                 }
@@ -227,14 +243,14 @@ class Communication {
         }
 
         try {
-            $this->result->execute();
+            $result->execute();
         } catch (PDOException $e) {
             echo "ERROR:";
             echo "\n\n\r\r" . $e->getMessage();
             exit;
         }
 
-        $row = $this->result->fetchAll();
+        $row = $result->fetchAll();
         $this->result = null;
         $this->response($row);
     }

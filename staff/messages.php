@@ -1,36 +1,37 @@
 <?php
 
+//todo validation
+
+// Initialise session
 session_start();
 
+error_reporting(0);
+
 require '../login-check.php';
+require '../classes/security.class.php';
+require '../classes/userDetails.class.php';
+require '../classes/communication.class.php';
+require '../classes/errorList.class.php';
 
-$currentUser = $_SESSION['currentUser'];
+// Globals
 $currentStaff = $_SESSION['currentUser'];
-
-include '../classes/security.class.php';
-include '../classes/communication.class.php';
-include '../classes/userDetails.class.php';
-include '../classes/errorList.class.php';
-
-
-$sta_id = $currentUser['staff_id']; // (1) = demo staff id
-$sta_user = $currentUser['staff_username']; // (1) = demo staff id
 $staff_id = $currentStaff['staff_id'];
+$staff_username = $currentStaff['staff_username'];
 
 $c = new Communication ();
 if ($_POST['communication_action']) {
     $el = new errorList ();
 
-    try { $c->insert ($sta_user); }
-	catch (Exception $e){
-        
-        $el->newList()->type('error')->message ($e->getMessage ())->go('messages.php');
-		exit;
-	}
-	
-    $el->newList()->type('success')->message ($c->getResponse ())->go('messages.php');
-    exit;
+    try {
+        $c->insert($staff_username);
+    } catch (Exception $e) {
 
+        $el->newList()->type('error')->message($e->getMessage())->go('messages.php?' . $_SERVER['QUERY_STRING']);
+        exit;
+    }
+
+    $el->newList()->type('success')->message($c->getResponse())->go('messages.php?' . $_SERVER['QUERY_STRING']);
+    exit;
 }
 
 $el = new errorList ();
@@ -38,30 +39,48 @@ if ($el->exists()) {
     echo $el->getResponse();
 }
 
-$c->getAll('message', $sta_user, 'staff');
-$sent = $c->getResponse();
-$sent_count = count($sent);
+// Determine which messages to display
+if ($_GET['sid']) {
+    // Filter sent messages by student username (sid)
+    $c->getAll('message', $staff_username, 'staff', $_GET['sid']);
 
+    // Get messages and count
+    $sent = $c->getResponse();
+    $sent_count = count($sent);
+} else {
+    // Get sent messages from all students
+    $sent_count = -1;
+}
 
-$c->received($sta_user, 'staff');
+// Get count of received messages
+$c->received($staff_username, 'staff');
 $received = $c->getResponse();
 $received_count = count($received);
 
+// Get allocated students
 $u = new UserDetails ();
-$u->AllMystudents($sta_id);
+$u->GetAllocatedStudents($staff_username);
 $students = $u->getResponse();
+
 
 $getStaffDetailsQ = new UserDetails ();
 $getStaffDetailsQ->isStaffAuthorised($staff_id);
 $getStaffDetails = $getStaffDetailsQ->getResponse();
 
-foreach($getStaffDetails as $staffDetail){
-    $staffAuthorsied = $staffDetail['staff_authorised'];
+foreach ($getStaffDetails as $staffDetail) {
+    $staffAuthorised = $staffDetail['staff_authorised'];
 }
 ?>
+<!DOCTYPE html>
+<html>
 
 <head>
-    <title>Messages</title>
+    <title>eSupervision - Messages</title>
+
+    <meta name="author" content="Code Zero"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -71,14 +90,15 @@ foreach($getStaffDetails as $staffDetail){
             $(elemID).toggle();
             $(newButtonID).toggle();
         }
-        ;
 
         $(document).ready(function () {
             $(".button-collapse").sideNav();
+            $('select').material_select();
         });
     </script>
 </head>
 <body>
+
 <nav>
     <div class="nav-wrapper green">
         <ul id="nav-mobile" class="side-nav">
@@ -97,42 +117,69 @@ foreach($getStaffDetails as $staffDetail){
             <li>
                 <a href="uploads.php">Project Uploads</a>
             </li>
-                        <?php
-            if($staffAuthorsied == 1){
-            
-            echo '<li>
+            <?php if ($staffAuthorised == 1) {
+                echo '<li>
                 <a href="search.php">Search</a>
             </li>';
-        }
-        ?>
+            } ?>
         </ul>
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
     </div>
 </nav>
 
-
 <div class="container">
     <div class="row">
         <!-- MESSAGE SECTION START-->
-        <div id="sendMessage" class="row">
-            <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#sendMessage', '#newMessage');"></i>
- <input type="hidden" name="communication_from_id" value="<?php echo $sta_user; ?>" ?>    	     
-                <input type='hidden' name='communication_type_id' value='2' />
-                    <label>Select a student</label>
-                  <select name="communication_to_id">
-                        <?php foreach ($students as $stu) {
-                                        echo "<option value='".$stu['student_username']."'>".$stu['student_first']." ".$stu['student_last']." (".$stu['student_username'].") </option>";
-                                    }
-                                    ?>
-                  </select>
-                <div class="input-field">
-                    <textarea class="materialize-textarea" name='communication_body'></textarea>
-                    <label>New Message</label>
+
+        <!-- NEW MESSAGE SECTION START-->
+        <div class="row" id="sendMessage">
+            <div class="col s12">
+                <div class="card">
+                    <i class="small mdi-content-clear c_right-align"
+                       onclick="toggleForm('#sendMessage', '#newMessage');"></i>
+
+                    <div class="card-content">
+                        <span class="card-title green-text">New Message</span>
+
+                        <form id="communication" method="POST"
+                              action="messages.php?<?php echo $_SERVER['QUERY_STRING']; ?>"
+                              enctype="multipart/form-data">
+                            <input type='hidden' name='communication_action' value='sendmessage'/>
+                            <input type="hidden" name="communication_from_id" value="<?php echo $staff_username; ?>">
+                            <input type='hidden' name='communication_type_id' value='2'/>
+
+                            <div class="col s12">
+                                <label for="communication_to_id">Student</label>
+                                <select name="communication_to_id" id="communication_to_id">
+                                    <option value="" disabled="disabled" selected="selected">Choose...</option>
+                                    <?php foreach ($students as $stu) {
+                                        echo '<option value="' . $stu['student_username'] . '"' . (($_GET['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
+                                    } ?>
+                                </select>
+                            </div>
+                            <div class="input-field col s12">
+                                <label for="communication_body">Message</label>
+                                <textarea class="materialize-textarea" name="communication_body"
+                                          id="communication_body"></textarea>
+                            </div>
+                            <div class="file-field input-field col s12">
+                                <div class="waves-effect waves-teal waves-light green btn-flat white-text">
+                                    <span>File</span>
+                                    <input type="file" name="fileToUpload" id="fileToUpload"/>
+                                </div>
+                            </div>
+                            <div class="input-field col s12">
+                                <button
+                                    class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+                                    Send
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                          <input class="waves-effect waves-teal waves-light btn-flat" type="file" name="fileToUpload" id="fileToUpload">
-                <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
-            </form>
+            </div>
         </div>
+        <!-- NEW MESSAGE SECTION END-->
 
         <div class="col s10 m12 offset-s1 card">
             <a onClick="toggleForm('#sendMessage', '#newMessage');" class="c_right_align" id="newMessage">
@@ -142,41 +189,96 @@ foreach($getStaffDetails as $staffDetail){
 
             <div class="card-content">
                 <span class="card-title green-text">Message History</span>
-				<?php 
-                if ($received_count > 0) {
-                    echo "<div><a href='receivedmessages.php'>Click here to view messages you have received</a></div>";
-                }
-                ?>
+                <?php if ($sent_count > 0) {
+                    // Get student name
+                    $ud = new UserDetails ();
+                    $ud->GetStudentDetails($_GET['sid']);
+                    $student = $ud->getResponse();
 
-                <p class="green-text">You have submitted
-                    <?php echo $sent_count; ?> Message posts</p>
-                <ul class="collection">
-                    <?php foreach ($sent as $s) { 
-                        echo '<li class="collection-item">'; 
-                        echo ' <form action="readfile.php" method="POST">',
-                                "<span><p><b> ".$s[ 'communication_body']."</b></p>",
-                                "<p>eCommunication to ".$s['student_first']." ".$s['student_last']." added on ". $s['communication_date_added']." at ". $s['communication_time_added']. "</p></span>";
-                        
-                        if ($s['communication_file_id'] > 0 ) {
-                            echo '&emsp; 
-                           
-                            <input type="hidden" name="file_id" value="'.$s['communication_file_id'].'" />
-                             <button class="btn waves-light" >Submit
-                                View <i class="mdi-content-send right"></i> </button>';
-                        }
-                        
-                        echo "</form>","</li>"; 
-                    } ?>
-                </ul>
+                    echo '<p>There are ' . $sent_count . ' messages between you and ' . $student[0]['student_first'] . ' ' . $student[0]['student_last'] . '.</p>';
+                } ?>
+
+                <div class="row">
+                    <!-- STUDENT FILTER FORM START -->
+                    <form id="communication_filter" action="" method="GET">
+                        <div class="col s12 m9">
+                            <label for="communication_student_id_filter">Select a student</label>
+                            <select name="sid" id="communication_student_id_filter">
+                                <option value="" disabled="disabled" selected="selected">Choose...</option>
+                                <?php foreach ($students as $stu) {
+                                    echo '<option value="' . $stu['student_username'] . '"' . (($_GET['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
+                                } ?>
+                            </select>
+                        </div>
+                        <div class="input-field col s12 m3">
+
+                            <button type="submit"
+                                    class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+                                Filter
+                            </button>
+                        </div>
+                    </form>
+                    <!-- STUDENT FILTER FORM END -->
+                </div>
+
+                <?php if ($sent_count > 0) {
+                    foreach ($sent as $s) { ?>
+                        <ul class="collection">
+                            <li class="collection-item" <?php echo ($s['communication_from_id'] == $staff_username) ? 'style="background-color: #fafafa;"' : '' ?> >
+                                <form action="readfile.php" method="POST">
+                                    <p>
+                                        <span class="green-text">
+                                            <b>
+                                                <?php if ($s['communication_from_id'] == $staff_username) {
+                                                    // Message is from current staff user
+                                                    echo 'Me';
+                                                } else {
+                                                    // Message is from student
+                                                    echo $s['student_first'] . " " . $s['student_last'];
+                                                } ?>
+                                            </b>
+                                        </span>
+                                        &#8212;
+
+                                        <?php
+                                        // Pretty format the date
+                                        $date = strtotime($s['communication_date_added']);
+                                        $prettyDate = date('l j F Y', $date);
+
+                                        // Output date and time
+                                        echo $prettyDate . ', ' . substr($s['communication_time_added'], 0, -3); ?>
+                                    </p>
+
+                                    <p>
+                                        <?php echo $s['communication_body']; ?>
+                                    </p>
+
+                                    <?php
+                                    if ($s['communication_file_id'] > 0) { ?>
+                                        <hr/>
+                                        <p>
+                                            <input type="hidden" name="file_id"
+                                                   value="' . $s['communication_file_id'] . '"/>
+                                            <button
+                                                class="waves-effect waves-teal waves-light green btn-flat white-text"
+                                                style="margin-bottom: 0; margin-top: 15px;">
+                                                View File<i class="mdi-editor-attach-file right"></i></button>
+                                        </p>
+                                    <?php } ?>
+                                </form>
+                            </li>
+                        </ul>
+                    <?php }
+                } else if ($sent_count == 0) {
+                    // No messages found for current student
+                    echo '<ul class="collection"><li class="collection-item">No messages</li></ul>';
+                } ?>
             </div>
         </div>
         <!--MESSAGING SECTION END-->
     </div>
 </div>
 <!-- end container -->
-<script>
- $(document).ready(function() {
-    $('select').material_select();
-  });
-</script>
 </body>
+
+</html>
