@@ -30,6 +30,10 @@ $getStaffDetailsQ = new UserDetails ();
 $getStaffDetailsQ->isStaffAuthorised($staff_id);
 $getStaffDetails = $getStaffDetailsQ->getResponse();
 
+$u = new UserDetails ();
+$u->AllMystudents($sta_id);
+$students = $u->getResponse();
+
 foreach($getStaffDetails as $staffDetail){
     $staffAuthorsied = $staffDetail['staff_authorised'];
 }
