@@ -39,6 +39,7 @@ class Communication {
         }
     }
 
+
     public function insert($from_user) {
         try {
             $this->validate();
@@ -61,8 +62,8 @@ class Communication {
                 // echo "Blog Post: id1";
                 $this->add('blog');
                 break;
-
-            default:
+				
+			default:
                 // echo "nothing to do <pre>";
                 print_r($_POST);
                 exit;
@@ -78,7 +79,7 @@ class Communication {
             }
         }
     }
-
+	
     // Add a new communication to the database
     public function add($type) {
         switch ($type) {
@@ -116,7 +117,7 @@ class Communication {
             $this->response('file uploaded: ' . $this->file_id);
         }
 
-        $this->from = $_POST ['communication_from_id'];
+		$this->from = $_POST ['communication_from_id'];
         $this->date_addded = time();
         $this->time_addded = time();
         $this->body = $_POST ['communication_body'];
