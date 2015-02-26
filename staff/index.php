@@ -10,14 +10,14 @@ $currentStaff = $_SESSION['currentUser'];
 $userDetails = '';
 
 // Determine permissions of current user
-if ($currentUser['user_type'] === 'staff') {
+if ($currentStaff['user_type'] === 'staff') {
     // All staff only things here
-    $userDetails = '<li>staff_first: ' . $currentUser['staff_first'] . '</li>
-                    <li>staff_last: ' . $currentUser['staff_last'] . '</li>
-                    <li>staff_username: ' . $currentUser['staff_username'] . '</li>
-                    <li>staff_banner_id: ' . $currentUser['staff_banner_id'] . '</li>
-                    <li>staff_active: ' . $currentUser['staff_active'] . '</li>
-                    <li>user_type: ' . $currentUser['user_type'] . '</li>';
+    $userDetails = '<li>staff_first: ' . $currentStaff['staff_first'] . '</li>
+                    <li>staff_last: ' . $currentStaff['staff_last'] . '</li>
+                    <li>staff_username: ' . $currentStaff['staff_username'] . '</li>
+                    <li>staff_banner_id: ' . $currentStaff['staff_banner_id'] . '</li>
+                    <li>staff_active: ' . $currentStaff['staff_active'] . '</li>
+                    <li>user_type: ' . $currentStaff['user_type'] . '</li>';
 
     if ($currentUser['staff_authorised'] === '1') {
         // Authorised staff only things here
@@ -26,10 +26,6 @@ if ($currentUser['user_type'] === 'staff') {
         // Unauthorised staff only things here
         $userDetails .= '<li>staff_authorised: no</li>';
     }
-} else {
-    // Student only things here
-    $userDetails = '<b>' . $currentUser['student_first'] . ' ' . $currentUser['student_last'] . '</b> (' . $currentUser['student_username'] . ')
-                    <p>Banner ID: ' . $currentUser['student_banner_id'] . '</p>';
 }
 
 include '../classes/communication.class.php';
@@ -37,8 +33,7 @@ include '../classes/meetings.class.php';
 include '../classes/userDetails.class.php';
 
 // $_SESSION['user']['id']
-$user_id = $currentUser['staff_id']; // (1) = demo staff id
-$user_user = $currentUser['staff_username']; // (1) = demo staff id
+$staff_username = $currentStaff['staff_username']; // (1) = demo staff id
 $staff_id = $currentStaff['staff_id'];
 
 // PRINT USER VARIABLES TO TOP OF BROWSER
@@ -46,29 +41,29 @@ $staff_id = $currentStaff['staff_id'];
 
 $c = new Communication ();
 
-$c->getAll('blog', $user_user);
+$c->getAll('blog', $staff_username);
 $blogs = $c->getResponse();
 $blog_count = count($blogs);
 
-$c->getAll('message', $user_user, 'staff');
+$c->getAll('message', $staff_username, 'staff');
 $messages = $c->getResponse();
 $message_count = count($messages);
 
-$c->received($user_user, 'staff');
+$c->received($staff_username, 'staff');
 $received = $c->getResponse();
 $received_count = count($received);
 
 $m = new Meeting ();
-$m->getAll($user_user);
+$m->getAll($staff_username);
 $meetings = $m->getResponse();
 $meeting_count = count($meetings);
 
 $u = new UserDetails ();
-$u->studentSuper($user_id);
+$u->studentSuper($staff_id);
 $supervisor = $u->getResponse();
 
 $u2 = new UserDetails ();
-$u2->studentSM($user_id);
+$u2->studentSM($staff_id);
 $secondMarker = $u2->getResponse();
 
 
