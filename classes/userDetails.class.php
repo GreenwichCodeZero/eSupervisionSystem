@@ -47,12 +47,15 @@ class UserDetails {
 
     public function AllMyStudents($staff_id) {
         $result = $this->con->prepare(
-            "SELECT  `esuper_student`.`student_first` ,  `esuper_student`.`student_last` ,  `esuper_student`.`student_username`
-FROM  `esuper_student` ,  `esuper_user_allocation` ,  `esuper_staff`  
-WHERE
-`esuper_student`.`student_id` = `esuper_user_allocation`.`student_id` AND  
- `esuper_user_allocation`.`supervisor_id` =  `esuper_staff`.`staff_id`
-AND   `esuper_staff`.`staff_id` =  '" . $staff_id . "'");
+            'SELECT student.student_first, student.student_last, student.student_username
+             FROM esuper_student student
+             JOIN esuper_user_allocation allocation ON student.student_id = allocation.student_id
+             JOIN esuper_staff spv ON allocation.supervisor_id = spv.staff_id
+             JOIN esuper_staff snd ON allocation.second_id = snd.staff_id
+             WHERE spv.staff_id = :staff_id
+             OR snd.staff_id = :staff_id
+             ORDER BY student.student_last');
+        $result->bindValue(':staff_id', $staff_id);
 
         try {
             $result->execute();
@@ -76,7 +79,8 @@ AND   `esuper_staff`.`staff_id` =  '" . $staff_id . "'");
              JOIN esuper_staff spv ON allocation.supervisor_id = spv.staff_id
              JOIN esuper_staff snd ON allocation.second_id = snd.staff_id
              WHERE spv.staff_username = :staff_username
-             OR snd.staff_username = :staff_username');
+             OR snd.staff_username = :staff_username
+             ORDER BY student.student_last');
         $result->bindValue(':staff_username', $staff_username);
 
         try {
@@ -123,7 +127,7 @@ AND   `esuper_staff`.`staff_id` =  '" . $staff_id . "'");
     }
 
 
-    public function supervisorStudents ($user_id) {
+    public function supervisorStudents($user_id) {
         // $s = new Security (); 
         //     try { $this->con = $s->db (); }
 
@@ -137,20 +141,18 @@ AND   `esuper_staff`.`staff_id` =  '" . $staff_id . "'");
         $result->bindValue(':student_id', $student_id);
         try {
             $result->execute();
-        }
-
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             echo "ERROR:";
-            echo "\n\n\r\r". $e->getMessage ();
+            echo "\n\n\r\r" . $e->getMessage();
             exit;
         }
 
         $row = $result->fetchAll();
         $result = null;
-        $this->response ($row);
+        $this->response($row);
     }
 
-        public function noSupervisor () {
+    public function noSupervisor() {
         // $s = new Security (); 
         //     try { $this->con = $s->db (); }
 
@@ -160,25 +162,23 @@ AND   `esuper_staff`.`staff_id` =  '" . $staff_id . "'");
         //     }
 
         $result = $this->con->prepare(
-'SELECT esuper_student.student_id, esuper_student.student_first, esuper_student.student_last from esuper_student WHERE esuper_student.student_id NOT IN (SELECT student_id from esuper_user_allocation) UNION SELECT esuper_student.student_id, esuper_student.student_first, esuper_student.student_last FROM esuper_user_allocation, esuper_student WHERE esuper_user_allocation.student_id = esuper_student.student_id AND esuper_user_allocation.supervisor_id IS NULL ');
-       // $result->bindValue();
+            'SELECT esuper_student.student_id, esuper_student.student_first, esuper_student.student_last from esuper_student WHERE esuper_student.student_id NOT IN (SELECT student_id from esuper_user_allocation) UNION SELECT esuper_student.student_id, esuper_student.student_first, esuper_student.student_last FROM esuper_user_allocation, esuper_student WHERE esuper_user_allocation.student_id = esuper_student.student_id AND esuper_user_allocation.supervisor_id IS NULL ');
+        // $result->bindValue();
         try {
             $result->execute();
-        }
-
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             echo "ERROR:";
-            echo "\n\n\r\r". $e->getMessage ();
+            echo "\n\n\r\r" . $e->getMessage();
             exit;
         }
 
         $row = $result->fetchAll();
         $result = null;
-        $this->response ($row);
+        $this->response($row);
     }
 
 
-    public function noSecondMarker () {
+    public function noSecondMarker() {
         // $s = new Security (); 
         //     try { $this->con = $s->db (); }
 
@@ -188,25 +188,23 @@ AND   `esuper_staff`.`staff_id` =  '" . $staff_id . "'");
         //     }
 
         $result = $this->con->prepare(
-'SELECT esuper_student.student_id, esuper_student.student_first, esuper_student.student_last from esuper_student WHERE esuper_student.student_id NOT IN (SELECT student_id from esuper_user_allocation) UNION SELECT esuper_student.student_id, esuper_student.student_first, esuper_student.student_last FROM esuper_user_allocation, esuper_student WHERE esuper_user_allocation.student_id = esuper_student.student_id AND esuper_user_allocation.second_id IS NULL ');
-  //      $result->bindValue();
+            'SELECT esuper_student.student_id, esuper_student.student_first, esuper_student.student_last from esuper_student WHERE esuper_student.student_id NOT IN (SELECT student_id from esuper_user_allocation) UNION SELECT esuper_student.student_id, esuper_student.student_first, esuper_student.student_last FROM esuper_user_allocation, esuper_student WHERE esuper_user_allocation.student_id = esuper_student.student_id AND esuper_user_allocation.second_id IS NULL ');
+        //      $result->bindValue();
         try {
             $result->execute();
-        }
-
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             echo "ERROR:";
-            echo "\n\n\r\r". $e->getMessage ();
+            echo "\n\n\r\r" . $e->getMessage();
             exit;
         }
 
         $row = $result->fetchAll();
         $result = null;
-        $this->response ($row);
+        $this->response($row);
     }
 
 
-public function isStaffAuthorised($staff_id) {
+    public function isStaffAuthorised($staff_id) {
         $result = $this->con->prepare("SELECT staff_authorised FROM esuper_staff WHERE staff_id = " . '"' . $staff_id . '"');
 
         $result->bindValue(':staff_id', $staff_id);
