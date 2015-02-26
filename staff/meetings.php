@@ -3,6 +3,8 @@
 // Initialise session
 session_start();
 
+error_reporting(0);
+
 require '../database-connection.php';
 require '../validation.php';
 require '../login-check.php';
@@ -218,7 +220,7 @@ if (!($link = GetConnection())) {
         // Staff has students allocated to them
         $studentsOptionList = '<option value="" disabled="disabled" selected="selected">Choose...</option>';
         foreach ($students as $student) {
-            $studentsOptionList .= '<option value="' . $student['student_username'] . '">' . $student['student_first'] . ' ' . $student['student_last'] . '</option>';
+            $studentsOptionList .= '<option value="' . $student['student_username'] . '">' . $student['student_first'] . ' ' . $student['student_last'] . ' (' . $student['student_username'] . ')</option>';
         }
     } else {
         // Staff has no students allocated to them
@@ -241,8 +243,8 @@ $getStaffDetailsQ = new UserDetails ();
 $getStaffDetailsQ->isStaffAuthorised($staff_id);
 $getStaffDetails = $getStaffDetailsQ->getResponse();
 
-foreach($getStaffDetails as $staffDetail){
-    $staffAuthorsied = $staffDetail['staff_authorised'];
+foreach ($getStaffDetails as $staffDetail) {
+    $staffAuthorised = $staffDetail['staff_authorised'];
 }
 ?>
 <!DOCTYPE html>
@@ -393,14 +395,13 @@ foreach($getStaffDetails as $staffDetail){
             <li>
                 <a href="uploads.php">Project Uploads</a>
             </li>
-                        <?php
-            if($staffAuthorsied == 1){
-            
-            echo '<li>
+            <?php
+            if ($staffAuthorised == 1) {
+                echo '<li>
                 <a href="search.php">Search</a>
             </li>';
-        }
-        ?>
+            }
+            ?>
         </ul>
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
     </div>
