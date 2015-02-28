@@ -65,14 +65,16 @@ if($staffAuthorsied != 1){  //quick fix to not allow access to unauthorised staf
             <li>
                 <a href="uploads.php">Project Uploads</a>
             </li>
-                        <?php
+            <?php
             if($staffAuthorsied == 1){
-            
-            echo '<li>
-                <a href="search.php">Search</a>
-            </li>';
-        }
-        ?>
+				echo '<li>
+						<a href="search.php">Search</a>
+					</li>';
+			}
+			?>
+			<li>
+                <a href="../logout.php" title="Logout">Logout</a>
+            </li>
         </ul>
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
     </div>

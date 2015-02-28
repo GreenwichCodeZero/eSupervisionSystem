@@ -83,6 +83,9 @@ $supervisor = $u->getResponse();
                 <li>
                     <a href="uploads.php">Project Uploads</a>
                 </li>
+				<li>
+					<a href="../logout.php" title="Logout">Logout</a>
+				</li>				
             </ul>
             <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
         </div>
