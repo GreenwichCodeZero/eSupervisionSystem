@@ -107,6 +107,7 @@ $searchStudents = $searchStudentsQ->getResponse();
 </form>
 <!-- End of search by name -->
 <br>
+<p>OR</p>
 <!-- Start of search by programme -->
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
@@ -131,7 +132,33 @@ if($submit == 1 && $searchStudents != null){
     echo "<h2>Studets found:</h2>";
 
 foreach($searchStudents as $students){
-    echo $students['student_first'] . " " . $students['student_last'] . "<br>";
+     echo'<div class="row">
+        <div class="col s12 m10">
+          <div class="card">
+            <div class="card-content green-text">
+              <span class="card-title green-text">';
+                  echo $students['student_first'] . " " . $students['student_last'];
+                  echo "</span> <br>";
+$studentSupervisorQ = new UserDetails ();
+$studentSupervisorQ->getStudentSupervisor($students['student_id']);
+$studentSupervisors = $studentSupervisorQ->getResponse();
+foreach($studentSupervisors as $studentSupervisor){
+    echo "Supervisor = " . $studentSupervisor['staff_first'] . " " . $studentSupervisor['staff_last'];
+}   
+$studentSecondMarkerQ = new UserDetails ();
+$studentSecondMarkerQ->getStudentSecondMarker($students['student_id']);
+$studentSecondMarkers = $studentSecondMarkerQ->getResponse();
+foreach($studentSecondMarkers as $studentSecondMarker){
+    echo "<br> Second marker = " . $studentSecondMarker['staff_first'] . " " . $studentSecondMarker['staff_last'];
+}    
+        echo'  
+           </div>
+            <div class="card-action">
+              <a href="#">This is a link</a>
+            </div>
+          </div>
+        </div>
+      </div>';
 }
 }else{
     echo $noStudentsFound;
@@ -144,7 +171,32 @@ if($searchStudentsByProgrammes != null){
     echo "<h2>Studets found:</h2>";
 
 foreach($searchStudentsByProgrammes as $studentsProgramme){
-    echo $studentsProgramme['student_first'] . " " . $studentsProgramme['student_last'] . "<br>";
+    echo'<div class="row">
+        <div class="col s12 m10">
+          <div class="card">
+            <div class="card-content green-text">
+              <span class="card-title green-text">';
+                  echo $studentsProgramme['student_first'] . " " . $studentsProgramme['student_last'];
+            echo'  </span><br>';
+$studentSupervisorQ = new UserDetails ();
+$studentSupervisorQ->getStudentSupervisor($studentsProgramme['student_id']);
+$studentSupervisors = $studentSupervisorQ->getResponse();
+foreach($studentSupervisors as $studentSupervisor){
+    echo "Supervisor = " . $studentSupervisor['staff_first'] . " " . $studentSupervisor['staff_last'];
+}    
+$studentSecondMarkerQ = new UserDetails ();
+$studentSecondMarkerQ->getStudentSecondMarker($studentsProgramme['student_id']);
+$studentSecondMarkers = $studentSecondMarkerQ->getResponse();
+foreach($studentSecondMarkers as $studentSecondMarker){
+    echo "<br> Second marker = " . $studentSecondMarker['staff_first'] . " " . $studentSecondMarker['staff_last'];
+}          
+echo' </div>
+            <div class="card-action">
+              <a href="#">This is a link</a>
+            </div>
+          </div>
+        </div>
+      </div>';
 }
 }else{
     echo $noProgrameStudents;
