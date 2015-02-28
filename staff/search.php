@@ -192,7 +192,7 @@ foreach($studentSecondMarkers as $studentSecondMarker){
 }          
 echo' </div>
             <div class="card-action">
-              <a href="#">This is a link</a>
+              <a href="#">Select student (Just an example of how this could work for US17 perhaps)</a>
             </div>
           </div>
         </div>
