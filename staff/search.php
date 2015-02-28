@@ -1,5 +1,6 @@
 <?php
 session_start();
+$submit = 0;
 
 require '../login-check.php';
 
@@ -15,9 +16,6 @@ include 'searchCheck.php';
 $stu_id = $currentUser['student_id']; // (1) = demo student id
 $stu_user = $currentUser['student_username']; // (1) = demo student id
 $staff_id = $currentStaff['staff_id'];
-
-
-
 
 $getStaffDetailsQ = new UserDetails ();
 $getStaffDetailsQ->isStaffAuthorised($staff_id);
@@ -38,7 +36,6 @@ foreach($getStaffDetails as $staffDetail){
 if($staffAuthorsied != 1){  //quick fix to not allow access to unauthorised staff
     header('Location: index.php');
 } 
-
 
 $searchStudentsQ = new UserDetails ();
 $searchStudentsQ->searchStudents($name);
@@ -115,6 +112,7 @@ $searchStudents = $searchStudentsQ->getResponse();
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
 <label for="searchProgramme">Search students by programme:</label>
 <select name="searchProgramme" id="searchProgramme">
+<option>Please select a programme</option>
 <?php
 foreach($searchProgrammes as $programme){
     echo "<option value=" . '"' . $programme['programme_id'] . '">' . $programme['programme_title'] . "</option>";
@@ -129,7 +127,7 @@ foreach($searchProgrammes as $programme){
 
 <!-- Start of display students found by searching their name -->
 <?php
-if($searchStudents != null){
+if($submit == 1 && $searchStudents != null){
     echo "<h2>Studets found:</h2>";
 
 foreach($searchStudents as $students){

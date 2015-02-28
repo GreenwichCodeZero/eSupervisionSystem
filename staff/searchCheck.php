@@ -2,8 +2,15 @@
 if(isset($_GET['searchSubmit'])) {
 
 $name = $_GET['searchByName'];
+$submit = 1;
 
-$noStudentsFound = "No students found";
+if($name == null){
+	$submit = 0;
+$noStudentsFound = 'Please enter a students name';
+}else{
+	$noStudentsFound = 'No students found by the name "' . $name . '"';
+
+}
 }
 
 if(isset($_GET['searchProgrammeSubmit'])) {
