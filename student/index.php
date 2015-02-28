@@ -7,7 +7,7 @@ session_start();
 require '../login-check.php';
 
 $currentStudent = $_SESSION['currentUser'];
-$userDetails = '';
+$studentDetails = $studentBannerId = $studentName = '';
 
 // Determine permissions of current user
 if ($currentStudent['user_type'] === 'staff') {
@@ -15,8 +15,9 @@ if ($currentStudent['user_type'] === 'staff') {
     header('Location: /codezero/staff/index.php');
 } else {
     // Student only things here
-    $userDetails = '<b>' . $currentStudent['student_first'] . ' ' . $currentStudent['student_last'] . '</b> (' . $currentStudent['student_username'] . ')
-                    <p>Banner ID: ' . $currentStudent['student_banner_id'] . '</p>';
+     $studentDetails = 'Student: '. $currentStudent['student_username'];
+	 $studentBannerId= 'BannerID: '. $currentStudent['student_banner_id'];
+	 $studentName = $currentStudent['student_first'] . ' ' . $currentStudent['student_last'];
 }
 
 include '../classes/communication.class.php';
@@ -72,6 +73,7 @@ $secondMarker = $u2->getResponse();
         $(document).ready(function () {
             $(".button-collapse").sideNav();
             $(".dropdown-button").dropdown();
+			$('.modal-trigger').leanModal();
         });
     </script>
 </head>
@@ -95,91 +97,73 @@ $secondMarker = $u2->getResponse();
             <li>
                 <a href="submissions.php">Project Uploads</a>
             </li>
+			<li>
+                <a href="../logout.php" title="Logout">Logout</a>
+            </li>
         </ul>
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
     </div>
 </nav>
 <div class="container">
+    <h4 class="center-align">eSupervision Dashboard</h4>
+	<div class="row">
+		<div class="left-align col s4">
+			<p>
+				<?php echo $studentDetails; ?> 
+			</p>
+			<p>
+				<?php echo $studentBannerId; ?> 
+			</p>
+		</div>
+		<div class="center-align col s4">
+			<p>
+				<?php echo $studentName; ?>
+			</p>
+		</div>
+		<div class="right-align col s4">
+			<p>
+				Supervisor: <?php echo "<a href=" . '"' . $supervisor[0]['staff_profile_link'] . '" target="_blank">' . $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last'] . "</a>"; ?>
+			</p>
+			<p>
+				Second Marker: <?php echo "<a href=" . '"' . $secondMarker[0]['staff_profile_link'] . '" target="_blank">' . $secondMarker[0]['staff_first'] . ' ' . $secondMarker[0]['staff_last'] . "</a>"; ?>
+			</p>
+		</div>
+	</div>
     <div class="row">
-        <h5 class="center-align">eSupervision Dashboard</h5>
-    </div>
-    <div class="row">
-        <div class="col s12 m12 l6">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title green-text">Student Summary</span>
-
-                    <p>
-                        <?php echo $userDetails; ?>
-                    </p>
-                </div>
-                <div class="card-action">
-                    <a href="../logout.php" title="Logout">Logout</a>
-                </div>
-            </div>
-        </div>
-        <div class="col s12 m12 l6">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title green-text">Supervisor Details</span>
-
-                    <p>
-                        Supervisor: <?php echo "<a href=" . '"' . $supervisor[0]['staff_profile_link'] . '" target="_blank">' . $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last'] . "</a>"; ?>
-                    </p>
-
-                    <p>
-                        Second
-                        Marker: <?php echo "<a href=" . '"' . $secondMarker[0]['staff_profile_link'] . '" target="_blank">' . $secondMarker[0]['staff_first'] . ' ' . $secondMarker[0]['staff_last'] . "</a>"; ?>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col s12 m6 l4">
+        <div class="col s12 m6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Meeting Summary</span>
-
                     <p>You have submitted <?php echo $meeting_count; ?> meeting records.</p>
                 </div>
                 <div class="card-action">
-                    <a href="meetings.php" title="View all meetings">View All</a>
-                    <a href="#" title="Request new meeting">Request</a>
+                    <a href="meetings.php" title="View all meetings">View All or Request</a>
                 </div>
             </div>
         </div>
-        <div class="col s12 m6 l4">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title green-text">Message Summary</span>
-
-                    <p>You have submitted <?php echo $message_count; ?> messages.</p>
-
-                    <p>You have received <?php echo $received_count; ?> messages.</p>
-                </div>
-                <div class="card-action">
-                    <a href="messages.php" title="View all messages">View All</a>
-                    <a class="waves-effect waves-light btn modal-trigger" href="#newMessageModal"
-                       title="Write new message">Message </a>
-                </div>
-            </div>
-        </div>
-        <div class="col s12 m6 l4">
+		<div class="col s12 m6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Blog Summary</span>
-
                     <p>You have submitted <?php echo $blog_count; ?> blog posts.</p>
                 </div>
                 <div class="card-action">
-                    <a href="blogs.php" title="View all blogs">View All</a>
-                    <a class="waves-effect waves-light btn modal-trigger" href="#newBlogModal"
-                       title="Write new blog post">New Post</a>
+                    <a href="blogs.php" title="View all blogs">View All or Add New</a>
                 </div>
             </div>
         </div>
-
+        <div class="col s12 m6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Message Summary</span>
+                    <p>You have submitted <?php echo $message_count; ?> messages.</p>
+                    <p>You have received <?php echo $received_count; ?> messages.</p>
+                </div>
+                <div class="card-action">
+                    <a href="messages.php" title="View all messages">View All or Submit New</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -224,9 +208,4 @@ $secondMarker = $u2->getResponse();
 </div>
 <!-- End New Message Modal -->
 </body>
-<script>
-    $(document).ready(function () {
-        $('.modal-trigger').leanModal();
-    });
-</script>
 </html>

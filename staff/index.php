@@ -12,12 +12,8 @@ $userDetails = '';
 // Determine permissions of current user
 if ($currentStaff['user_type'] === 'staff') {
     // All staff only things here
-    $userDetails = '<li>staff_first: ' . $currentStaff['staff_first'] . '</li>
-                    <li>staff_last: ' . $currentStaff['staff_last'] . '</li>
-                    <li>staff_username: ' . $currentStaff['staff_username'] . '</li>
-                    <li>staff_banner_id: ' . $currentStaff['staff_banner_id'] . '</li>
-                    <li>staff_active: ' . $currentStaff['is_active'] . '</li>
-                    <li>user_type: ' . $currentStaff['user_type'] . '</li>';
+    $staffDetails = 'Staff: '. $currentStaff['staff_username'];
+	$staffName = $currentStaff['staff_first'] . ' '. $currentStaff['staff_last'];
 
     if ($currentUser['staff_authorised'] === '1') {
         // Authorised staff only things here
@@ -131,43 +127,37 @@ foreach($getStaffDetails as $staffDetail){
             </li>
             <?php
             if($staffAuthorsied == 1){
-
-                echo '<li>
-                <a href="search.php">Search</a>
-            </li>';
-            }
+				echo '<li>
+					<a href="search.php">Search</a>
+				</li>';
+			}
             ?>
+			<li>
+                <a href="../logout.php" title="Logout">Logout</a>
+            </li>
         </ul>
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
     </div>
 </nav>
 <div class="container">
     <div class="row">
-        <h5 class="center-align">eSupervision Dashboard</h5>
+        <h4 class="center-align">eSupervision Dashboard</h4>
     </div>
     <div class="row">
-        <div class="col s12 m12 l6">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title green-text">Student Summary</span>
-
-                    <p>
-                        <?php echo $userDetails; ?>
-                    </p>
-                </div>
-                <div class="card-action">
-                    <a href="../logout.php" title="Logout">Logout</a>
-                </div>
-            </div>
+        <div class="col s10 offset-s1 m8 offset-m2 l6 offset-l3 center-align">
+			<div>
+				<?php echo $staffDetails; ?> 
+			</div>
+			<div>
+				<?php echo $staffName; ?>
+			</div>
         </div>
-
     </div>
     <div class="row">
-        <div class="col s12 m6 l4">
+        <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Meeting Summary</span>
-
                     <p>You have submitted <?php echo $meeting_count; ?> meeting records.</p>
                 </div>
                 <div class="card-action">
@@ -176,70 +166,51 @@ foreach($getStaffDetails as $staffDetail){
                 </div>
             </div>
         </div>
-        <div class="col s12 m6 l4">
+        <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Message Summary</span>
-
                     <p>You have submitted <?php echo $message_count; ?> messages.</p>
                     <p>You have received <?php echo $received_count; ?> messages.</p>
                 </div>
                 <div class="card-action">
                     <a href="messages.php" title="View all messages">View All</a>
-                    <a class="waves-effect waves-light btn modal-trigger" href="#newMessageModal" title="Write new message">Message </a>
+                    <a href="#newMessageModal" title="Write new message">Message Project Students</a>
                 </div>
             </div>
         </div>
-        <div class="col s12 m6 l4">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title green-text">Blog Summary</span>
-
-                    <p>You have submitted <?php echo $blog_count; ?> blog posts.</p>
-                </div>
-                <div class="card-action">
-                    <a href="blogs.php" title="View all blogs">View All</a>
-                    <a class="waves-effect waves-light btn modal-trigger" href="#newBlogModal" title="Write new blog post">New Post</a>
-                </div>
-            </div>
-        </div>
-
-
-
-
+    
         <!-- new stuff -->
 
         <!--  Project students starts here -->
-        <div class="col s12 m12 l4">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title green-text">List of project students</span>
-                    <br>
-                    <?php
-                    foreach ($students as $student) {
-                        echo $student['student_first'] . " " . $student['student_last'] . "<br>";
-                    }
-                    ?>
-                </div>
-                <div class="card-action">
-                    <a href="#" title="View all students">View all</a>
-                </div>
-            </div>
+        <div class="col s12 l6">
+			<div class="card">
+				<div class="card-content">
+					<span class="card-title green-text">List of project students</span>
+					<div class="collection">
+						<?php
+							foreach ($students as $student) {
+								echo "<a class='collection-item' href='#'>". $student['student_first'] . " " . $student['student_last'] . "</a>";
+							}
+						?>       
+					</div>
+				</div>
+			</div>
         </div>
         <!--  Project students ends here -->
 
         <!--  Search for students starts here -->
-        <div class="col s12 m12 l4">
+        <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Search for student</span>
-
                     <form>
                         <input type="search" name="searchForStudent" id="searchForStudent"
                                placeholder="Enter student name...">
                         <input type="submit" value="Search">
                     </form>
                 </div>
+				
             </div>
         </div>
     </div>
@@ -247,20 +218,17 @@ foreach($getStaffDetails as $staffDetail){
 
     <!--  Students without supervisor starts here -->
     <div class="row">
-        <div class="col s12 m6 l4">
+        <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Students without a supervisor</span>
-                    <br>
-                    <?php
-
-                    foreach ($noSupervisors as $noSupervisor) {
-                        echo $noSupervisor['student_first'] . " " . $noSupervisor['student_last'] . "<br>";
-                    }
-                    ?>
-                </div>
-                <div class="card-action">
-                    <a href="#" title="View all students without a supervisor">View all</a>
+					<div class="collection">
+						<?php
+							foreach ($noSupervisors as $noSupervisor) {
+								echo "<a class='collection-item' href='#'>" . $noSupervisor['student_first'] . " " . $noSupervisor['student_last'] ."</a>";
+							}
+						?>
+					</div>
                 </div>
             </div>
         </div>
@@ -268,20 +236,17 @@ foreach($getStaffDetails as $staffDetail){
 
         <!--  Students without second marker starts here -->
         <div class="row">
-            <div class="col s12 m6 l4">
+            <div class="col s12 l6">
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title green-text">Students without a second marker</span>
-                        <br>
-                        <?php
-
-                        foreach ($noSecondMarkers as $noSecondMarker) {
-                            echo $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'] . "<br>";
-                        }
-                        ?>
-                    </div>
-                    <div class="card-action">
-                        <a href="#" title="View all students without a second marker">View all</a>
+                        <div class="collection">
+							<?php
+								foreach ($noSecondMarkers as $noSecondMarker) {
+									echo "<a class='collection-item' href='#'>". $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'] . "</a>";
+								}
+							?>
+						</div>
                     </div>
                 </div>
             </div>
@@ -311,29 +276,11 @@ foreach($getStaffDetails as $staffDetail){
         </form>
     </div>
     <!-- End New Message Modal -->
-
-    <!-- Start New Message Modal -->
-    <div id="newBlogModal" class="modal modal-fixed-footer">
-        <form method="post" action = "blogs.php">
-            <div class="modal-content">
-                <h4>New blog post</h4>
-
-                <textarea name="communication_body"></textarea>
-                <input type="hidden" name="communication_action" value="posttoblog" />
-                <input type="hidden" name="communication_from_id" value="<?php echo $currentStaff['student_username']; ?>" ?>
-                <input type="hidden" name="communication_to_id" value="blog" />
-            </div>
-            <div class="modal-footer">
-
-                <button class="waves-effect waves-green btn-flat ">Submit</button>
-            </div>
-        </form>
-    </div>
-    <!-- End New Message Modal -->
+	<script>
+		$(document).ready(function(){
+			$('.modal-trigger').leanModal();
+		});
+	</script>
 </body>
-<script>
-    $(document).ready(function(){
-        $('.modal-trigger').leanModal();
-    });
-</script>
+
 </html>
