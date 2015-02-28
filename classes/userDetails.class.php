@@ -249,7 +249,8 @@ class UserDetails {
 
 
     public function searchStudents($student_first) {
-        $result = $this->con->prepare("SELECT * FROM esuper_student WHERE esuper_student.student_first = " . '"' . $student_first . '"' . "OR " . '"' . $student_first . '"');
+        //$result = $this->con->prepare("SELECT * FROM esuper_student WHERE esuper_student.student_first = " . '"' . $student_first . '"' . "OR " . '"' . $student_first . '"' . " = esuper_student.student_first " . " esuper_student.student_last");
+        $result = $this->con->prepare("SELECT * FROM esuper_student WHERE student_first LIKE " . '"' . $student_first . '%"'  . ' OR  CONCAT(student_first, " ", student_last) LIKE ' . '"' . $student_first . '%"');
 
         $result->bindValue(':student_first', $student_first);
         try {
