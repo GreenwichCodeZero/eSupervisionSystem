@@ -249,7 +249,8 @@ class UserDetails {
 
 
     public function searchStudents($student_first) {
-        $result = $this->con->prepare("SELECT * FROM esuper_student WHERE esuper_student.student_first = " . '"' . $student_first . '"' . "OR " . '"' . $student_first . '"');
+        //$result = $this->con->prepare("SELECT * FROM esuper_student WHERE esuper_student.student_first = " . '"' . $student_first . '"' . "OR " . '"' . $student_first . '"' . " = esuper_student.student_first " . " esuper_student.student_last");
+        $result = $this->con->prepare("SELECT * FROM esuper_student WHERE student_first LIKE " . '"' . $student_first . '%"'  . ' OR  CONCAT(student_first, " ", student_last) LIKE ' . '"' . $student_first . '%"');
 
         $result->bindValue(':student_first', $student_first);
         try {
@@ -282,6 +283,39 @@ class UserDetails {
         $this->response($row);
     }
 
+    public function getStudentSupervisor($student_id) {
+        $result = $this->con->prepare("SELECT * FROM esuper_student, esuper_staff, esuper_user_allocation WHERE esuper_student.student_id = " . $student_id . " AND esuper_student.student_id = esuper_user_allocation.student_id AND esuper_staff.staff_id = esuper_user_allocation.supervisor_id");
+
+        $result->bindValue(':student_first', $student_first);
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
+
+     public function getStudentSecondMarker($student_id) {
+        $result = $this->con->prepare("SELECT * FROM esuper_student, esuper_staff, esuper_user_allocation WHERE esuper_student.student_id = " . $student_id . " AND esuper_student.student_id = esuper_user_allocation.student_id AND esuper_staff.staff_id = esuper_user_allocation.second_id");
+
+        $result->bindValue(':student_first', $student_first);
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
 
     public function getResponse() {
         return $this->response;

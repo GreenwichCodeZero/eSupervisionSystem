@@ -199,23 +199,6 @@ foreach($getStaffDetails as $staffDetail){
         </div>
         <!--  Project students ends here -->
 
-        <!--  Search for students starts here -->
-        <div class="col s12 l6">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title green-text">Search for student</span>
-                    <form>
-                        <input type="search" name="searchForStudent" id="searchForStudent"
-                               placeholder="Enter student name...">
-                        <input type="submit" value="Search">
-                    </form>
-                </div>
-				
-            </div>
-        </div>
-    </div>
-    <!--  Search for students ends here -->
-
     <!--  Students without supervisor starts here -->
     <div class="row">
         <div class="col s12 l6">

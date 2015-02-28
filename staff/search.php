@@ -1,5 +1,6 @@
 <?php
 session_start();
+$submit = 0;
 
 require '../login-check.php';
 
@@ -15,9 +16,6 @@ include 'searchCheck.php';
 $stu_id = $currentUser['student_id']; // (1) = demo student id
 $stu_user = $currentUser['student_username']; // (1) = demo student id
 $staff_id = $currentStaff['staff_id'];
-
-
-
 
 $getStaffDetailsQ = new UserDetails ();
 $getStaffDetailsQ->isStaffAuthorised($staff_id);
@@ -38,7 +36,6 @@ foreach($getStaffDetails as $staffDetail){
 if($staffAuthorsied != 1){  //quick fix to not allow access to unauthorised staff
     header('Location: index.php');
 } 
-
 
 $searchStudentsQ = new UserDetails ();
 $searchStudentsQ->searchStudents($name);
@@ -110,11 +107,13 @@ $searchStudents = $searchStudentsQ->getResponse();
 </form>
 <!-- End of search by name -->
 <br>
+<p>OR</p>
 <!-- Start of search by programme -->
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
 <label for="searchProgramme">Search students by programme:</label>
 <select name="searchProgramme" id="searchProgramme">
+<option>Please select a programme</option>
 <?php
 foreach($searchProgrammes as $programme){
     echo "<option value=" . '"' . $programme['programme_id'] . '">' . $programme['programme_title'] . "</option>";
@@ -129,11 +128,37 @@ foreach($searchProgrammes as $programme){
 
 <!-- Start of display students found by searching their name -->
 <?php
-if($searchStudents != null){
+if($submit == 1 && $searchStudents != null){
     echo "<h2>Studets found:</h2>";
 
 foreach($searchStudents as $students){
-    echo $students['student_first'] . " " . $students['student_last'] . "<br>";
+     echo'<div class="row">
+        <div class="col s12 m10">
+          <div class="card">
+            <div class="card-content green-text">
+              <span class="card-title green-text">';
+                  echo $students['student_first'] . " " . $students['student_last'];
+                  echo "</span> <br>";
+$studentSupervisorQ = new UserDetails ();
+$studentSupervisorQ->getStudentSupervisor($students['student_id']);
+$studentSupervisors = $studentSupervisorQ->getResponse();
+foreach($studentSupervisors as $studentSupervisor){
+    echo "Supervisor = " . $studentSupervisor['staff_first'] . " " . $studentSupervisor['staff_last'];
+}   
+$studentSecondMarkerQ = new UserDetails ();
+$studentSecondMarkerQ->getStudentSecondMarker($students['student_id']);
+$studentSecondMarkers = $studentSecondMarkerQ->getResponse();
+foreach($studentSecondMarkers as $studentSecondMarker){
+    echo "<br> Second marker = " . $studentSecondMarker['staff_first'] . " " . $studentSecondMarker['staff_last'];
+}    
+        echo'  
+           </div>
+            <div class="card-action">
+              <a href="#">Select student (Just an example of how this could work for US17 perhaps)</a>
+            </div>
+          </div>
+        </div>
+      </div>';
 }
 }else{
     echo $noStudentsFound;
@@ -146,7 +171,32 @@ if($searchStudentsByProgrammes != null){
     echo "<h2>Studets found:</h2>";
 
 foreach($searchStudentsByProgrammes as $studentsProgramme){
-    echo $studentsProgramme['student_first'] . " " . $studentsProgramme['student_last'] . "<br>";
+    echo'<div class="row">
+        <div class="col s12 m10">
+          <div class="card">
+            <div class="card-content green-text">
+              <span class="card-title green-text">';
+                  echo $studentsProgramme['student_first'] . " " . $studentsProgramme['student_last'];
+            echo'  </span><br>';
+$studentSupervisorQ = new UserDetails ();
+$studentSupervisorQ->getStudentSupervisor($studentsProgramme['student_id']);
+$studentSupervisors = $studentSupervisorQ->getResponse();
+foreach($studentSupervisors as $studentSupervisor){
+    echo "Supervisor = " . $studentSupervisor['staff_first'] . " " . $studentSupervisor['staff_last'];
+}    
+$studentSecondMarkerQ = new UserDetails ();
+$studentSecondMarkerQ->getStudentSecondMarker($studentsProgramme['student_id']);
+$studentSecondMarkers = $studentSecondMarkerQ->getResponse();
+foreach($studentSecondMarkers as $studentSecondMarker){
+    echo "<br> Second marker = " . $studentSecondMarker['staff_first'] . " " . $studentSecondMarker['staff_last'];
+}          
+echo' </div>
+            <div class="card-action">
+              <a href="#">Select student (Just an example of how this could work for US17 perhaps)</a>
+            </div>
+          </div>
+        </div>
+      </div>';
 }
 }else{
     echo $noProgrameStudents;
