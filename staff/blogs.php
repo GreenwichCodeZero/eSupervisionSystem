@@ -9,40 +9,51 @@ $currentStaff = $_SESSION['currentUser'];
 
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
+include '../classes/comment.class.php';
 include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
 
-
-$stu_id = $currentUser['student_id']; // (1) = demo student id
-$stu_user = $currentUser['student_username']; // (1) = demo student id
+// Globals
+$currentStaff = $_SESSION['currentUser'];
 $staff_id = $currentStaff['staff_id'];
+$staff_username = $currentStaff['staff_username'];
 
-$c = new Communication ();
-if ($_POST['communication_action']) {
+
+$com = new Communication ();
+
+if ($_POST['comment_action']) {
+    $cmm = new Comment ();
     $el = new errorList ();
 
-    try { $c->insert (); }
+    try { $cmm->insert ( $staff_username, $_GET['sid'] ); }
     catch (Exception $e){
        $el->newList()->type('error')->message ($e->getMessage ())->go('blogs.php');
         exit;
     }
 
-    $el->newList()->type('success')->message($c->getResponse())->go('blogs.php');
+    $el->newList()->type('success')->message($cmm->getResponse())->go('blogs.php');
     exit;
 
 }
 
+// Determine which messages to display
+if ($_GET['sid']) {
+    // Filter sent messages by student username (sid)
+    $com->getAll('blog', $staff_username, 'staff', $_GET['sid']);
 
+    // Get messages and count
+    $blogs = $com->getResponse();
+    $blog_count = count($blogs);
+} else {
+    $blog_count = -1;
+}
 
-$c->getAll('blog', $stu_user);
-$blogs = $c->getResponse();
-$blog_count = count($blogs);
-
-
+// Get allocated students
 $u = new UserDetails ();
-$u->studentSuper($stu_id);
-$supervisor = $u->getResponse();
+$u->GetAllocatedStudents($staff_username);
+$students = $u->getResponse();
 
+// Is staff authorised
 $getStaffDetailsQ = new UserDetails ();
 $getStaffDetailsQ->isStaffAuthorised($staff_id);
 $getStaffDetails = $getStaffDetailsQ->getResponse();
@@ -50,10 +61,11 @@ $getStaffDetails = $getStaffDetailsQ->getResponse();
 foreach($getStaffDetails as $staffDetail){
     $staffAuthorsied = $staffDetail['staff_authorised'];
 }
+// End is staff authorised
 ?>
 
 <head>
-    <title>Messages</title>
+    <title>Student Blog Posts</title>
     <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -66,6 +78,7 @@ foreach($getStaffDetails as $staffDetail){
 
         $(document).ready(function () {
             $(".button-collapse").sideNav();
+            $('select').material_select();
         });
     </script>
 </head>
@@ -117,48 +130,194 @@ foreach($getStaffDetails as $staffDetail){
                    <?
                 }
             ?>
-        </div>
+</div>
 
-        <!-- BLOG SECTION START -->
-        <div id="submitBlog" class="row">
-            <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
-            
-            <form name="blogEntry" method="post" action='' enctype="multipart/form-data" class="col s10 m12 offset-s1">
-                <input type='hidden' name='communication_action' value='posttoblog'/>
-                <input type='hidden' name='communication_from_id' value='<?php echo $stu_user; ?>'/>
-                <input type='hidden' name='communication_to_id' value='blog'/>
+  <div class="row">
 
-                <div class="input-field">
-                    <textarea class="materialize-textarea" name='communication_body'></textarea>
-                    <label>New Blog Entry</label>
-                </div>
-                <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
-            </form>
-        </div>
+
         <div class="col s10 m12 offset-s1 card">
-            <a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry" class="c_right-align">
-                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Entry</div>
-            </a>
+          
 
             <div class="card-content">
-                <span class="card-title green-text">Blog History</span>
+                <span class="card-title green-text">Student Blog History</span>
+                <?php if ($blog_count > 0) {
+                    // Get student name
+                    $ud = new UserDetails ();
+                    $ud->GetStudentDetails($_GET['sid']);
+                    $student = $ud->getResponse();
 
-                <p class="green-text">You have submitted
-                    <?php echo $blog_count; ?> Blog posts</p>
-                <ul class="collection">
-                    <?php foreach ($blogs as $b) { echo '<li class="collection-item">'; echo $b['communication_body']; echo "</li>";} ?>
-                </ul>
+                    if ( !isset($_GET['sid']) ) {
+                        echo '<p>Your allocated students have submitted '. $blog_count .' blog posts collectively.</p>';
+                    } else {
+
+                        echo '<p>'. $student[0]['student_first'] . ' ' . $student[0]['student_last'] . ' has submitted '. $blog_count .' blog posts.</p>';
+                    }
+
+
+                } ?>
+
+                <div class="row">
+                    <!-- STUDENT FILTER FORM START -->
+                    <form id="communication_filter" action="" method="GET">
+                        <div class="col s12 m9">
+                            <label for="communication_student_id_filter">Select a student</label>
+                            <select name="sid" id="communication_student_id_filter">
+                                <option value="" disabled="disabled" selected="selected">Choose...</option>
+                                <?php foreach ($students as $stu) {
+                                    echo '<option value="' . $stu['student_username'] . '"' . (($_GET['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
+                                } ?>
+                            </select>
+                        </div>
+                        <div class="input-field col s12 m3">
+
+                            <button type="submit"
+                                    class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+                                Filter
+                            </button>
+                        </div>
+                    </form>
+                    <!-- STUDENT FILTER FORM END -->
+                </div>
+
+                <?php if ($blog_count > 0) {
+                    $count = 0;
+                    foreach ($blogs as $b) { 
+                    ++$count;
+                        ?>
+
+                        <ul class="collection">
+                            <li class="collection-item" <?php echo ($b['communication_from_id'] == $staff_username) ? 'style="background-color: #fafafa;"' : '' ?> >
+
+                            <?php if ($b['communication_comment_id'] == 0){ ?>
+                                <a onClick="toggleForm('#sendMessage<?php echo $count; ?>', '#newMessage');" class="c_right_align" id="newMessage<?php echo $count; ?>">
+                                    <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Write a comment
+                                    </div>
+                                </a>
+                                <?php } ?>
+
+                                <form action="readfile.php" method="POST">
+                                    <p>
+                                        <span class="green-text">
+                                            <b>
+                                                <?php if ($b['communication_from_id'] == $staff_username) {
+                                                    // Message is from current staff user
+                                                    echo 'Me';
+                                                } else {
+                                                    // Message is from student
+                                                    echo $b['student_first'] . " " . $b['student_last'];
+                                                } ?>
+                                            </b>
+                                        </span>
+                                        &#8212;
+
+                                        <?php
+                                        // Pretty format the date
+                                        $date = strtotime($b['communication_date_added']);
+                                        $prettyDate = date('l j F Y', $date);
+
+                                        // Output date and time
+                                        echo $prettyDate . ', ' . substr($b['communication_time_added'], 0, -3); ?>
+                                    </p>
+
+                                    <p>
+                                        <?php echo $b['communication_body']; ?>
+                                    </p>
+
+                                    <?php
+                                    if ($b['communication_file_id'] > 0) { ?>
+                                        <hr/>
+                                        <p>
+                                            <input type="hidden" name="file_id"
+                                                   value="' . $b['communication_file_id'] . '"/>
+                                            <button
+                                                class="waves-effect waves-teal waves-light green btn-flat white-text"
+                                                style="margin-bottom: 0; margin-top: 15px;">
+                                                View File<i class="mdi-editor-attach-file right"></i></button>
+                                        </p>
+                                    <?php } ?>
+                                </form>
+
+                                        <!-- MESSAGE SECTION START-->
+
+
+                            <?php if ($b['communication_comment_id'] > 0){
+
+                                $cmm1 = new Comment ();
+                                $cmm1->getComment ($b['communication_comment_id']);
+                                $comment = $cmm1->getResponse ();
+                            ?>
+
+                            <!-- NO COMMENT HTML START -->
+
+                            <p><b>Comment from <?php echo $commet_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>: </b><i><?php echo $comment['comment_body'].' on '. $comment['date_added'].' at '. $comment['time_added']; ?><i></p>
+
+                            <!-- NO COMMENT HTML END -->
+
+                            <?
+                            } else {
+
+                            ?>
+                                <!-- NEW COMMENT SECTION START-->
+                                <div class="row" id="sendMessage<?php echo $count; ?>">
+                                    <div class="col s12">
+                                            <i class="small mdi-content-clear c_right-align"
+                                               onclick="toggleForm('#sendMessage<?php echo $count; ?>', '#newMessage<?php echo $count; ?>');"></i>
+
+                                            <div class="card-content">
+
+                                                <form id="communication" method="POST"
+                                                      action=""
+                                                      enctype="multipart/form-data">
+                                                    <input type='hidden' name='comment_action' value='newcomment'/>
+                                                    <input type="hidden" name="comment_from_id" value="<?php echo $staff_username; ?>">
+                                                    <input type='hidden' name='comment_student_id' value='<?php echo $_GET['sid']; ?>'/>
+                                                    <input type='hidden' name='comment_communication_id' value='<?php echo $b['communication_id']; ?>'/>
+
+                                                
+                                                    <div class="input-field col s12">
+                                                        <label for="comment_body">Your comment:</label>
+                                                        <textarea class="materialize-textarea" name="comment_body"
+                                                                  id="communication_body"></textarea>
+                                                    </div>
+                                                    
+                                                    <div class="input-field col s12">
+                                                        <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+                                                            Submit
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                </div>
+                                <!-- NEW COMMENT SECTION END-->
+
+
+
+                                <?
+                            }
+
+                            ?>
+
+
+                              
+
+
+                            </li>
+                        </ul>
+
+
+
+
+                    <?php }
+                } else if ($blog_count == 0) {
+                    // No messages found for current student
+                    echo '<ul class="collection"><li class="collection-item">No posts to display</li></ul>';
+                } ?>
             </div>
         </div>
-
-        <!-- BLOG SECTION END -->
-    </div>
+        <!--MESSAGING SECTION END-->
+    </div>     
 
 </div>
 <!-- end container -->
 </body>
-<script>
-    $(document).ready(function () {
-        $('.modal-trigger').leanModal();
-    });
-</script>
