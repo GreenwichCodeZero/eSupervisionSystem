@@ -171,7 +171,7 @@ class Communication {
 						FROM
 						`esuper_communication`
 						 WHERE 
-						`esuper_communication`.`communication_type_id` = :type_id');
+						`esuper_communication`.`communication_type_id` = :type_id ORDER BY communication_date_added DESC');
                 $result->bindValue(':type_id', $type_id);
 
                 break;
