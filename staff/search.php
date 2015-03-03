@@ -201,6 +201,8 @@ if (isset($_GET['name'])) {
                             </span>
 
                                 <p>
+                                    Programme: <?php echo $student['programme_title']; ?>
+                                    <br/>
                                     Supervisor: <?php echo $studentSupervisors[0]['staff_first'] . ' ' . $studentSupervisors[0]['staff_last']; ?>
                                     <br/>
                                     Second
