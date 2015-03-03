@@ -105,7 +105,7 @@ class Communication {
 
             $f = new File ();
             try {
-                $f->add($this->from);
+                $f->add($this->from, 1);
             } catch (Exception $e) {
                 echo $e->getMessage();
                 exit;
@@ -146,7 +146,7 @@ class Communication {
             'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
             'X-Mailer: PHP/' . phpversion();
 
-        if (mail('bd118@greenwich.ac.uk, ' . $this->from . '@greenwich.ac.uk',
+        if (mail( $this->from . '@greenwich.ac.uk',
             'New Message Received', 'A new message was submitted and is waiting for you on the eSupervision System.', $headers)) {
             $this->response('Your content was commited successfully and your tutor has been notified .');
         } else {

@@ -117,7 +117,7 @@ class File {
 
 
 	// Add a new File to the database
-	public function add ( $user ) {
+	public function add ( $user, $file_type_id ) {
 
 		$fileName = $_FILES['fileToUpload']['name'];
 		$tmpName  = $_FILES['fileToUpload']['tmp_name'];
@@ -164,9 +164,16 @@ class File {
 			`esuper_file`
 			(file_id, file_owner, file_name, file_size, file_type,  file_content, file_type_id ) 
 			VALUES 
-			(null, '".$user."', '$fileName', '$fileSize', '$fileType', '$content', 1)"
+			(null, '$user', '$fileName', '$fileSize', '$fileType', '$content', 1)"
 			);
-        $result->execute();
+
+     	try { $result->execute(); }
+
+        catch (PDOException $e) {
+        	echo "ERROR:";
+        	echo "\n\n\r\r". $e->getMessage ();
+        	exit;
+        }
 
         $this->response ($this->con->lastInsertId());
 
