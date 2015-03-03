@@ -633,15 +633,32 @@ foreach ($getStaffDetails as $staffDetail) {
                             <p class="grey-text text-darken-1" style="font-size: 0.8em">
                                 <b>Type:</b> <?php echo $meeting['meeting_type']; ?>.
                                 <b>Current status:</b> <?php echo $meeting['meeting_status']; ?>
+
                             </p>
                         </div>
                         <div class="card-action">
-                            <a href="meetings.php?meeting=<?php echo $meeting['meeting_id']; ?>&status=2"
+
+                      <?php
+                            if($meeting['meeting_status'] == "Pending"){
+                               echo'
+                                <a href="meetings.php?meeting=' .  $meeting['meeting_id'] . '&status=2"
                                title="Accept">Accept</a>
-                            <a href="meetings.php?meeting=<?php echo $meeting['meeting_id']; ?>&status=3"
+                            <a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=3"
                                title="Decline">Decline</a>
-                            <a href="meetings.php?meeting=<?php echo $meeting['meeting_id']; ?>&status=4"
-                               title="Decline">Held</a>
+                            <a href="meetings.php?meeting=' . $meeting['meeting_id'] . '?>&status=4"
+                               title="Decline">Held</a>';
+                           }else if($meeting['meeting_status'] == "Held"){
+                                echo '<a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=3"
+                               title="Decline">Decline</a>';
+                           }else if($meeting['meeting_status'] == "Accepted"){
+                           echo '<a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=3"
+                               title="Decline">Decline</a>
+                               <a href="meetings.php?meeting=' . $meeting['meeting_id'] . '?>&status=4"
+                               title="Decline">Held</a>';
+                           }
+
+                        ?>
+                
                         </div>
                     </div>
                 </div>
