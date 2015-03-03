@@ -15,7 +15,7 @@ class Search {
     }
 
         public function searchProgrammes() {
-        $result = $this->con->prepare("SELECT * FROM esuper_programme");
+        $result = $this->con->prepare("SELECT * FROM esuper_programme ORDER BY programme_title");
 
        // $result->bindValue(':student_first', $student_first);
         try {
