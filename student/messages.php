@@ -11,8 +11,8 @@ include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
 
 
-$stu_id = $currentUser['student_id']; // 
-$stu_user = $currentUser['student_username']; //
+$stu_id = $currentUser['student_id']; // (1) = demo student id
+$stu_user = $currentUser['student_username']; // (1) = demo student id
 
 $c = new Communication ();
 if ($_POST['communication_action']) {
