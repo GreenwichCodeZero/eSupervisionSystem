@@ -14,20 +14,35 @@ class UserDetails {
         }
     }
 
-    // Get student details by username
+    // Get student details by username (including programme ID)
     public function GetStudentDetails($student_username) {
         $result = $this->con->prepare(
             'SELECT
-               student_id,
-               student_first,
-               student_last,
-               student_banner_id
+			   s.student_id,
+			   s.student_first,
+			   s.student_last,
+			   s.student_banner_id,
+			   p.programme_id,
+			   p.programme_title
 			 FROM
-			   esuper_student
+			   esuper_student s,
+               esuper_programme p,
+               (SELECT * FROM (
+                   SELECT us3.* FROM esuper_user_programme us3 ORDER BY us3.last_updated DESC
+                 ) us2
+               GROUP BY us2.student_id) us
 			 WHERE
-			   student_username = :student_username');
-
+			   s.student_username = :student_username
+             AND
+               p.programme_id = us.programme_id
+             AND
+               us.student_id = s.student_id
+             AND
+               s.student_active = 1
+             ORDER BY
+               s.student_last ASC, s.student_first ASC');
         $result->bindValue(':student_username', $student_username);
+
         try {
             $result->execute();
         } catch (PDOException $e) {
@@ -123,6 +138,87 @@ class UserDetails {
         $this->response($row);
     }
 
+    // Function that returns all active staff
+    public function GetAllStaff() {
+        $result = $this->con->prepare(
+            'SELECT
+               s.staff_id,
+               s.staff_first,
+               s.staff_last,
+               s.staff_username,
+               p.programme_id,
+               p.programme_title
+             FROM
+               esuper_staff s,
+               esuper_programme p,
+               (SELECT * FROM (
+                   SELECT us3.* FROM esuper_user_programme us3 ORDER BY us3.last_updated DESC
+                 ) us2
+               GROUP BY us2.staff_id) us
+             WHERE
+               p.programme_id = us.programme_id
+             AND
+               us.staff_id = s.staff_id
+             AND
+               s.staff_active = 1
+             ORDER BY
+               s.staff_last ASC, s.staff_first ASC');
+
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
+
+    // Function that returns all active staff of a specified programme
+    public function GetStaffByProgrammeId($programme_id) {
+        $result = $this->con->prepare(
+            'SELECT
+               s.staff_id,
+               s.staff_first,
+               s.staff_last,
+               s.staff_username,
+               p.programme_id,
+               p.programme_title
+             FROM
+               esuper_staff s,
+               esuper_programme p,
+               (SELECT * FROM (
+                   SELECT us3.* FROM esuper_user_programme us3 ORDER BY us3.last_updated DESC
+                 ) us2
+               GROUP BY us2.staff_id) us
+             WHERE
+               p.programme_id = :programme_id
+             AND
+               p.programme_id = us.programme_id
+             AND
+               us.staff_id = s.staff_id
+             AND
+               s.staff_active = 1
+             ORDER BY
+               s.staff_last ASC, s.staff_first ASC');
+        $result->bindValue(':programme_id', $programme_id);
+
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
+
     public function studentSM($student_id) {
         $result = $this->con->prepare(
             'SELECT
@@ -152,7 +248,6 @@ class UserDetails {
         $result = null;
         $this->response($row);
     }
-
 
     public function supervisorStudents($user_id) {
         // $s = new Security (); 
@@ -204,7 +299,6 @@ class UserDetails {
         $this->response($row);
     }
 
-
     public function noSecondMarker() {
         // $s = new Security (); 
         //     try { $this->con = $s->db (); }
@@ -230,7 +324,6 @@ class UserDetails {
         $this->response($row);
     }
 
-
     public function isStaffAuthorised($staff_id) {
         $result = $this->con->prepare("SELECT staff_authorised FROM esuper_staff WHERE staff_id = " . '"' . $staff_id . '"');
 
@@ -248,23 +341,33 @@ class UserDetails {
         $this->response($row);
     }
 
-
     public function searchStudents($student_name) {
         $result = $this->con->prepare(
             'SELECT
-               student_id,
-               student_first,
-               student_last,
-               student_username,
-               student_banner_id
-             FROM
-               esuper_student
-             WHERE
-               (student_first LIKE :student_name OR student_last LIKE :student_name OR CONCAT(student_first, " ", student_last) LIKE :student_name)
+			   s.student_id,
+			   s.student_first,
+			   s.student_last,
+               s.student_username,
+			   s.student_banner_id,
+			   p.programme_id,
+			   p.programme_title
+			 FROM
+			   esuper_student s,
+               esuper_programme p,
+               (SELECT * FROM (
+                   SELECT us3.* FROM esuper_user_programme us3 ORDER BY us3.last_updated DESC
+                 ) us2
+               GROUP BY us2.student_id) us
+			 WHERE
+               (s.student_first LIKE :student_name OR s.student_last LIKE :student_name OR CONCAT(s.student_first, " ", s.student_last) LIKE :student_name)
              AND
-               student_active = 1
+               p.programme_id = us.programme_id
+             AND
+               us.student_id = s.student_id
+             AND
+               s.student_active = 1
              ORDER BY
-               student_last ASC, student_first ASC'
+               s.student_last ASC, s.student_first ASC'
         );
         $result->bindValue(':student_name', $student_name . '%');
 
@@ -288,11 +391,16 @@ class UserDetails {
                s.student_first,
                s.student_last,
                s.student_username,
-               s.student_banner_id
+               s.student_banner_id,
+               p.programme_id,
+               p.programme_title
              FROM
                esuper_student s,
                esuper_programme p,
-               esuper_user_programme us
+               (SELECT * FROM (
+                   SELECT us3.* FROM esuper_user_programme us3 ORDER BY us3.last_updated DESC
+                 ) us2
+               GROUP BY us2.student_id) us
              WHERE
                p.programme_id = :programme_id
              AND

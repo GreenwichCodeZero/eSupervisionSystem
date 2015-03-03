@@ -23,6 +23,7 @@ if ($currentStaff['staff_authorised'] !== '1') {
 $userDetails = new UserDetails ();
 
 // Get search results
+$name = $searchStudentsByName = $programmeID = $searchStudentsByProgramme = null;
 if (isset($_GET['name'])) {
     $name = $_GET['name'];
 
@@ -200,6 +201,8 @@ if (isset($_GET['name'])) {
                             </span>
 
                                 <p>
+                                    Programme: <?php echo $student['programme_title']; ?>
+                                    <br/>
                                     Supervisor: <?php echo $studentSupervisors[0]['staff_first'] . ' ' . $studentSupervisors[0]['staff_last']; ?>
                                     <br/>
                                     Second
@@ -207,12 +210,23 @@ if (isset($_GET['name'])) {
                                 </p>
                             </div>
                             <div class="card-action">
-                                <input value="<?php echo $student['student_username']; ?>" name="students[]"
-                                       type="checkbox"
-                                       id="<?php echo $student['student_username']; ?>"/>
 
-                                <label for="<?php echo $student['student_username']; ?>"
-                                       class="green-text">Select</label>
+                                <?php if ($programmeID != null) {
+                                    // Searched by programme, select many ?>
+                                    <input value="<?php echo $student['student_username']; ?>" name="students[]"
+                                           type="checkbox"
+                                           id="<?php echo $student['student_username']; ?>"/>
+                                    <label for="<?php echo $student['student_username']; ?>"
+                                           class="green-text">Select</label>
+                                <?php } else {
+                                    // Searched by name, select single ?>
+                                    <input value="<?php echo $student['student_username']; ?>" name="students[]"
+                                           type="radio" id="<?php echo $student['student_username']; ?>"
+                                           class="with-gap"/>
+                                    <label for="<?php echo $student['student_username']; ?>"
+                                           class="green-text">Select</label>
+                                <?php } ?>
+
                             </div>
                         </div>
                     </div>
@@ -222,6 +236,8 @@ if (isset($_GET['name'])) {
             </div>
 
             <div class="row">
+                <input type="hidden" name="programme" value="<?php echo $programmeID; ?>"/>
+
                 <div class="input-field col s12">
                     <button type="submit" name="allocate"
                             class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
