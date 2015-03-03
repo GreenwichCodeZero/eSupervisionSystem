@@ -7,6 +7,8 @@ require '../login-check.php';
 $currentUser = $_SESSION['currentUser'];
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
+include '../classes/comment.class.php';
+include '../classes/projectDetails.class.php';
 include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
 
