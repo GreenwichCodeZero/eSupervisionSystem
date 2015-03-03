@@ -1,45 +1,53 @@
 <?php
+
+// Initialise session
 session_start();
-$submit = 0;
+
+error_reporting(0);
 
 require '../login-check.php';
+require '../classes/security.class.php';
+require '../classes/communication.class.php';
+require '../classes/userDetails.class.php';
+require '../classes/search.class.php';
 
-$currentUser = $_SESSION['currentUser'];
+// Globals
 $currentStaff = $_SESSION['currentUser'];
-
-include '../classes/security.class.php';
-include '../classes/communication.class.php';
-include '../classes/userDetails.class.php';
-include '../classes/search.class.php';
-include 'searchCheck.php';
-
-$stu_id = $currentUser['student_id']; // (1) = demo student id
-$stu_user = $currentUser['student_username']; // (1) = demo student id
 $staff_id = $currentStaff['staff_id'];
 
-$getStaffDetailsQ = new UserDetails ();
-$getStaffDetailsQ->isStaffAuthorised($staff_id);
-$getStaffDetails = $getStaffDetailsQ->getResponse();
-
-$searchProgrammesQ = new Search ();
-$searchProgrammesQ->searchProgrammes();
-$searchProgrammes = $searchProgrammesQ->getResponse();
-
-$searchStudentsByProgrammeQ = new UserDetails ();
-$searchStudentsByProgrammeQ->searchStudentsByProgramme($programmeID);
-$searchStudentsByProgrammes = $searchStudentsByProgrammeQ->getResponse();
-
-foreach($getStaffDetails as $staffDetail){
-    $staffAuthorsied = $staffDetail['staff_authorised'];
+if ($currentStaff['staff_authorised'] !== '1') {
+    // Do not allow access to unauthorised staff
+    header('Location: index.php');
 }
 
-if($staffAuthorsied != 1){  //quick fix to not allow access to unauthorised staff
-    header('Location: index.php');
-} 
+$userDetails = new UserDetails ();
 
-$searchStudentsQ = new UserDetails ();
-$searchStudentsQ->searchStudents($name);
-$searchStudents = $searchStudentsQ->getResponse();
+// Get search results
+if (isset($_GET['name'])) {
+    $name = $_GET['name'];
+
+    if ($name == null) {
+        $submit = 0;
+        $noStudentsFound = 'Please enter a students name';
+    } else {
+        $noStudentsFound = 'No students found by the name "' . $name . '"';
+    }
+
+    $userDetails->searchStudents($name);
+    $searchStudentsByName = $userDetails->getResponse();
+} else if (isset($_GET['programme'])) {
+    $programmeID = $_GET['programme'];
+
+    if ($programmeID == null) {
+        $noStudentsFound = 'Please select a programme';
+    } else {
+        $noStudentsFound = "No students found on this programme";
+    }
+
+    $userDetails->searchStudentsByProgramme($programmeID);
+    $searchStudentsByProgramme = $userDetails->getResponse();
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -55,11 +63,11 @@ $searchStudents = $searchStudentsQ->getResponse();
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="../js/materialize.min.js"></script>
-      <script type="text/javascript">
+    <script type="text/javascript">
         $(document).ready(function () {
             $('select').material_select();
         });
-</script>
+    </script>
 </head>
 <body>
 
@@ -81,14 +89,10 @@ $searchStudents = $searchStudentsQ->getResponse();
             <li>
                 <a href="uploads.php">Project Uploads</a>
             </li>
-            <?php
-            if($staffAuthorsied == 1){
-				echo '<li>
-						<a href="search.php">Search</a>
-					</li>';
-			}
-			?>
-			<li>
+            <?php if ($currentStaff['staff_authorised'] === '1') {
+                echo '<li><a href="search.php">Search</a></li>';
+            } ?>
+            <li>
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
         </ul>
@@ -97,112 +101,140 @@ $searchStudents = $searchStudentsQ->getResponse();
 </nav>
 
 <div class="container">
-<h1>Search</h1>
-<!-- Start of search by name -->
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-<label for="searchByName">Enter a first or full name:</label>
-<input type="search" name="searchByName" id="searchByName" placeholder="Enter a students name to search">
+    <!-- Search start -->
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title green-text">Search Students</span>
 
-<input type="submit" name="searchSubmit" id="searchSubmit" value="Search by name">
-</form>
-<!-- End of search by name -->
-<br>
-<p>OR</p>
-<!-- Start of search by programme -->
+            <div class="row">
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-<label for="searchProgramme">Search students by programme:</label>
-<select name="searchProgramme" id="searchProgramme">
-<option>Please select a programme</option>
-<?php
-foreach($searchProgrammes as $programme){
-    echo "<option value=" . '"' . $programme['programme_id'] . '">' . $programme['programme_title'] . "</option>";
-}
-?>
+                <!-- Start of search by name -->
+                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
 
-</select>
+                    <div class="col s12 m9">
+                        <label for="name">Student name</label>
+                        <input type="search" name="name" id="name" placeholder="Enter a name"
+                               value="<?php echo $_GET['name']; ?>">
+                    </div>
+                    <div class="input-field col s12 m3">
+                        <button type="submit" id="searchSubmit"
+                                class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+                            Search
+                        </button>
+                    </div>
+                </form>
+                <!-- End of search by name -->
 
-<input type="submit" name="searchProgrammeSubmit" id="searchSubmit" value="Search by programme">
-</form>
-<!-- End of search by programme -->
-
-<!-- Start of display students found by searching their name -->
-<?php
-if($submit == 1 && $searchStudents != null){
-    echo "<h2>Studets found:</h2>";
-
-foreach($searchStudents as $students){
-     echo'<div class="row">
-        <div class="col s12 m10">
-          <div class="card">
-            <div class="card-content green-text">
-              <span class="card-title green-text">';
-                  echo $students['student_first'] . " " . $students['student_last'];
-                  echo "</span> <br>";
-$studentSupervisorQ = new UserDetails ();
-$studentSupervisorQ->getStudentSupervisor($students['student_id']);
-$studentSupervisors = $studentSupervisorQ->getResponse();
-foreach($studentSupervisors as $studentSupervisor){
-    echo "Supervisor = " . $studentSupervisor['staff_first'] . " " . $studentSupervisor['staff_last'];
-}   
-$studentSecondMarkerQ = new UserDetails ();
-$studentSecondMarkerQ->getStudentSecondMarker($students['student_id']);
-$studentSecondMarkers = $studentSecondMarkerQ->getResponse();
-foreach($studentSecondMarkers as $studentSecondMarker){
-    echo "<br> Second marker = " . $studentSecondMarker['staff_first'] . " " . $studentSecondMarker['staff_last'];
-}    
-        echo'  
-           </div>
-            <div class="card-action">
-              <a href="#">Select student (Just an example of how this could work for US17 perhaps)</a>
             </div>
-          </div>
-        </div>
-      </div>';
-}
-}else{
-    echo $noStudentsFound;
-}
-//End of display students found by searching their name -->
 
-//Start of display students found by programme -->
-
-if($searchStudentsByProgrammes != null){
-    echo "<h2>Studets found:</h2>";
-
-foreach($searchStudentsByProgrammes as $studentsProgramme){
-    echo'<div class="row">
-        <div class="col s12 m10">
-          <div class="card">
-            <div class="card-content green-text">
-              <span class="card-title green-text">';
-                  echo $studentsProgramme['student_first'] . " " . $studentsProgramme['student_last'];
-            echo'  </span><br>';
-$studentSupervisorQ = new UserDetails ();
-$studentSupervisorQ->getStudentSupervisor($studentsProgramme['student_id']);
-$studentSupervisors = $studentSupervisorQ->getResponse();
-foreach($studentSupervisors as $studentSupervisor){
-    echo "Supervisor = " . $studentSupervisor['staff_first'] . " " . $studentSupervisor['staff_last'];
-}    
-$studentSecondMarkerQ = new UserDetails ();
-$studentSecondMarkerQ->getStudentSecondMarker($studentsProgramme['student_id']);
-$studentSecondMarkers = $studentSecondMarkerQ->getResponse();
-foreach($studentSecondMarkers as $studentSecondMarker){
-    echo "<br> Second marker = " . $studentSecondMarker['staff_first'] . " " . $studentSecondMarker['staff_last'];
-}          
-echo' </div>
-            <div class="card-action">
-              <a href="#">Select student (Just an example of how this could work for US17 perhaps)</a>
+            <div class="row center">
+                <p><b>or</b></p>
             </div>
-          </div>
+
+            <div class="row">
+
+                <!-- Start of search by programme -->
+                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
+
+                    <div class="col s12 m9">
+                        <label for="programme">Student programme</label>
+                        <select name="programme" id="programme">
+                            <option value="">Select a programme</option>
+                            <?php
+                            $search = new Search ();
+                            $search->searchProgrammes();
+                            $searchProgrammes = $search->getResponse();
+
+                            foreach ($searchProgrammes as $programme) {
+                                echo '<option value="' . $programme['programme_id'] . '"' . (($_GET['programme'] == $programme['programme_id']) ? 'selected="selected"' : '') . '>' . $programme['programme_title'] . "</option>";
+                            } ?>
+                        </select>
+                    </div>
+                    <div class="input-field col s12 m3">
+                        <button type="submit" id="searchProgrammeSubmit"
+                                class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+                            Search
+                        </button>
+                    </div>
+                </form>
+                <!-- End of search by programme -->
+
+            </div>
         </div>
-      </div>';
-}
-}else{
-    echo $noProgrameStudents;
-}
-?>
-<!-- End of display students found by programme -->
+    </div>
+    <!-- Search end -->
+
+    <!-- Results start -->
+    <?php if ($name != null || $programmeID != null) { ?>
+
+        <div class="row center">
+            <div class="col s12">
+                <h5>Results</h5>
+            </div>
+        </div>
+
+        <form id="allocationForm" action="allocate.php" method="POST">
+
+            <div class="row">
+
+                <?php
+
+                if ($name != null) {
+                    $students = $searchStudentsByName;
+                } else {
+                    $students = $searchStudentsByProgramme;
+                }
+
+                foreach ($students as $student) {
+                    $userDetails->getStudentSupervisor($student['student_id']);
+                    $studentSupervisors = $userDetails->getResponse();
+
+                    $userDetails->getStudentSecondMarker($student['student_id']);
+                    $studentSecondMarkers = $userDetails->getResponse(); ?>
+
+                    <div class="col s12 m6 l4">
+                        <div class="card">
+                            <div class="card-content">
+                            <span class="card-title green-text">
+                                <?php echo $student['student_first'] . ' ' . $student['student_last']; ?>
+                            </span>
+
+                                <p>
+                                    Supervisor: <?php echo $studentSupervisors[0]['staff_first'] . ' ' . $studentSupervisors[0]['staff_last']; ?>
+                                    <br/>
+                                    Second
+                                    marker: <?php echo $studentSecondMarkers[0]['staff_first'] . ' ' . $studentSecondMarkers[0]['staff_last']; ?>
+                                </p>
+                            </div>
+                            <div class="card-action">
+                                <input value="<?php echo $student['student_username']; ?>" name="students[]"
+                                       type="checkbox"
+                                       id="<?php echo $student['student_username']; ?>"/>
+
+                                <label for="<?php echo $student['student_username']; ?>"
+                                       class="green-text">Select</label>
+                            </div>
+                        </div>
+                    </div>
+
+                <?php } // End foreach ?>
+
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <button type="submit" name="allocate"
+                            class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+                        Allocate
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    <?php } else {
+        echo $noStudentsFound;
+    } ?>
+    <!-- Results end -->
 
 </div>
 
