@@ -118,8 +118,6 @@ class Communication {
 
         $this->from = $_POST ['communication_from_id'];
         $this->to = $_POST ['communication_to_id'];
-        $this->date_addded = time();
-        $this->time_addded = time();
         $this->body = $_POST ['communication_body'];
 
         $result = $this->con->prepare(
@@ -158,9 +156,12 @@ class Communication {
 
     // Find a comment by comment id, type, who posted etc.
     public function getAll($type, $user, $user_type = null, $filter_username = null) {
+
         switch ($type) {
             case 'blog':
+
                 $type_id = 1;
+<<<<<<< HEAD
                 $result = $this->con->prepare(
                     'SELECT
 						`esuper_communication`.`communication_id`
@@ -173,8 +174,69 @@ class Communication {
 						 WHERE 
 						`esuper_communication`.`communication_type_id` = :type_id ORDER BY communication_date_added DESC');
                 $result->bindValue(':type_id', $type_id);
+=======
+                
+                switch ($user_type) {
+                    case 'staff';
+                        $sql = 'SELECT
+                                  c.communication_id,
+                                  c.communication_body,
+                                  c.communication_date_added,
+                                  c.communication_time_added,
+                                  c.communication_file_id,
+                                  s.student_first,
+                                  s.student_last,
+                                  c.communication_from_id,
+                                  c.communication_to_id,
+                                  c.communication_comment_id
+                                FROM
+                                  esuper_communication c,
+                                  esuper_student s
+                                WHERE
+                                  c.communication_type_id = 1
+                                AND
+                                  (s.student_username = c.communication_from_id OR s.student_username = c.communication_to_id)';
+>>>>>>> origin/TA228-227-79
 
-                break;
+                        // Add filter if necessary
+                        if ($filter_username != null) {
+                            $sql .= ' AND
+                                        c.communication_from_id = :student_username';
+                        }
+
+                        $sql .= ' ORDER BY c.communication_date_added DESC, c.communication_time_added DESC';
+
+                        $result = $this->con->prepare($sql);
+                        // $result->bindValue(':staff_username', $user);
+                        $result->bindValue(':student_username', $filter_username);
+
+                        break;
+
+                    case 'student':
+                        $result = $this->con->prepare(
+                            'SELECT
+                        `esuper_communication`.`communication_id`
+                        , `esuper_communication`.`communication_body`
+                        , `esuper_communication`.`communication_date_added`
+                        , `esuper_communication`.`communication_time_added`
+                        , `esuper_communication`.`communication_file_id`
+                        , `esuper_communication`.`communication_comment_id`
+
+                        FROM
+                        `esuper_communication`
+                         WHERE
+                        `esuper_communication`.`communication_type_id` = 1
+                        AND
+                        `esuper_communication`.`communication_from_id` = :user
+                        
+                        ORDER BY `esuper_communication`.communication_date_added DESC, `esuper_communication`.communication_time_added DESC');
+                        
+                        $result->bindValue(':user', $user);
+
+                        break;
+                }
+
+            break;
             case 'message':
                 switch ($user_type) {
                     case 'staff';
@@ -227,13 +289,13 @@ class Communication {
 						`esuper_communication`,
 						`esuper_staff`
 						 WHERE
-						`esuper_communication`.`communication_type_id` = :type_id
+						`esuper_communication`.`communication_type_id` = 2
 						AND
 						`esuper_communication`.`communication_from_id` = :user
 						AND
 						`esuper_staff`.`staff_username` = `esuper_communication`.`communication_to_id`
 						ORDER BY `esuper_communication`.communication_date_added DESC, `esuper_communication`.communication_time_added DESC');
-                        $result->bindValue(':type_id', $type_id);
+
                         $result->bindValue(':user', $user);
 
                         break;
@@ -317,14 +379,43 @@ class Communication {
         $this->response($row);
     }
 
+    public function addComment ($communication_id, $comment_id) {
+
+        $result = $this->con->prepare (
+            'update esuper_communication
+            SET
+            communication_comment_id = :comment_id
+            WHERE
+            communication_id = :communication_id
+            '
+            );
+
+        $result->bindValue(':communication_id', $communication_id);
+        $result->bindValue(':comment_id', $comment_id);
+
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $result = null;
+        return true;
+
+    }
+
     // Remove a communication from the database
     public function remove() {
     }
 
+    // Set response variable
     public function response($var) {
         $this->response = $var;
     }
 
+    // Return response variable when called
     public function getResponse() {
         return $this->response;
     }
