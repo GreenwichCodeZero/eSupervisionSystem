@@ -27,11 +27,11 @@ if ($_POST['comment_action']) {
 
     try { $cmm->insert ( $staff_username, $_GET['sid'] ); }
     catch (Exception $e){
-       $el->newList()->type('error')->message ($e->getMessage ())->go('blogs.php');
+       $el->newList()->type('error')->message ($e->getMessage ())->go('blogs.php?sid='.$_GET['sid']);
         exit;
     }
 
-    $el->newList()->type('success')->message($cmm->getResponse())->go('blogs.php');
+    $el->newList()->type('success')->message($cmm->getResponse())->go('blogs.php?sid='.$_GET['sid']);
     exit;
 
 }
@@ -247,11 +247,19 @@ foreach($getStaffDetails as $staffDetail){
                                 $comment = $cmm1->getResponse ();
                             ?>
 
-                            <!-- NO COMMENT HTML START -->
+                            <!--  COMMENT HTML START -->
 
-                            <p><b>Comment from <?php echo $commet_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>: </b><i><?php echo $comment['comment_body'].' on '. $comment['date_added'].' at '. $comment['time_added']; ?><i></p>
+                            <p>
+                            <b>
+                                Comment from <?php echo $comment_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>
+                                 on <?php echo $comment['comment_date_added']; ?>
+                                 at <?php echo $comment['comment_time_added']; ?>
+                             </b> 
+                             </p>
+                                
+                            <p><?php echo $comment['comment_body']; ?></p>
 
-                            <!-- NO COMMENT HTML END -->
+                            <!--  COMMENT HTML END -->
 
                             <?
                             } else {
