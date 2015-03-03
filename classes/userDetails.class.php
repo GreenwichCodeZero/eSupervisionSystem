@@ -18,6 +18,7 @@ class UserDetails {
     public function GetStudentDetails($student_username) {
         $result = $this->con->prepare(
             'SELECT
+               student_id,
                student_first,
                student_last,
                student_banner_id
