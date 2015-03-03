@@ -36,6 +36,34 @@ class Comment {
         }
 	}
 
+
+    public function addComment ( $comment_id, $communication_id) {
+
+        $result = $this->con->prepare (
+            'update esuper_communication
+            SET
+            communication_comment_id = :comment_id
+            WHERE
+            communication_id = :communication_id
+            '
+            );
+
+        $result->bindValue(':communication_id', $communication_id);
+        $result->bindValue(':comment_id', $comment_id);
+
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $result = null;
+        return true;
+
+    }
+
 	public function insert( $staff_user, $student_user ) {
 
 
@@ -84,7 +112,7 @@ class Comment {
         // front end picks up new comment
         // 
         
-        try { $c->addComment ($this->comment_id, $this->postVars['comment_communication_id']); }
+        try { $this->addComment ($this->comment_id, $this->postVars['comment_communication_id']); }
             
         catch (Exception $e) {
             throw new Exception ( $e->getMessage());
@@ -117,11 +145,7 @@ class Comment {
 
     	$result = $this->con->prepare (
         	'SELECT 
-        	comment_id, 			
-			comment_staff_id,
-			comment_body,
-			comment_date_added,
-			comment_time_added
+            *
 			FROM 
 			esuper_comment
 			WHERE
