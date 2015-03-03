@@ -7,7 +7,6 @@ require '../login-check.php';
 $currentUser = $_SESSION['currentUser'];
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
-include '../classes/comment.class.php';
 include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
 
@@ -20,7 +19,7 @@ if ($_POST['communication_action']) {
     $el = new errorList ();
 
     try {
-        $c->insert( $stu_user );
+        $c->insert();
     } catch (Exception $e) {
         $el->newList()->type('error')->message($e->getMessage())->go('blogs.php');
         exit;
@@ -32,7 +31,7 @@ if ($_POST['communication_action']) {
 }
 
 
-$c->getAll('blog', $stu_user, 'student');
+$c->getAll('blog', $stu_user);
 $blogs = $c->getResponse();
 $blog_count = count($blogs);
 
@@ -41,10 +40,11 @@ $u = new UserDetails ();
 $u->studentSuper($stu_id);
 $supervisor = $u->getResponse();
 
+
 ?>
 
 <head>
-    <title>Blogs</title>
+    <title>Messages</title>
     <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -134,24 +134,6 @@ $supervisor = $u->getResponse();
                     <?php foreach ($blogs as $b) {
                         echo '<li class="collection-item">';
                         echo $b['communication_body'];
-
-                          if ($b['communication_comment_id'] > 0){
-
-                                $cmm1 = new Comment ();
-                                $cmm1->getComment ($b['communication_comment_id']);
-                                $comment = $cmm1->getResponse ();
-
-                            ?>
-
-                            <!-- NO COMMENT HTML START -->
-
-                            <p><b>Comment from <?php echo $comment['comment_staff_id']; ?>: </b><i><?php echo $comment['comment_body'].' on '. $comment['date_added'].' at '. $comment['time_added']; ?><i></p>
-
-                            <!-- NO COMMENT HTML END -->
-
-                            <?
- }
-
                         echo "</li>";
                     } ?>
                 </ul>

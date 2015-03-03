@@ -9,108 +9,38 @@ $currentStaff = $_SESSION['currentUser'];
 
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
-include '../classes/comment.class.php';
-include '../classes/projectDetails.class.php';
 include '../classes/userDetails.class.php';
-include '../classes/errorList.class.php';
 
 
-// Globals
-$currentStaff = $_SESSION['currentUser'];
+$stu_id = $currentUser['student_id']; // (1) = demo student id
+$stu_user = $currentUser['student_username']; // (1) = demo student id
 $staff_id = $currentStaff['staff_id'];
-$staff_username = $currentStaff['staff_username'];
+
+$f = new File ();
+$f->getAll($stu_user);
+$files = $f->getResponse();
+$file_count = count($files);
 
 
-$f = $f2 = $f3 = $f4 = $f5 = $f6 = $f7 = new File ();
-
-if ($_POST['file_action']){
-    $el = new errorList ();
-
-    try { $f->submit ( $stu_user, $_POST['file_type_id']); }
-    catch (Exception $e){
-        
-        $el->newList()->type('error')->message ($e->getMessage ())->go('submissions.php');
-        exit;
-    }
-    
-    $el->newList()->type('success')->message ($f->getResponse ())->go('submissions.php');
-    exit;
-
-}
-
-$p = new projectDetails ();
-
-if ($_POST['projectDetails_action']){
-    $el = new errorList ();
-
-    try { $p->newTitle ( $stu_user); }
-    catch (Exception $e){
-        
-        $el->newList()->type('error')->message ($e->getMessage ())->go('submissions.php');
-        exit;
-    }
-    
-    $el->newList()->type('success')->message ($p->getResponse ())->go('submissions.php');
-    exit;
-
-}
-
-
-// Determine which messages to display
-if ($_GET['sid']) {
-    
-    $filtered = 1;
-
-    $f2->fileTypes ();
-    $fileTypes = $f2->getResponse ();
-
-    $f3->get ($_GET['sid'], 'interim');
-    $interim = $f3->getResponse ();
-
-    $f3->get ($_GET['sid'], 'initial');
-    $initial = $f3->getResponse ();
-
-    $f3->get ($_GET['sid'], 'ethics');
-    $ethics = $f3->getResponse ();
-
-    $f3->get ($_GET['sid'], 'proposal');
-    $proposal = $f3->getResponse ();
-
-    $f7->get ($_GET['sid'], 'project');
-    $project = $f7->getResponse ();
-
-    $p->studentProject($_GET['sid']);
-    $projectTitle = $p->getResponse ();
-
-    //  is this needed?
-    $f->getAll($_GET['sid']);
-    $files = $f->getResponse();
-    $file_count = count($files);
-} else {
-    $filtered = -1;
-}
-
-
-
-
-// Get allocated students
 $u = new UserDetails ();
-$u->GetAllocatedStudents($staff_username);
-$students = $u->getResponse();
+$u->studentSuper($stu_id);
+$supervisor = $u->getResponse();
 
-// Is staff authorised
 $getStaffDetailsQ = new UserDetails ();
 $getStaffDetailsQ->isStaffAuthorised($staff_id);
 $getStaffDetails = $getStaffDetailsQ->getResponse();
 
+$u = new UserDetails ();
+$u->AllMystudents($sta_id);
+$students = $u->getResponse();
+
 foreach($getStaffDetails as $staffDetail){
     $staffAuthorsied = $staffDetail['staff_authorised'];
 }
-// End is staff authorised
 
 ?>
 <head>
-    <title>Student Uploads</title>
+    <title>Uploads</title>
     <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -123,7 +53,6 @@ foreach($getStaffDetails as $staffDetail){
         ;
 
         $(document).ready(function () {
-            $('select').material_select();
             $(".button-collapse").sideNav();
         });
     </script>
@@ -164,300 +93,56 @@ foreach($getStaffDetails as $staffDetail){
     </nav>
 
 <div class="container">
-    
- <div class="row">
+    <div class="row">
 
 
+        <!-- BLOG SECTION START -->
+        <div id="submitBlog" class="row">
+            <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
+
+            <form name="blogEntry" method="post" action='' enctype="multipart/form-data" class="col s10 m12 offset-s1">
+                <input type='hidden' name='communication_action' value='posttoblog'/>
+                <input type='hidden' name='communication_from_id' value='<?php echo $stu_user; ?>'/>
+                <input type='hidden' name='communication_to_id' value='blog'/>
+
+                <div class="input-field">
+                    <textarea class="materialize-textarea" name='communication_body'></textarea>
+                    <label>New Blog Entry</label>
+                </div>
+                <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit
+                </button>
+            </form>
+        </div>
         <div class="col s10 m12 offset-s1 card">
-          
+            <a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry" class="c_right-align">
+                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Entry</div>
+            </a>
 
             <div class="card-content">
-                <span class="card-title green-text">Student Blog History</span>
-                <?php if ($filtered) {
-                    // Get student name
-                    $ud = new UserDetails ();
-                    $ud->GetStudentDetails($_GET['sid']);
-                    $student = $ud->getResponse();
+                <span class="card-title green-text">Upload History</span>
 
-                    if ( !isset($_GET['sid']) ) {
-                        echo '<p>Your allocated students have submitted '. $blog_count .' blog posts collectively.</p>';
-                    } else {
+                <p class="green-text">You have uploaded
+                    <?php echo $file_count; ?> files</p>
+                <ul class="collection">
+				<?php foreach ($files as $f) {
+                        echo '<li class="collection-item">'; 
+                        echo ' <form action="readfile.php" method="POST">', "<p> {$f[ 'file_name']} </p>                      
+                            <input type='hidden' name='file_id' value='".$f['file_id']."'' />
+                            <button>View file</button>";
+                        echo "</form>","</li>";
+                        }
+                    ?>
 
-                        echo '<p>'. $student[0]['student_first'] . ' ' . $student[0]['student_last'] . ' has submitted '. $blog_count .' blog posts.</p>';
-                    }
-
-
-                } ?>
-
-                <div class="row">
-                    <!-- STUDENT FILTER FORM START -->
-                    <form id="communication_filter" action="" method="GET">
-                        <div class="col s12 m9">
-                            <label for="communication_student_id_filter">Select a student</label>
-                            <select name="sid" id="communication_student_id_filter">
-                                <option value="" disabled="disabled" selected="selected">Choose...</option>
-                                <?php foreach ($students as $stu) {
-                                    echo '<option value="' . $stu['student_username'] . '"' . (($_GET['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
-                                } ?>
-                            </select>
-                        </div>
-                        <div class="input-field col s12 m3">
-
-                            <button type="submit"
-                                    class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
-                                Filter
-                            </button>
-                        </div>
-                    </form>
-                    <!-- STUDENT FILTER FORM END -->
-                </div>
-
-                <?php if ($filtered > 0) { ?>
-
-                    
-                    <div class="row">
-                        <!-- Uploads SECTION START -->
-                         <div class="row">
-                            <?php
-                                $el = new errorList ();
-                                if ($el->exists ()){
-                                    ?>
-                                    <p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
-                                   <?php echo $el->getResponse (); ?>
-                                    </p>
-                                   <?
-                                }
-                            ?>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <h5 class="center-align">Project Uploads</h5>
-                    </div>
-
-
-                        <div id="submitBlog" class="row">
-                            <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
-                            <form name="blogEntry" method="post" action='' enctype="multipart/form-data" class="col s10 m12 offset-s1">
-
-                                <input type='hidden' name='file_owner' value='<?php echo $stu_user; ?>' />
-                                <input type='hidden' name='file_action' value='submit' />
-                                
-                                    <select name="file_type_id">
-                                        <?php foreach ($fileTypes as $ft) {
-                                                        echo "<option value='".$ft['file_type_id']."'>".$ft['file_type_name']."</option>";
-                                                    }
-                                                    ?>
-                                  </select>
-
-                                          <input class="waves-effect waves-teal waves-light btn-flat" type="file" name="fileToUpload" id="fileToUpload">
-                             
-                                <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
-                            </form>
-                        </div>
-
-
-                    <div class="row">
-                  <a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry" class="c_right-align"> 
-                                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit new file</div>
-                            </a>
-                    </div>     
-
-
-
-                    <div class="row">
-                        <div class="col s12 m12 l6">
-                            <div class="card">
-                            <form method = 'post'>
-                                <div class="card-content">
-                                    <span class="card-title green-text">Project Title</span>
-
-                                    <p>
-                                        <input type='text' name ='title' placeholder='<?php echo ( $projectTitle ? $projectTitle[0]['project_title'] : 'Insert title ...' ); ?>' />
-                                        <input type='hidden' name='projectDetails_action' value = 'projectDetails_action' />
-                                        <button>Update</button>
-                                    </p>
-                                </div>
-                                </form>
-                            </div>
-                        </div>
-
-
-                        <div class="col s12 m12 l6">
-                            <div class="card">
-                                <div class="card-content">
-                                    <span class="card-title green-text">Project Proposal</span>
-
-                                    <p>
-                                       
-                                           Latest Upload: 
-                                           <?php echo ( 
-                                            $proposal[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$proposal[0]['file_id']."'/><a>".$proposal[0]['file_name']."</a><button>download</button>
-                                            </form>"
-                                            : "no file uploaded yet" 
-                                            );  
-                                        ?>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col s12 m12 l6">
-                            <div class="card">
-                                <div class="card-content">
-                                    <span class="card-title green-text">Inital Report</span>
-
-                                    <p>
-                                        
-                                           Latest Upload: 
-                                           <?php echo ( 
-                                            $initial[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$initial[0]['file_id']."'/><a>".$initial[0]['file_name']."</a><button>download</button>
-                                            </form>"
-                                            : "no file uploaded yet" 
-                                            );  
-                                        ?>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="col s12 m12 l6">
-                            <div class="card">
-                                <div class="card-content">
-                                    <span class="card-title green-text">Interim Report</span>
-
-                                    <p>
-                                           Latest Upload: 
-                                           <?php echo ( 
-                                            $interim[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$interim[0]['file_id']."'/><a>".$interim[0]['file_name']."</a><button>download</button>
-                                            </form>"
-                                            : "no file uploaded yet" 
-                                            );  
-                                        ?>
-                                    </p>
-
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12 m12 l6">
-                            <div class="card">
-                                <div class="card-content">
-                                    <span class="card-title green-text">Project Report</span>
-
-                                    <p>
-                                           Latest Upload: 
-                                           <?php echo ( 
-                                            $project[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$project[0]['file_id']."'/><a>".$project[0]['file_name']."</a><button>download</button>
-                                            </form>"
-                                            : "no file uploaded yet" 
-                                            );  
-                                        ?>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="col s12 m12 l6">
-                            <div class="card">
-                                <div class="card-content">
-                                    <span class="card-title green-text">Research Ethics</span>
-
-                                    <p>
-                                           Latest Upload: 
-                                           <?php echo ( 
-                                            $ethics[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$ethics[0]['file_id']."'/><a>".$ethics[0]['file_name']."</a><button>download</button>
-                                            </form>"
-                                            : "no file uploaded yet" 
-                                            );  
-                                        ?>
-                                    </p>
-
-                                   
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                 <div class="col s10 m12 offset-s1 card">
-                            
-                            <div class="card-content">
-                                <span class="card-title green-text">Supervisor Uploads</span>
-                                <p class="green-text"><?php echo $supervisor[0]['staff_first']." ".$supervisor[0]['staff_last'];?> has uploaded
-                                    <?php echo $super_count; ?> files</p>
-                                
-                                <ul class="collection">
-                                <?php 
-                                if ($super_count > 0) {
-                ?>
-
-                                
-                                    <?php foreach ($superFiles as $sf) { 
-                                        
-                                        echo '<li class="collection-item">'; 
-                                        echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
-                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
-                                            
-                                        echo "</li>";
-                                        }
-                                        
-
-                                        
-                                    ?>
-                                </ul>
-
-                                <?php 
-                            } else {
-                                ?>
-
-                                <li class="collection-item">
-                                No files uploaded
-                                </li> 
-
-                                <?php 
-
-                            }
-
-                ?>
-                    </ul>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                  <?php  } else if ($blog_count == 0) {
-
-                    // No messages found for current student
-                    
-                    echo '<ul class="collection"><li class="collection-item">No posts to display</li></ul>';
-                } ?>
+                </ul>
             </div>
         </div>
-        <!--MESSAGING SECTION END-->
-    </div>     
 
+        <!-- BLOG SECTION END -->
+    </div>
 
-
- 
 </div>
 <!-- end container -->
 </body>
-
 <script>
     $(document).ready(function () {
         $('.modal-trigger').leanModal();

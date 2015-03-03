@@ -181,7 +181,7 @@ class File {
 	}
 	
 	// Find a comment by comment id, type, who posted etc.
-	public function getAll ( $user ) { 
+	public function getAll ( $user, $type ) { 
 
 		
 			$result = $this->con->prepare(
