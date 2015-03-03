@@ -37,10 +37,6 @@ $staff_id = $currentStaff['staff_id'];
 
 $c = new Communication ();
 
-$c->getAll('blog', $staff_username);
-$blogs = $c->getResponse();
-$blog_count = count($blogs);
-
 $c->getAll('message', $staff_username, 'staff');
 $messages = $c->getResponse();
 $message_count = count($messages);
