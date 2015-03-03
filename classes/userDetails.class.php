@@ -248,11 +248,25 @@ class UserDetails {
     }
 
 
-    public function searchStudents($student_first) {
-        //$result = $this->con->prepare("SELECT * FROM esuper_student WHERE esuper_student.student_first = " . '"' . $student_first . '"' . "OR " . '"' . $student_first . '"' . " = esuper_student.student_first " . " esuper_student.student_last");
-        $result = $this->con->prepare("SELECT * FROM esuper_student WHERE student_first LIKE " . '"' . $student_first . '%"'  . ' OR  CONCAT(student_first, " ", student_last) LIKE ' . '"' . $student_first . '%"');
+    public function searchStudents($student_name) {
+        $result = $this->con->prepare(
+            'SELECT
+               student_id,
+               student_first,
+               student_last,
+               student_username,
+               student_banner_id
+             FROM
+               esuper_student
+             WHERE
+               (student_first LIKE :student_name OR student_last LIKE :student_name OR CONCAT(student_first, " ", student_last) LIKE :student_name)
+             AND
+               student_active = 1
+             ORDER BY
+               student_last ASC, student_first ASC'
+        );
+        $result->bindValue(':student_name', $student_name . '%');
 
-        $result->bindValue(':student_first', $student_first);
         try {
             $result->execute();
         } catch (PDOException $e) {
@@ -267,9 +281,30 @@ class UserDetails {
     }
 
     public function searchStudentsByProgramme($programme_id) {
-        $result = $this->con->prepare("SELECT * FROM esuper_student, esuper_programme, esuper_user_programme WHERE esuper_programme.programme_id =  " . '"' . $programme_id . '"' . " AND esuper_programme.programme_id = esuper_user_programme.programme_id AND esuper_user_programme.student_id = esuper_student.student_id");
+        $result = $this->con->prepare(
+            'SELECT
+               s.student_id,
+               s.student_first,
+               s.student_last,
+               s.student_username,
+               s.student_banner_id
+             FROM
+               esuper_student s,
+               esuper_programme p,
+               esuper_user_programme us
+             WHERE
+               p.programme_id = :programme_id
+             AND
+               p.programme_id = us.programme_id
+             AND
+               us.student_id = s.student_id
+             AND
+               s.student_active = 1
+             ORDER BY
+               s.student_last ASC, s.student_first ASC'
+        );
+        $result->bindValue(':programme_id', $programme_id);
 
-        $result->bindValue(':student_first', $student_first);
         try {
             $result->execute();
         } catch (PDOException $e) {
@@ -284,9 +319,26 @@ class UserDetails {
     }
 
     public function getStudentSupervisor($student_id) {
-        $result = $this->con->prepare("SELECT * FROM esuper_student, esuper_staff, esuper_user_allocation WHERE esuper_student.student_id = " . $student_id . " AND esuper_student.student_id = esuper_user_allocation.student_id AND esuper_staff.staff_id = esuper_user_allocation.supervisor_id");
+        $result = $this->con->prepare(
+            'SELECT
+               t.staff_first,
+               t.staff_last
+             FROM
+               esuper_student s,
+               esuper_staff t,
+               esuper_user_allocation a
+             WHERE
+               s.student_id = :student_id
+             AND
+               s.student_id = a.student_id
+             AND
+               t.staff_id = a.supervisor_id
+             ORDER BY
+               a.last_updated DESC
+             LIMIT 1'
+        );
+        $result->bindValue(':student_id', $student_id);
 
-        $result->bindValue(':student_first', $student_first);
         try {
             $result->execute();
         } catch (PDOException $e) {
@@ -300,10 +352,27 @@ class UserDetails {
         $this->response($row);
     }
 
-     public function getStudentSecondMarker($student_id) {
-        $result = $this->con->prepare("SELECT * FROM esuper_student, esuper_staff, esuper_user_allocation WHERE esuper_student.student_id = " . $student_id . " AND esuper_student.student_id = esuper_user_allocation.student_id AND esuper_staff.staff_id = esuper_user_allocation.second_id");
+    public function getStudentSecondMarker($student_id) {
+        $result = $this->con->prepare(
+            'SELECT
+               t.staff_first,
+               t.staff_last
+             FROM
+               esuper_student s,
+               esuper_staff t,
+               esuper_user_allocation a
+             WHERE
+               s.student_id = :student_id
+             AND
+               s.student_id = a.student_id
+             AND
+               t.staff_id = a.second_id
+             ORDER BY
+               a.last_updated DESC
+             LIMIT 1'
+        );
+        $result->bindValue(':student_id', $student_id);
 
-        $result->bindValue(':student_first', $student_first);
         try {
             $result->execute();
         } catch (PDOException $e) {
