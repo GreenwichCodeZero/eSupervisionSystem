@@ -364,7 +364,7 @@ class Communication {
         $this->response($row);
     }
 
-    public function addComment ($communication_id, $comment_id) {
+    public function addComment ( $comment_id, $communication_id) {
 
         $result = $this->con->prepare (
             'update esuper_communication
