@@ -27,7 +27,7 @@ $emailHeaders = 'From: eSupervision System <esupervision@greenwich.ac.uk>' . "\r
 
 // Get student supervisor
 $u = new UserDetails ();
-$u->studentSuper($currentStudent['student_id']);
+$u->getStudentSupervisor($currentStudent['student_id']);
 $supervisor = $u->getResponse();
 
 // Create database connection

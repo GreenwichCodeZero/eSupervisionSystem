@@ -69,7 +69,7 @@ $f7->get ( $stu_user, 'project');
 $project = $f7->getResponse ();
 
 $u = new UserDetails ();
-$u->studentSuper($stu_id);
+$u->getStudentSupervisor($stu_id);
 $supervisor = $u->getResponse();
 
 
