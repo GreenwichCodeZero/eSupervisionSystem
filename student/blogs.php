@@ -38,7 +38,7 @@ $blog_count = count($blogs);
 
 
 $u = new UserDetails ();
-$u->studentSuper($stu_id);
+$u->getStudentSupervisor($stu_id);
 $supervisor = $u->getResponse();
 
 ?>
