@@ -31,17 +31,16 @@ if ($_POST['communication_action']){
 
 }
 
-
 $c->received($sta_user, 'staff');
 $received = $c->getResponse();
 $received_count = count($received);
 
 $u = new UserDetails ();
-$u->studentSuper($sta_id);
+$u->getStudentSupervisor($sta_id);
 $supervisor = $u->getResponse();
 
 $u = new UserDetails ();
-$u->AllMystudents($sta_id);
+$u->GetAllocatedStudents($sta_user);
 $students = $u->getResponse();
 
 ?>
