@@ -1,15 +1,17 @@
 <?php
 
+//todo JS validation
+
 // Initialise session
 session_start();
 
-//error_reporting(0); todo
+error_reporting(0);
 
 require '../login-check.php';
 require '../classes/security.class.php';
-require '../classes/communication.class.php';
 require '../classes/userDetails.class.php';
-require '../classes/search.class.php';
+require '../database-connection.php';
+require '../validation.php';
 
 // Globals
 $currentStaff = $_SESSION['currentUser'];
@@ -22,6 +24,95 @@ if ($currentStaff['staff_authorised'] !== '1') {
 }
 
 $userDetails = new UserDetails ();
+
+if (isset($_POST['saveAllocate'])) {
+    // Allocate button has been pressed
+    // Get data
+    $type = $_POST['type'];
+    $allocated_staff_id = $_POST['staff'];
+    $allocatedStudents = $_SESSION['allocatedStudents'];
+
+    // Create database connection
+    if (!($link = GetConnection())) {
+        // Database connection error occurred
+        $outputText .= 'Error connecting to database, please try again.';
+    } else {
+        // Loop over each allocated student
+        foreach ($allocatedStudents as $allocatedStudent) {
+            // Get student ID
+            $userDetails->GetStudentDetails($allocatedStudent);
+            $studentDetails = $userDetails->getResponse()[0];
+            $studentUserId = $studentDetails['student_id'];
+
+            // Server-side validation
+            // Validate student ID
+            $studentUserId = mysqli_real_escape_string($link, stripslashes(strip_tags($studentUserId)));
+            if (!preg_match('/^[0-9]{1,}$/', $studentUserId)) {
+                array_push($errorList, 'Student ID is required');
+            }
+
+            // Validate supervisor ID
+            $allocated_staff_id = mysqli_real_escape_string($link, stripslashes(strip_tags($allocated_staff_id)));
+            if (!preg_match('/^[0-9]{1,}$/', $allocated_staff_id)) {
+                array_push($errorList, 'Supervisor ID is required');
+            }
+
+            // Validate current staff ID
+            $staff_id = mysqli_real_escape_string($link, stripslashes(strip_tags($staff_id)));
+            if (!preg_match('/^[0-9]{1,}$/', $staff_id)) {
+                array_push($errorList, 'Current staff ID is required');
+            }
+
+            // Check for and display any errors
+            if (count($errorList) > 0) {
+                $outputText = DisplayErrorMessages($errorList);
+            } else {
+                // No errors
+                switch ($type) {
+                    case 'supervisor':
+                        // Insert into database
+                        if (AllocateStudentSupervisor($link, $studentUserId, $allocated_staff_id, $staff_id)) {
+
+                            // todo US14 Send email to student
+                            /*mail(
+                                $meetingToStudentUsername . '@greenwich.ac.uk',
+                                'New Meeting Request Received',
+                                'A new meeting request was submitted and is waiting for you on the eSupervision System.',
+                                $emailHeaders
+                            );*/
+
+                            $outputText = 'Successfully allocated students\' supervisors.';
+                        } else {
+                            $outputText = 'Database error.';
+                        }
+
+                        break;
+                    case 'second':
+                        // Insert into database
+                        if (AllocateStudentSecondMarker($link, $studentUserId, $allocated_staff_id, $staff_id)) {
+
+                            // todo US14 Send email to student
+                            /*mail(
+                                $meetingToStudentUsername . '@greenwich.ac.uk',
+                                'New Meeting Request Received',
+                                'A new meeting request was submitted and is waiting for you on the eSupervision System.',
+                                $emailHeaders
+                            );*/
+
+                            $outputText = 'Successfully allocated students\' second markers.';
+                        } else {
+                            $outputText = 'Database error.';
+                        }
+
+                        break;
+                }
+            }
+        }
+    }
+} else {
+    // Save selected students to session
+    $_SESSION['allocatedStudents'] = $selectedStudents;
+}
 
 ?>
 <!DOCTYPE html>
@@ -76,98 +167,137 @@ $userDetails = new UserDetails ();
 </nav>
 
 <div class="container">
-    <form id="allocationForm" action="allocate.php" method="POST">
 
-        <!-- Start of allocate form -->
-        <div class="card">
-            <div class="card-content">
-                <span class="card-title green-text">Allocation</span>
+    <?php echo $outputText; ?>
+
+    <!-- Start of allocate form -->
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title green-text">Allocation</span>
+
+            <form id="allocationForm" action="allocate.php" method="POST">
 
                 <div class="row">
-
                     <div class="col s12 m9">
-                        <!--<label for="name">Student name</label>
-                        <input type="search" name="name" id="name" placeholder="Enter a name"
-                               value="<?php //echo $_GET['name']; ?>">-->
+                        <div class="col s12 m6">
+                            <label for="type">Allocation type</label>
+                            <select name="type" id="type">
+                                <option value="" disabled="disabled" selected="selected">Allocation type</option>
+                                <option value="supervisor">Supervisor</option>
+                                <option value="second">Second marker</option>
+                            </select>
+                        </div>
+                        <div class="col s12 m6">
+                            <!-- Get programme ID of current students -->
+                            <?php if (count($selectedStudents) == 1) {
+                                $userDetails->GetStudentDetails($selectedStudents[0]);
+                                $studentDetails = $userDetails->getResponse()[0];
 
-                        <!--todo-->
-                        staff type drop down. staff names dropdown.
+                                $programmeId = $studentDetails['programme_id'];
+                            } else {
+                                $programmeId = $_POST['programme'];
+                            } ?>
 
+                            <label for="staff">Select staff</label>
+                            <select name="staff" id="staff">
+                                <option value="" disabled="disabled" selected="selected">Select staff</option>
+                                <?php
+                                // Programme specific staff
+                                echo '<option value="" disabled="disabled">&#8212; Programme staff</option>';
+
+                                // Get staff details (same programme only)
+                                $userDetails->GetStaffByProgrammeId($programmeId);
+                                $staffDetailsProgramme = $userDetails->getResponse();
+
+                                foreach ($staffDetailsProgramme as $staff) {
+                                    echo '<option value="' . $staff['staff_id'] . '">' . $staff['staff_first'] . ' ' . $staff['staff_last'] . '</option>';
+                                }
+
+
+                                // Other staff
+                                echo '<option value="" disabled="disabled">&#8212; Other staff</option>';
+
+                                // Get all staff details
+                                $userDetails->GetAllStaff();
+                                $staffDetailsAll = $userDetails->getResponse();
+
+                                foreach ($staffDetailsAll as $staff) {
+                                    // Only display if it wasn't displayed in the programme staff section
+                                    if (!in_array($staff, $staffDetailsProgramme)) {
+                                        echo '<option value="' . $staff['staff_id'] . '">' . $staff['staff_first'] . ' ' . $staff['staff_last'] . '</option>';
+                                    }
+                                }
+
+                                ?>
+                            </select>
+                        </div>
                     </div>
+
                     <div class="input-field col s12 m3">
-                        <button type="submit" id="allocate"
+                        <button type="submit" id="saveAllocate" name="saveAllocate"
                                 class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
                             Allocate
                         </button>
                     </div>
                 </div>
+
+            </form>
+
+        </div>
+    </div>
+    <!-- End of allocate form -->
+
+    <!-- Students list start -->
+    <?php if ($selectedStudents != null) { ?>
+
+        <div class="row center">
+            <div class="col s12">
+                <h5>Students</h5>
             </div>
         </div>
-        <!-- End of allocate form -->
 
-        <!-- Students list start -->
-        <?php if ($selectedStudents != null) { ?>
+        <div class="row">
 
-            <div class="row center">
-                <div class="col s12">
-                    <h5>Students</h5>
-                </div>
-            </div>
+            <?php foreach ($selectedStudents as $studentUsername) {
+                // Get current student details
+                $userDetails->GetStudentDetails($studentUsername);
+                $studentDetails = $userDetails->getResponse()[0];
 
-            <div class="row">
+                // Get current student supervisor
+                $userDetails->getStudentSupervisor($studentDetails['student_id']);
+                $studentSupervisor = $userDetails->getResponse();
 
-                <?php foreach ($selectedStudents as $studentUsername) {
+                // Get current student second marker
+                $userDetails->getStudentSecondMarker($studentDetails['student_id']);
+                $studentSecondMarker = $userDetails->getResponse(); ?>
 
-                    // Get current student details
-                    $userDetails->GetStudentDetails($studentUsername);
-                    $studentDetails = $userDetails->getResponse()[0];
-
-                    // Get current student supervisor
-                    $userDetails->getStudentSupervisor($studentDetails['student_id']);
-                    $studentSupervisor = $userDetails->getResponse();
-
-                    // Get current student second marker
-                    $userDetails->getStudentSecondMarker($studentDetails['student_id']);
-                    $studentSecondMarker = $userDetails->getResponse(); ?>
-
-                    <div class="col s12 m6 l4">
-                        <div class="card">
-                            <div class="card-content">
-
-
-                                <?php
-                                //todo below
-                                //echo '<pre>';
-                                //var_dump($studentDetails);
-                                //echo '</pre>';
-                                ?>
-
-
-
+                <div class="col s12 m6 l4">
+                    <div class="card">
+                        <div class="card-content">
                                 <span class="card-title green-text">
                                     <?php echo $studentDetails['student_first'] . ' ' . $studentDetails['student_last']; ?>
                                 </span>
 
-                                <p>
-                                    Supervisor: <?php echo $studentSupervisor[0]['staff_first'] . ' ' . $studentSupervisor[0]['staff_last']; ?>
-                                    <br/>
-                                    Second
-                                    marker: <?php echo $studentSecondMarker[0]['staff_first'] . ' ' . $studentSecondMarker[0]['staff_last']; ?>
-                                </p>
-                            </div>
+                            <p>
+                                Programme: <?php echo $studentDetails['programme_title']; ?>
+                                <br/>
+                                Supervisor: <?php echo $studentSupervisor[0]['staff_first'] . ' ' . $studentSupervisor[0]['staff_last']; ?>
+                                <br/>
+                                Second
+                                marker: <?php echo $studentSecondMarker[0]['staff_first'] . ' ' . $studentSecondMarker[0]['staff_last']; ?>
+                            </p>
                         </div>
                     </div>
+                </div>
 
-                <?php } // End foreach ?>
+            <?php } // End foreach ?>
 
-            </div>
+        </div>
 
-        <?php } else {
-            echo 'No students selected to allocate.';
-        } ?>
-        <!-- Students list end -->
-
-    </form>
+    <?php } else {
+        echo 'No students selected to allocate.';
+    } ?>
+    <!-- Students list end -->
 
 </div>
 
