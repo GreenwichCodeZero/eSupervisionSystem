@@ -5,32 +5,40 @@
 session_start();
 
 require '../login-check.php';
+include '../classes/userDetails.class.php';
+include '../classes/security.class.php';
+include '../classes/communication.class.php';
+include '../classes/meetings.class.php';
 
-$currentStaff = $_SESSION['currentUser'];
+//$currentStaff = $_SESSION['currentUser'];
+$newStaffId = $_GET['staff'];
+
+$newCurrentStaffQ = new UserDetails();
+$newCurrentStaffQ->getNewStaffDetails($newStaffId);
+$newCurrentStaff = $newCurrentStaffQ->getResponse();
+
+//echo "new staff id = " . $newStaffId;
+
 $userDetails = '';
 
 // Determine permissions of current user
-if ($currentStaff['user_type'] === 'staff') {
     // All staff only things here
-    $staffDetails = 'Staff: '. $currentStaff['staff_username'];
-	$staffName = $currentStaff['staff_first'] . ' '. $currentStaff['staff_last'];
+    $staffDetails = 'Staff: '. $newCurrentStaff[0]['staff_username'];
+	$staffName = $newCurrentStaff[0]['staff_first'] . ' '. $newCurrentStaff[0]['staff_last'];
 
-    if ($currentUser['staff_authorised'] === '1') {
+    if ($newCurrentStaff[0]['staff_authorised'] === '1') {
         // Authorised staff only things here
         $userDetails .= '<li>staff_authorised: yes</li>';
     } else {
         // Unauthorised staff only things here
         $userDetails .= '<li>staff_authorised: no</li>';
     }
-}
 
-include '../classes/communication.class.php';
-include '../classes/meetings.class.php';
-include '../classes/userDetails.class.php';
+
 
 // $_SESSION['user']['id']
-$staff_username = $currentStaff['staff_username']; // (1) = demo staff id
-$staff_id = $currentStaff['staff_id'];
+$staff_username = $newCurrentStaff[0]['staff_username']; // (1) = demo staff id
+$staff_id = $newCurrentStaff[0]['staff_id'];
 
 // PRINT USER VARIABLES TO TOP OF BROWSER
 
@@ -51,7 +59,7 @@ $meetings = $m->getResponse();
 $meeting_count = count($meetings);
 
 $studentsSupervised = new UserDetails ();
-$studentsSupervised->supervisorStudents($staff_id);
+$studentsSupervised->supervisorStudents($newStaffId);
 $students = $studentsSupervised->getResponse();
 
 $noSupervisorQ = new UserDetails ();
@@ -63,7 +71,7 @@ $noSecondMarkerQ->noSecondMarker();
 $noSecondMarkers = $noSecondMarkerQ->getResponse();
 
 $getStaffDetailsQ = new UserDetails ();
-$getStaffDetailsQ->isStaffAuthorised($staff_id);
+$getStaffDetailsQ->isStaffAuthorised($newStaffId);
 $getStaffDetails = $getStaffDetailsQ->getResponse();
 
 foreach($getStaffDetails as $staffDetail){
@@ -98,19 +106,19 @@ foreach($getStaffDetails as $staffDetail){
     <div class="nav-wrapper green">
         <ul id="nav-mobile" class="side-nav">
             <li>
-                <a href="index.php">Dashboard</a>
+                <a href="#">Dashboard</a>
             </li>
             <li>
-                <a href="meetings.php">Meetings</a>
+                <a href="#">Meetings</a>
             </li>
             <li>
-                <a href="messages.php">Messages</a>
+                <a href="#">Messages</a>
             </li>
             <li>
-                <a href="blogs.php">Blog</a>
+                <a href="#">Blog</a>
             </li>
             <li>
-                <a href="uploads.php">Project Uploads</a>
+                <a href="#">Project Uploads</a>
             </li>
             <?php
             if($staffAuthorsied == 1){
@@ -127,7 +135,8 @@ foreach($getStaffDetails as $staffDetail){
 </nav>
 <div class="container">
     <div class="row">
-        <h4 class="center-align">eSupervision Dashboard</h4>
+        <h4 class="center-align">You are viewing staff: <?php echo $newCurrentStaff[0]['staff_first'] . " " . $newCurrentStaff[0]['staff_last'] . "s "; ?>eSupervision Dashboard</h4>
+            <h5 class="center-align"><a href="viewDashboards.php">Go back to view dashboards</a></h5>
     </div>
     <div class="row">
         <div class="col s10 offset-s1 m8 offset-m2 l6 offset-l3 center-align">
@@ -147,7 +156,7 @@ foreach($getStaffDetails as $staffDetail){
                     <p>You have submitted <?php echo $meeting_count; ?> meeting records.</p>
                 </div>
                 <div class="card-action">
-                    <a href="meetings.php" title="View all meetings">View All</a>
+                    <a href="#" title="View all meetings">View All</a>
                     <a href="#" title="Request new meeting">Request</a>
                 </div>
             </div>
@@ -160,7 +169,7 @@ foreach($getStaffDetails as $staffDetail){
                     <p>You have received <?php echo $received_count; ?> messages.</p>
                 </div>
                 <div class="card-action">
-                    <a href="messages.php" title="View all messages">View All</a>
+                    <a href="#" title="View all messages">View All</a>
                     <a href="#newMessageModal" title="Write new message">Message Project Students</a>
                 </div>
             </div>
@@ -235,7 +244,7 @@ foreach($getStaffDetails as $staffDetail){
 
                 <textarea name="communication_body"></textarea>
                 <input type="hidden" name="communication_action" value = "sendmessage" />
-                <input type="hidden" name="communication_from_id" value="<?php echo $currentStaff['student_username']; ?>" ?>
+                <input type="hidden" name="communication_from_id" value="<?php echo $newCurrentStaff[0]['student_username']; ?>" ?>
                 <input type="hidden" name="communication_to_id" value = "<?php echo $supervisor[0]['staff_username']; ?>" />
             </div>
             <div class="modal-footer">
