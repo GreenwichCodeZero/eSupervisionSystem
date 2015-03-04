@@ -8,12 +8,16 @@ require 'validation.php';
 // Initialise session
 session_start();
 
-if(isset($_SESSION['currentUser'])){
-    echo '<script>
-    window.history.back()
-    </script>';
+$s = $_SESSION['currentUser'];
 
+//$s['user_type'];
+
+//var_dump($s);
+
+if($s['user_type'] != null){
+RedirectToDashboard($s['user_type']);
 }
+
 $errorList = array();
 $outputText = $errorListOutput = '';
 

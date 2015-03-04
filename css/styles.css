@@ -13,3 +13,13 @@ body {}
 #sendMessage, #submitBlog, #requestMeeting{
     display:none;
 }
+
+#studentSubmit{
+	display: block;
+	margin-bottom: 100px;
+}
+
+#staffSubmit{
+	display: block;
+	margin-bottom: 30px;
+}

@@ -48,7 +48,13 @@ if (isset($_GET['name'])) {
     $userDetails->searchStudentsByProgramme($programmeID);
     $searchStudentsByProgramme = $userDetails->getResponse();
 }
+$getStaffDetailsQ = new UserDetails ();
+$getStaffDetailsQ->isStaffAuthorised($staff_id);
+$getStaffDetails = $getStaffDetailsQ->getResponse();
 
+foreach ($getStaffDetails as $staffDetail) {
+    $staffAuthorised = $staffDetail['staff_authorised'];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -90,9 +96,12 @@ if (isset($_GET['name'])) {
             <li>
                 <a href="uploads.php">Project Uploads</a>
             </li>
-            <?php if ($currentStaff['staff_authorised'] === '1') {
-                echo '<li><a href="search.php">Search</a></li>';
-            } ?>
+            <?php
+            if($getStaffDetails[0]['staff_authorised'] == 1){
+                echo '<li><a href="search.php">Search</a></li>
+                    <li><a href="viewDashboards.php">View dashboards</a></li>';
+            }
+            ?>
             <li>
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>

@@ -14,6 +14,8 @@ class UserDetails {
         }
     }
 
+
+
     // Get student details by username (including programme ID)
     public function GetStudentDetails($student_username) {
         $result = $this->con->prepare(
@@ -61,6 +63,7 @@ class UserDetails {
         $result = $this->con->prepare(
             '(
                SELECT
+               s.student_id,
                  s.student_first,
                  s.student_last,
                  s.student_username
@@ -82,6 +85,7 @@ class UserDetails {
                UNION
              (
                SELECT
+               s.student_id,
                  s.student_first,
                  s.student_last,
                  s.student_username
@@ -447,6 +451,82 @@ class UserDetails {
              ORDER BY
                a.last_updated DESC
              LIMIT 1');
+        $result->bindValue(':student_id', $student_id);
+
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
+
+
+    //used to display all unathorised staff in a drop down list on view dashboards
+    public function getAllUnauthorisedStaff() {
+        $result = $this->con->prepare(
+            'SELECT
+               *
+             FROM
+               esuper_staff
+             WHERE
+               staff_authorised = 0
+             ');
+        //$result->bindValue(':student_id', $student_id);
+
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
+
+    //used to display another staffs dashboard
+    public function getNewStaffDetails($staff_id) {
+        $result = $this->con->prepare(
+            'SELECT
+               *
+             FROM
+               esuper_staff
+             WHERE
+               staff_id = :staff_id
+             ');
+        $result->bindValue(':staff_id', $staff_id);
+
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
+
+        //used to display another staffs dashboard
+    public function getNewStudentDetails($student_id) {
+        $result = $this->con->prepare(
+            'SELECT
+               *
+             FROM
+               esuper_student
+             WHERE
+               student_id = :student_id
+             ');
         $result->bindValue(':student_id', $student_id);
 
         try {

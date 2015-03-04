@@ -82,12 +82,11 @@ $students = $u->getResponse();
                 <a href="submissions.php">Project Uploads</a>
             </li>
 			<?php
-			if ($staffAuthorised == 1) {
-                echo '<li>
-					<a href="search.php">Search</a>
-				</li>';
+            if($staffAuthorsied == 1){
+                echo '<li><a href="search.php">Search</a></li>
+                    <li><a href="viewDashboards.php">View dashboards</a></li>';
             }
-			?>
+            ?>
 			<li>
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
