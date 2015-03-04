@@ -304,23 +304,57 @@ class File {
 
 	}
 
-	public function supervisorUploads ($staff, $student) {
+	// Student: show files uploaded by supervisor (LIST)
 
-		$result = $this->con->prepare(
+	public function supervisorUploads ($staff, $student, $file_type = null) {
+
+		switch ($file_type) {
+			case "interim":
+			$type_id = 5;
+			break;
+			case "project":
+			$type_id = 2;
+			break;
+			case "ethics":
+			$type_id =6;
+
+			break;
+			case "initial":
+			$type_id = 8;
+			break;
+
+			case "proposal":
+			$type_id = 3;
+			break;
+
+			default: 
+			$type_id = 1;
+			break;
+
+		}
+
+		$sql =
 			'SELECT   
 			`esuper_file`.`file_id`,
 			`esuper_file`.`file_name`,
-			`esuper_communication`.`communication_body`
+			`esuper_communication`.`file_id`
 			FROM
 			`esuper_communication`,
 			`esuper_file` 
 			WHERE 
-
 			`esuper_file`.`file_id` = `esuper_communication`.`communication_file_id`
-AND
+			AND
 			`esuper_communication`.`communication_from_id` = "'.$staff.'"
 			AND
-			`esuper_communication`.`communication_to_id` = "'.$student.'"');
+			`esuper_communication`.`communication_to_id` = "'.$student.'"';
+
+			if ($file_type){
+				$sql .= "
+			AND
+			`esuper_file`.`file_type_id` = ".$type_id;
+			}
+			
+		$result = $this->con->prepare($sql);
 
 	try {
         	$result->execute();
@@ -337,6 +371,15 @@ AND
         $this->response ($row);
     
 	}
+
+	public function fileForStudent ( $super, $student ) {
+
+		// insert file
+		// 
+		// insert communication
+
+	}
+
 
 }
 
