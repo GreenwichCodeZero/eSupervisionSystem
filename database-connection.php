@@ -116,4 +116,20 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
 
         return mysqli_query($link, $sql);
     }
+
+    // Function that inserts a supervisor allocation into the database
+    function AllocateStudentSupervisor($link, $studentId, $supervisorId, $updatedByStaffId) {
+        $sql = "INSERT INTO esuper_user_allocation (student_id, supervisor_id, updated_by)
+                VALUES ($studentId, $supervisorId, $updatedByStaffId)";
+
+        return mysqli_query($link, $sql);
+    }
+
+    // Function that inserts a second marker allocation into the database
+    function AllocateStudentSecondMarker($link, $studentId, $secondMarkerId, $updatedByStaffId) {
+        $sql = "INSERT INTO esuper_user_allocation (student_id, second_id, updated_by)
+                VALUES ($studentId, $secondMarkerId, $updatedByStaffId)";
+
+        return mysqli_query($link, $sql);
+    }
 }
