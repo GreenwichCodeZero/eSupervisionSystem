@@ -198,7 +198,7 @@ if (isset($_POST['saveAllocate'])) {
                 <a href="uploads.php">Project Uploads</a>
             </li>
             <?php
-            if($staffAuthorsied == 1){
+            if($getStaffDetails[0]['staff_authorised'] == 1){
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>';
             }
