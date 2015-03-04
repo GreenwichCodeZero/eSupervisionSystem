@@ -47,11 +47,11 @@ $meetings = $m->getResponse();
 $meeting_count = count($meetings);
 
 $u = new UserDetails ();
-$u->studentSuper($user_id);
+$u->getStudentSupervisor($user_id);
 $supervisor = $u->getResponse();
 
 $u2 = new UserDetails ();
-$u2->studentSM($user_id);
+$u2->getStudentSecondMarker($user_id);
 $secondMarker = $u2->getResponse();
 
 ?>

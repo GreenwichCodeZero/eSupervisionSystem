@@ -39,7 +39,7 @@ $received = $c->getResponse();
 $received_count = count($received);
 
 $u = new UserDetails ();
-$u->studentSuper($stu_id);
+$u->getStudentSupervisor($stu_id);
 $supervisor = $u->getResponse();
 
 
