@@ -8,12 +8,12 @@ require 'validation.php';
 // Initialise session
 session_start();
 
-if(isset($_SESSION['currentUser'])){
-    echo '<script>
-    window.history.back()
-    </script>';
+// if(isset($_SESSION['currentUser'])){
+//     echo '<script>
+//     window.history.back()
+//     </script>';
 
-}
+// }
 $errorList = array();
 $outputText = $errorListOutput = '';
 
