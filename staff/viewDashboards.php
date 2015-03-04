@@ -89,8 +89,8 @@ $getAllProjectStudents = $getAllProjectStudentsQ->getResponse();
   <h1>View dashboards</h1>
 
 <form action="staffDashboard.php" method="get">
-<select name="staff">
-<option>Please select a staff</option>
+<select id="staff" name="staff">
+<option value="0">Please select a staff</option>
 <?php
 foreach($getAllUnauthorisedStaffs as $getAllUnauthorisedStaff){
     echo '<option value="' . $getAllUnauthorisedStaff['staff_id'] . '">' . $getAllUnauthorisedStaff['staff_first'] . " " . $getAllUnauthorisedStaff['staff_last'] . "</option>";
@@ -98,13 +98,13 @@ foreach($getAllUnauthorisedStaffs as $getAllUnauthorisedStaff){
 ?>
 </select>
 
-<input type="submit" id="staffSubmit" name="staffSubmit" value="View staff dashboard">
+<input type="submit" id="staffSubmit" onclick="return validateStaffSearch();" name="staffSubmit" value="View staff dashboard">
 </form>
 
 
 <form action="studentDashboard.php" method="get">
-<select name="student">
-<option>Please select a student</option>
+<select id="student" name="student">
+<option value="0">Please select a student</option>
 <?php
 foreach($getAllProjectStudents as $getAllProjectStudent){
     echo '<option value="' . $getAllProjectStudent['student_id'] . '">' . $getAllProjectStudent['student_first'] . " " . $getAllUnauthorisedStaff['student_last'] . "</option>";
@@ -112,11 +112,42 @@ foreach($getAllProjectStudents as $getAllProjectStudent){
 ?>
 </select>
 
-<input type="submit" id="studentSubmit" name="studentSubmit" value="View student dashboard">
+<input type="submit" id="studentSubmit" onclick="return validateStudentSearch();" name="studentSubmit" value="View student dashboard">
 </form>
+
+<div id="validation"></div>
 
 </div>
 
+<script type="text/javascript">
+
+    function validateStaffSearch(){
+        var staffSelectedValue = document.getElementById('staff').selectedIndex;
+        var staffSelected = false;
+
+        if(staffSelectedValue != 0){
+            staffSelected = true;
+         }else{
+            staffSelected = false;
+            document.getElementById('validation').innerHTML = "Please select a staff";
+         }
+    return staffSelected;
+    }
+
+        function validateStudentSearch(){
+            var studentSelectedValue = document.getElementById('student').selectedIndex;
+            var studentSelected = false;
+
+            if(studentSelectedValue != 0){
+                studentSelected = true;
+             }else{
+                document.getElementById('validation').innerHTML = "Please select a student";
+                studentSelected = false;
+             }
+        return studentSelected;
+    }
+
+</script>
 </body>
 
 </html>
