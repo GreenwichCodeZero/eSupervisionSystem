@@ -2,6 +2,8 @@
 
 session_start();
 
+session_start();
+
 require '../login-check.php';
 
 $currentUser = $_SESSION['currentUser'];
@@ -10,10 +12,9 @@ $currentStaff = $_SESSION['currentUser'];
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
 include '../classes/comment.class.php';
-include '../classes/projectDetails.class.php';
 include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
-
+include '../classes/projectDetails.class.php';
 
 // Globals
 $currentStaff = $_SESSION['currentUser'];
@@ -21,7 +22,7 @@ $staff_id = $currentStaff['staff_id'];
 $staff_username = $currentStaff['staff_username'];
 
 
-$f = $f2 = $f3 = $f4 = $f5 = $f6 = $f7 = new File ();
+$f = new File ();
 
 if ($_POST['file_action']){
     $el = new errorList ();
@@ -55,32 +56,69 @@ if ($_POST['projectDetails_action']){
 
 }
 
+// Get allocated students
+$u = new UserDetails ();
+$u->GetAllocatedStudents($staff_username);
+$students = $u->getResponse();
+
+print_r($students);
+// Is staff authorised
+$getStaffDetailsQ = new UserDetails ();
+$getStaffDetailsQ->isStaffAuthorised($staff_id);
+$getStaffDetails = $getStaffDetailsQ->getResponse();
+
+foreach($getStaffDetails as $staffDetail){
+    $staffAuthorsied = $staffDetail['staff_authorised'];
+}
+// End is staff authorised
 
 // Determine which messages to display
 if ($_GET['sid']) {
     
     $filtered = 1;
 
-    $f2->fileTypes ();
-    $fileTypes = $f2->getResponse ();
+    // Get files uploaded by type
+    $f->fileTypes ();
+    $fileTypes = $f->getResponse ();
 
-    $f3->get ($_GET['sid'], 'interim');
-    $interim = $f3->getResponse ();
+    // Get Student uploads by type
+    $f->get ($_GET['sid'], 'interim');
+    $student_interim = $f->getResponse ();
 
-    $f3->get ($_GET['sid'], 'initial');
-    $initial = $f3->getResponse ();
+        // Get Staff uploads by type
+        $f->supervisorUploads ($staff, $student, 'interim');
+        $staff_interim = $f->getResponse ();
 
-    $f3->get ($_GET['sid'], 'ethics');
-    $ethics = $f3->getResponse ();
+    $f->get ($_GET['sid'], 'initial');
+    $student_initial = $f->getResponse ();
 
-    $f3->get ($_GET['sid'], 'proposal');
-    $proposal = $f3->getResponse ();
+        // Get Staff uploads by type
+        $f->supervisorUploads ($staff, $student, 'initial');
+        $staff_initial = $f->getResponse ();
 
-    $f7->get ($_GET['sid'], 'project');
-    $project = $f7->getResponse ();
+    $f->get ($_GET['sid'], 'ethics');
+    $student_ethics = $f->getResponse ();
+
+        // Get Staff uploads by type
+        $f->supervisorUploads ($staff, $student, 'ethics');
+        $staff_ethics = $f->getResponse ();
+
+    $f->get ($_GET['sid'], 'proposal');
+    $student_proposal = $f->getResponse ();
+
+        // Get Staff uploads by type
+        $f->supervisorUploads ($staff, $student, 'proposal');
+        $staff_proposal = $f->getResponse ();
+
+    $f->get ($_GET['sid'], 'project');
+    $student_project = $f->getResponse ();
+
+        // Get Staff uploads by type
+        $f->supervisorUploads ($staff, $student, 'project');
+        $staff_project = $f->getResponse ();
 
     $p->studentProject($_GET['sid']);
-    $projectTitle = $p->getResponse ();
+    $student_projectTitle = $p->getResponse ();
 
     //  is this needed?
     $f->getAll($_GET['sid']);
@@ -93,20 +131,6 @@ if ($_GET['sid']) {
 
 
 
-// Get allocated students
-$u = new UserDetails ();
-$u->GetAllocatedStudents($staff_username);
-$students = $u->getResponse();
-
-// Is staff authorised
-$getStaffDetailsQ = new UserDetails ();
-$getStaffDetailsQ->isStaffAuthorised($staff_id);
-$getStaffDetails = $getStaffDetailsQ->getResponse();
-
-foreach($getStaffDetails as $staffDetail){
-    $staffAuthorsied = $staffDetail['staff_authorised'];
-}
-// End is staff authorised
 
 ?>
 <head>
@@ -172,7 +196,7 @@ foreach($getStaffDetails as $staffDetail){
           
 
             <div class="card-content">
-                <span class="card-title green-text">Student Blog History</span>
+                <span class="card-title green-text">Student Upload History</span>
                 <?php if ($filtered) {
                     // Get student name
                     $ud = new UserDetails ();
@@ -180,10 +204,10 @@ foreach($getStaffDetails as $staffDetail){
                     $student = $ud->getResponse();
 
                     if ( !isset($_GET['sid']) ) {
-                        echo '<p>Your allocated students have submitted '. $blog_count .' blog posts collectively.</p>';
+                        echo '<p>Your allocated students have submitted '. $file_count .' blog posts collectively.</p>';
                     } else {
 
-                        echo '<p>'. $student[0]['student_first'] . ' ' . $student[0]['student_last'] . ' has submitted '. $blog_count .' blog posts.</p>';
+                        echo '<p>'. $student[0]['student_first'] . ' ' . $student[0]['student_last'] . ' has submitted '. $file_count .' blog posts.</p>';
                     }
 
 
@@ -273,7 +297,7 @@ foreach($getStaffDetails as $staffDetail){
                                     <span class="card-title green-text">Project Title</span>
 
                                     <p>
-                                        <input type='text' name ='title' placeholder='<?php echo ( $projectTitle ? $projectTitle[0]['project_title'] : 'Insert title ...' ); ?>' />
+                                        <input type='text' name ='title' placeholder='<?php echo ( $student_projectTitle ? $student_projectTitle[0]['project_title'] : 'Insert title ...' ); ?>' />
                                         <input type='hidden' name='projectDetails_action' value = 'projectDetails_action' />
                                         <button>Update</button>
                                     </p>
@@ -292,8 +316,18 @@ foreach($getStaffDetails as $staffDetail){
                                        
                                            Latest Upload: 
                                            <?php echo ( 
-                                            $proposal[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$proposal[0]['file_id']."'/><a>".$proposal[0]['file_name']."</a><button>download</button>
+                                            $student_proposal[0]['file_id'] > 0 ? 
+                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_proposal[0]['file_id']."'/><a>".$student_proposal[0]['file_name']."</a><button>download</button>
+                                            </form>"
+                                            : "no file uploaded yet" 
+                                            );  
+                                        ?>
+                                    </p>
+
+                                    <p>Staff
+                                         <?php echo ( 
+                                            $staff_proposal[0]['file_id'] > 0 ? 
+                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$staff_proposal[0]['file_id']."'/><i class='mdi-file-attachment'></i><a>".$staff_proposal[0]['file_name']."</a><button>download</button>
                                             </form>"
                                             : "no file uploaded yet" 
                                             );  
@@ -314,8 +348,8 @@ foreach($getStaffDetails as $staffDetail){
                                         
                                            Latest Upload: 
                                            <?php echo ( 
-                                            $initial[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$initial[0]['file_id']."'/><a>".$initial[0]['file_name']."</a><button>download</button>
+                                            $student_initial[0]['file_id'] > 0 ? 
+                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_initial[0]['file_id']."'/><a>".$student_initial[0]['file_name']."</a><button>download</button>
                                             </form>"
                                             : "no file uploaded yet" 
                                             );  
@@ -334,8 +368,8 @@ foreach($getStaffDetails as $staffDetail){
                                     <p>
                                            Latest Upload: 
                                            <?php echo ( 
-                                            $interim[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$interim[0]['file_id']."'/><a>".$interim[0]['file_name']."</a><button>download</button>
+                                            $student_interim[0]['file_id'] > 0 ? 
+                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_interim[0]['file_id']."'/><a>".$student_interim[0]['file_name']."</a><button>download</button>
                                             </form>"
                                             : "no file uploaded yet" 
                                             );  
@@ -356,8 +390,8 @@ foreach($getStaffDetails as $staffDetail){
                                     <p>
                                            Latest Upload: 
                                            <?php echo ( 
-                                            $project[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$project[0]['file_id']."'/><a>".$project[0]['file_name']."</a><button>download</button>
+                                            $student_project[0]['file_id'] > 0 ? 
+                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_project[0]['file_id']."'/><a>".$student_project[0]['file_name']."</a><button>download</button>
                                             </form>"
                                             : "no file uploaded yet" 
                                             );  
@@ -376,8 +410,8 @@ foreach($getStaffDetails as $staffDetail){
                                     <p>
                                            Latest Upload: 
                                            <?php echo ( 
-                                            $ethics[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$ethics[0]['file_id']."'/><a>".$ethics[0]['file_name']."</a><button>download</button>
+                                            $student_ethics[0]['file_id'] > 0 ? 
+                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_ethics[0]['file_id']."'/><a>".$student_ethics[0]['file_name']."</a><button>download</button>
                                             </form>"
                                             : "no file uploaded yet" 
                                             );  
