@@ -1,7 +1,5 @@
 <?php
 
-//todo JS validation
-
 // Initialise session
 session_start();
 
@@ -131,8 +129,52 @@ if (isset($_POST['saveAllocate'])) {
     <script type="text/javascript" src="../js/materialize.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            $(".button-collapse").sideNav();
             $('select').material_select();
         });
+
+        // Client-side form validation
+        // Function to display any error messages on form submit
+        /**
+         * @return {boolean}
+         */
+        function ValidateForm() {
+            var isValid = true;
+
+            // Validate type
+            if (ValidateType(document.getElementById('type').value) != '') isValid = false;
+
+            // Validate staff
+            if (ValidateStaff(document.getElementById('staff').value) != '') isValid = false;
+
+            return isValid;
+        }
+
+        // Function to validate the selected type
+        function ValidateType(type) {
+            var output;
+            if (/^\s*$/.test(type)) {
+                output = 'You must choose the allocation type';
+            } else {
+                output = '';
+            }
+
+            document.getElementById('typeValidation').innerHTML = output;
+            return output;
+        }
+
+        // Function to validate the selected staff
+        function ValidateStaff(staff) {
+            var output;
+            if (/^\s*$/.test(staff)) {
+                output = 'You must choose a staff member';
+            } else {
+                output = '';
+            }
+
+            document.getElementById('staffValidation').innerHTML = output;
+            return output;
+        }
     </script>
 </head>
 <body>
@@ -181,11 +223,13 @@ if (isset($_POST['saveAllocate'])) {
                     <div class="col s12 m9">
                         <div class="col s12 m6">
                             <label for="type">Allocation type</label>
-                            <select name="type" id="type">
+                            <select name="type" id="type" onkeyup="ValidateType(this.value);"
+                                    onblur="ValidateType(this.value);">
                                 <option value="" disabled="disabled" selected="selected">Allocation type</option>
                                 <option value="supervisor">Supervisor</option>
                                 <option value="second">Second marker</option>
                             </select>
+                            <span id="typeValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
                         <div class="col s12 m6">
                             <!-- Get programme ID of current students -->
@@ -199,7 +243,8 @@ if (isset($_POST['saveAllocate'])) {
                             } ?>
 
                             <label for="staff">Select staff</label>
-                            <select name="staff" id="staff">
+                            <select name="staff" id="staff" onkeyup="ValidateStaff(this.value);"
+                                    onblur="ValidateStaff(this.value);">
                                 <option value="" disabled="disabled" selected="selected">Select staff</option>
                                 <?php
                                 // Programme specific staff
@@ -230,11 +275,12 @@ if (isset($_POST['saveAllocate'])) {
 
                                 ?>
                             </select>
+                            <span id="staffValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
                     </div>
 
                     <div class="input-field col s12 m3">
-                        <button type="submit" id="saveAllocate" name="saveAllocate"
+                        <button type="submit" id="saveAllocate" name="saveAllocate" onclick="return ValidateForm();"
                                 class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
                             Allocate
                         </button>
