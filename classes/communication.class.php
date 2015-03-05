@@ -39,7 +39,7 @@ class Communication {
         }
     }
 
-    public function insert($from_user) {
+    public function insert($from_user, $file_type_id = null) {
         try {
             $this->validate();
         } catch (Exception $e) {
@@ -54,16 +54,16 @@ class Communication {
         switch ($this->action) {
             case 'sendmessage':
                 // echo "message:";
-                $this->add('message');
+                $this->add('message', $file_type_id);
                 break;
 
             case 'posttoblog':
                 // echo "Blog Post: id1";
-                $this->add('blog');
+                $this->add('blog', $file_type_id);
                 break;
 
             default:
-                // echo "nothing to do <pre>";
+                echo "insert:<pre>";
                 print_r($_POST);
                 exit;
                 break;
@@ -80,7 +80,7 @@ class Communication {
     }
 
     // Add a new communication to the database
-    public function add($type) {
+    public function add($type, $file_type_id = null) {
         switch ($type) {
             case 'message':
                 $this->type = 2;
@@ -93,7 +93,7 @@ class Communication {
                 break;
 
             default:
-                echo "<br>NO POST VALUES<br>";
+                echo "<br>add: <br>";
                 print_r($_POST);
                 exit;
                 break;
@@ -105,7 +105,8 @@ class Communication {
 
             $f = new File ();
             try {
-                $f->add($this->from, 1);
+                $f->add($this->from, $type_id = ( $file_type_id > 0 ) ? $file_type_id : 1);
+                // $f->add($this->from, 1);
             } catch (Exception $e) {
                 echo $e->getMessage();
                 exit;

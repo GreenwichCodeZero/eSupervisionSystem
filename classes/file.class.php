@@ -117,8 +117,7 @@ class File {
 
 
 	// Add a new File to the database
-	public function add ( $user, $file_type_id ) {
-
+	public function add ( $user, $file_type_id = 1) {
 		$fileName = $_FILES['fileToUpload']['name'];
 		$tmpName  = $_FILES['fileToUpload']['tmp_name'];
 		$fileSize = $_FILES['fileToUpload']['size'];
@@ -164,7 +163,7 @@ class File {
 			`esuper_file`
 			(file_id, file_owner, file_name, file_size, file_type,  file_content, file_type_id ) 
 			VALUES 
-			(null, '$user', '$fileName', '$fileSize', '$fileType', '$content', 1)"
+			(null, '$user', '$fileName', '$fileSize', '$fileType', '$content', '$file_type_id')"
 			);
 
      	try { $result->execute(); }
@@ -265,6 +264,10 @@ class File {
 			$type_id = 3;
 			break;
 
+			case 'contextual':
+			$type_id = 4;
+			break;
+
 			default: 
 			$type_id = 1;
 			break;
@@ -306,7 +309,7 @@ class File {
 
 	// Student: show files uploaded by supervisor (LIST)
 
-	public function supervisorUploads ($staff, $student, $file_type = null) {
+	public function supervisorUploads ($staff, $student, $file_type = null, $limit = null) {
 
 		switch ($file_type) {
 			case "interim":
@@ -327,6 +330,14 @@ class File {
 			$type_id = 3;
 			break;
 
+			case "feedback":
+			$type_id = 1;
+			break;
+
+			case 'contextual':
+			$type_id = 4;
+			break;
+
 			default: 
 			$type_id = 1;
 			break;
@@ -337,7 +348,10 @@ class File {
 			'SELECT   
 			`esuper_file`.`file_id`,
 			`esuper_file`.`file_name`,
-			`esuper_communication`.`communication_file_id`
+			`esuper_file`.`file_type_id`,
+			`esuper_communication`.`communication_file_id`,
+			`esuper_communication`.`communication_date_added`,
+			`esuper_communication`.`communication_time_added`
 			FROM
 			`esuper_communication`,
 			`esuper_file` 
@@ -346,12 +360,18 @@ class File {
 			AND
 			`esuper_communication`.`communication_from_id` = "'.$staff.'"
 			AND
-			`esuper_communication`.`communication_to_id` = "'.$student.'"';
+			`esuper_communication`.`communication_to_id` = "'.$student.'"
+			';
 
 			if ($file_type){
-				$sql .= "
-			AND
-			`esuper_file`.`file_type_id` = ".$type_id;
+				$sql .= "AND `esuper_file`.`file_type_id` = '".$type_id."'";
+			}
+
+			$sql .= 'ORDER BY esuper_file.file_id DESC';
+
+
+			if ($limit){
+				$sql .= $limit;
 			}
 			
 		$result = $this->con->prepare($sql);
@@ -369,6 +389,7 @@ class File {
         $row = $result->fetchAll();
         $result = null;
         $this->response ($row);
+        return $this;
     
 	}
 
