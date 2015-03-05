@@ -591,7 +591,7 @@ foreach ($getStaffDetails as $staffDetail) {
 
             <?php foreach ($meetings as $meeting) { ?>
 
-                <div class="col m12 l6">
+                <div class="col s12">
                     <div class="card">
                         <div class="card-content">
                             <span class="card-title green-text">
