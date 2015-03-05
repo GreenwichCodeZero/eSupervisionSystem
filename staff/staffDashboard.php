@@ -13,6 +13,15 @@ include '../classes/meetings.class.php';
 $currentStaff = $_SESSION['currentUser'];
 $newStaffId = $_GET['staff'];
 
+// Determine permissions of current user
+if ($currentStaff['user_type'] === 'student') {
+    // Redirect to staff dashboard
+    header('Location: /codezero/student/index.php');
+} else if ($currentStaff['staff_authorised'] !== '1') {
+    // Do not allow access to unauthorised staff
+    header('Location: index.php');
+}
+
 $newCurrentStaffQ = new UserDetails();
 $newCurrentStaffQ->getNewStaffDetails($newStaffId);
 $newCurrentStaff = $newCurrentStaffQ->getResponse();
@@ -21,7 +30,6 @@ $newCurrentStaff = $newCurrentStaffQ->getResponse();
 
 $userDetails = '';
 
-// Determine permissions of current user
     // All staff only things here
     $staffDetails = 'Staff: '. $newCurrentStaff[0]['staff_username'];
 	$staffName = $newCurrentStaff[0]['staff_first'] . ' '. $newCurrentStaff[0]['staff_last'];
