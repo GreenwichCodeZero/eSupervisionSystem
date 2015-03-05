@@ -23,6 +23,7 @@ class UserDetails {
 			   s.student_id,
 			   s.student_first,
 			   s.student_last,
+               s.student_username,
 			   s.student_banner_id,
 			   p.programme_id,
 			   p.programme_title
