@@ -116,9 +116,9 @@ class Communication {
             $this->response('file uploaded: ' . $this->file_id);
         }
 
-        $this->from = $_POST ['communication_from_id'];
-        $this->to = $_POST ['communication_to_id'];
-        $this->body = $_POST ['communication_body'];
+        $this->from = strip_tags($_POST ['communication_from_id']);
+        $this->to = strip_tags($_POST ['communication_to_id']);
+        $this->body = strip_tags($_POST ['communication_body']);
 
         $result = $this->con->prepare(
             "INSERT INTO `esuper_communication` (communication_from_id,communication_to_id, communication_date_added, communication_time_added, communication_type_id, communication_body, communication_file_id)
@@ -375,8 +375,8 @@ class Communication {
             '
             );
 
-        $result->bindValue(':communication_id', $communication_id);
-        $result->bindValue(':comment_id', $comment_id);
+        $result->bindValue(':communication_id', strip_tags($communication_id));
+        $result->bindValue(':comment_id', strip_tags($comment_id));
 
         try {
             $result->execute();
