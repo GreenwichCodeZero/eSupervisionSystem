@@ -4,7 +4,11 @@ session_start();
 
 require '../login-check.php';
 
-$currentUser = $_SESSION['currentUser'];
+// Redirect students
+if ($_SESSION['currentUser']['user_type'] == 'student') {
+    header ('location: ../student');
+}
+
 $currentStaff = $_SESSION['currentUser'];
 
 include '../classes/security.class.php';
@@ -12,6 +16,7 @@ include '../classes/communication.class.php';
 include '../classes/comment.class.php';
 include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
+
 
 // Globals
 $currentStaff = $_SESSION['currentUser'];
@@ -251,8 +256,17 @@ foreach($getStaffDetails as $staffDetail){
                             <p>
                             <b>
                                 Comment from <?php echo $comment_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>
-                                 on <?php echo $comment['comment_date_added']; ?>
-                                 at <?php echo $comment['comment_time_added']; ?>
+
+                                <?php
+                                // Pretty format the date
+                                    $date = strtotime($comment['comment_date_added']);
+                                    $prettyDate = date('l j F Y', $date);
+
+                                    // Output date and time
+                                    echo $prettyDate . ', ' . substr($comment['comment_time_added'], 0, -3); 
+                                ?>
+
+
                              </b> 
                              </p>
                                 

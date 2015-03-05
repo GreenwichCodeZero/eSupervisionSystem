@@ -30,7 +30,7 @@ class Communication {
         date_default_timezone_set('Europe/London');
 
         $s = new Security ();
-        $s->clean($_POST);
+        $_POST = $s->clean($_POST);
         try {
             $this->con = $s->db();
         } catch (Exception $e) {
