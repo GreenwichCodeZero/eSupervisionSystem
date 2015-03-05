@@ -41,7 +41,7 @@ $f2->fileTypes ();
 $fileTypes = $f2->getResponse ();
 
 $u = new UserDetails ();
-$u->getStudentSupervisor($stu_id);
+$u->studentSuper($stu_id);
 $supervisor = $u->getResponse();
 
 // $f->getSubmissions ();

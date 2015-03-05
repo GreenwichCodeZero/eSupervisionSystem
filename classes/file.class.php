@@ -337,7 +337,7 @@ class File {
 			'SELECT   
 			`esuper_file`.`file_id`,
 			`esuper_file`.`file_name`,
-			`esuper_communication`.`file_id`
+			`esuper_communication`.`communication_file_id`
 			FROM
 			`esuper_communication`,
 			`esuper_file` 

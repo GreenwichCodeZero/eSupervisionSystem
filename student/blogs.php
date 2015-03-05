@@ -143,11 +143,28 @@ $supervisor = $u->getResponse();
 
                             ?>
 
-                            <!-- NO COMMENT HTML START -->
+                             <!--  COMMENT HTML START -->
 
-                            <p><b>Comment from <?php echo $comment['comment_staff_id']; ?>: </b><i><?php echo $comment['comment_body'].' on '. $comment['date_added'].' at '. $comment['time_added']; ?><i></p>
+                            <p><hr />
+                            <b>
+                                Comment from <?php echo $comment_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>
 
-                            <!-- NO COMMENT HTML END -->
+                                <?php
+                                // Pretty format the date
+                                    $date = strtotime($comment['comment_date_added']);
+                                    $prettyDate = date('l j F Y', $date);
+
+                                    // Output date and time
+                                    echo $prettyDate . ', ' . substr($comment['comment_time_added'], 0, -3); 
+                                ?>
+
+
+                             </b> 
+                             </p>
+                                
+                            <p><?php echo $comment['comment_body']; ?></p>
+
+                            <!--  COMMENT HTML END -->
 
                             <?
  }

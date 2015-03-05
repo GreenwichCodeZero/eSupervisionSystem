@@ -11,6 +11,11 @@ require '../classes/userDetails.class.php';
 require '../database-connection.php';
 require '../validation.php';
 
+// Redirect students
+if ($_SESSION['currentUser']['user_type'] == 'student') {
+    header ('location: ../student');
+}
+
 // Globals
 $currentStaff = $_SESSION['currentUser'];
 $staff_id = $currentStaff['staff_id'];
