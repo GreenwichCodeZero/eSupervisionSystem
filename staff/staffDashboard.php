@@ -30,18 +30,17 @@ $newCurrentStaff = $newCurrentStaffQ->getResponse();
 
 $userDetails = '';
 
-    // All staff only things here
-    $staffDetails = 'Staff: '. $newCurrentStaff[0]['staff_username'];
-	$staffName = $newCurrentStaff[0]['staff_first'] . ' '. $newCurrentStaff[0]['staff_last'];
+// All staff only things here
+$staffDetails = 'Staff: ' . $newCurrentStaff[0]['staff_username'];
+$staffName = $newCurrentStaff[0]['staff_first'] . ' ' . $newCurrentStaff[0]['staff_last'];
 
-    if ($newCurrentStaff[0]['staff_authorised'] === '1') {
-        // Authorised staff only things here
-        $userDetails .= '<li>staff_authorised: yes</li>';
-    } else {
-        // Unauthorised staff only things here
-        $userDetails .= '<li>staff_authorised: no</li>';
-    }
-
+if ($newCurrentStaff[0]['staff_authorised'] === '1') {
+    // Authorised staff only things here
+    $userDetails .= '<li>staff_authorised: yes</li>';
+} else {
+    // Unauthorised staff only things here
+    $userDetails .= '<li>staff_authorised: no</li>';
+}
 
 
 // $_SESSION['user']['id']
@@ -82,7 +81,7 @@ $getStaffDetailsQ = new UserDetails ();
 $getStaffDetailsQ->isStaffAuthorised($newStaffId);
 $getStaffDetails = $getStaffDetailsQ->getResponse();
 
-foreach($getStaffDetails as $staffDetail){
+foreach ($getStaffDetails as $staffDetail) {
     $staffAuthorsied = $staffDetail['staff_authorised'];
 }
 ?>
@@ -134,7 +133,7 @@ foreach($getStaffDetails as $staffDetail){
                     <li><a href="viewDashboards.php">View dashboards</a></li>';
             }
             ?>
-			<li>
+            <li>
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
         </ul>
@@ -143,17 +142,19 @@ foreach($getStaffDetails as $staffDetail){
 </nav>
 <div class="container">
     <div class="row">
-        <h4 class="center-align">You are viewing staff: <?php echo $newCurrentStaff[0]['staff_first'] . " " . $newCurrentStaff[0]['staff_last'] . "s "; ?>eSupervision Dashboard</h4>
-            <h5 class="center-align"><a href="viewDashboards.php">Go back to view dashboards</a></h5>
+        <h4 class="center-align">You are viewing
+            staff: <?php echo $newCurrentStaff[0]['staff_first'] . " " . $newCurrentStaff[0]['staff_last'] . "s "; ?>
+            eSupervision Dashboard</h4>
+        <h5 class="center-align"><a href="viewDashboards.php">Go back to view dashboards</a></h5>
     </div>
     <div class="row">
         <div class="col s10 offset-s1 m8 offset-m2 l6 offset-l3 center-align">
-			<div>
-				<?php echo $staffDetails; ?> 
-			</div>
-			<div>
-				<?php echo $staffName; ?>
-			</div>
+            <div>
+                <?php echo $staffDetails; ?>
+            </div>
+            <div>
+                <?php echo $staffName; ?>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -161,6 +162,7 @@ foreach($getStaffDetails as $staffDetail){
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Meeting Summary</span>
+
                     <p>You have submitted <?php echo $meeting_count; ?> meeting records.</p>
                 </div>
                 <div class="card-action">
@@ -173,7 +175,9 @@ foreach($getStaffDetails as $staffDetail){
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Message Summary</span>
+
                     <p>You have submitted <?php echo $message_count; ?> messages.</p>
+
                     <p>You have received <?php echo $received_count; ?> messages.</p>
                 </div>
                 <div class="card-action">
@@ -182,78 +186,78 @@ foreach($getStaffDetails as $staffDetail){
                 </div>
             </div>
         </div>
-    
-        <!-- new stuff -->
+    </div>
 
+    <div class="row">
         <!--  Project students starts here -->
         <div class="col s12 l6">
-			<div class="card">
-				<div class="card-content">
-					<span class="card-title green-text">List of project students</span>
-					<div class="collection">
-						<?php
-							foreach ($students as $student) {
-								echo "<a class='collection-item' href='#'>". $student['student_first'] . " " . $student['student_last'] . "</a>";
-							}
-						?>       
-					</div>
-				</div>
-			</div>
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">List of project students</span>
+
+                    <div class="collection">
+                        <?php
+                        foreach ($students as $student) {
+                            echo "<a class='collection-item' href='#'>" . $student['student_first'] . " " . $student['student_last'] . "</a>";
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
         </div>
         <!--  Project students ends here -->
 
-    <!--  Students without supervisor starts here -->
-    <div class="row">
+        <!--  Students without supervisor starts here -->
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Students without a supervisor</span>
-					<div class="collection">
-						<?php
-							foreach ($noSupervisors as $noSupervisor) {
-								echo "<a class='collection-item' href='#'>" . $noSupervisor['student_first'] . " " . $noSupervisor['student_last'] ."</a>";
-							}
-						?>
-					</div>
+
+                    <div class="collection">
+                        <?php
+                        foreach ($noSupervisors as $noSupervisor) {
+                            echo "<a class='collection-item' href='#'>" . $noSupervisor['student_first'] . " " . $noSupervisor['student_last'] . "</a>";
+                        }
+                        ?>
+                    </div>
                 </div>
             </div>
         </div>
         <!--  Students without supervisor ends here -->
+    </div>
 
+    <div class="row">
         <!--  Students without second marker starts here -->
-        <div class="row">
-            <div class="col s12 l6">
-                <div class="card">
-                    <div class="card-content">
-                        <span class="card-title green-text">Students without a second marker</span>
-                        <div class="collection">
-							<?php
-								foreach ($noSecondMarkers as $noSecondMarker) {
-									echo "<a class='collection-item' href='#'>". $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'] . "</a>";
-								}
-							?>
-						</div>
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Students without a second marker</span>
+
+                    <div class="collection">
+                        <?php
+                        foreach ($noSecondMarkers as $noSecondMarker) {
+                            echo "<a class='collection-item' href='#'>" . $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'] . "</a>";
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
-            <!--  Students without second marker ends here -->
-
-            <!-- end of new -->
-
         </div>
+        <!--  Students without second marker ends here -->
     </div>
-
 
     <!-- Start New Message Modal -->
     <div id="newMessageModal" class="modal modal-fixed-footer">
-        <form method="post" action = "messages.php">
+        <form method="post" action="messages.php">
             <div class="modal-content">
                 <h4>Send a message to supervisor</h4>
 
                 <textarea name="communication_body"></textarea>
-                <input type="hidden" name="communication_action" value = "sendmessage" />
-                <input type="hidden" name="communication_from_id" value="<?php echo $newCurrentStaff[0]['student_username']; ?>" ?>
-                <input type="hidden" name="communication_to_id" value = "<?php echo $supervisor[0]['staff_username']; ?>" />
+                <input type="hidden" name="communication_action" value="sendmessage"/>
+                <input type="hidden" name="communication_from_id"
+                       value="<?php echo $newCurrentStaff[0]['student_username']; ?>" ?>
+                <input type="hidden" name="communication_to_id"
+                       value="<?php echo $supervisor[0]['staff_username']; ?>"/>
             </div>
             <div class="modal-footer">
 
@@ -262,11 +266,11 @@ foreach($getStaffDetails as $staffDetail){
         </form>
     </div>
     <!-- End New Message Modal -->
-	<script>
-		$(document).ready(function(){
-			$('.modal-trigger').leanModal();
-		});
-	</script>
+    <script>
+        $(document).ready(function () {
+            $('.modal-trigger').leanModal();
+        });
+    </script>
 </body>
 
 </html>
