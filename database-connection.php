@@ -81,7 +81,7 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         $sql = "SELECT meeting_id FROM esuper_meeting WHERE meeting_date = '$timeslotDate' AND meeting_timeslot_id = $timeslotId";
         $result = mysqli_query($link, $sql);
 
-        if (mysqli_num_rows($result) == 1) {
+        if (mysqli_num_rows($result) >= 1) {
             // False means timeslot is not available
             return false;
         } else {

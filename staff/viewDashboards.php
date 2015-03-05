@@ -20,7 +20,11 @@ $currentStaff = $_SESSION['currentUser'];
 $staff_id = $currentStaff['staff_id'];
 $staff_username = $currentStaff['staff_username'];
 
-if ($currentStaff['staff_authorised'] !== '1') {
+// Determine permissions of current user
+if ($currentStaff['user_type'] === 'student') {
+    // Redirect to staff dashboard
+    header('Location: /codezero/student/index.php');
+} else if ($currentStaff['staff_authorised'] !== '1') {
     // Do not allow access to unauthorised staff
     header('Location: index.php');
 }
@@ -84,7 +88,7 @@ foreach ($getStaffDetails as $staffDetail) {
                 <a href="uploads.php">Project Uploads</a>
             </li>
             <?php
-            if($getStaffDetails[0]['staff_authorised'] == 1){
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>';
             }
@@ -98,7 +102,7 @@ foreach ($getStaffDetails as $staffDetail) {
 </nav>
 
 <div class="container">
-  
+
   <h1>View dashboards</h1>
 
 <form action="staffDashboard.php" method="get">

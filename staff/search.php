@@ -30,25 +30,12 @@ $userDetails = new UserDetails ();
 // Get search results
 $name = $searchStudentsByName = $programmeID = $searchStudentsByProgramme = null;
 if (isset($_GET['name'])) {
-    $name = $_GET['name'];
-
-    if ($name == null) {
-        $submit = 0;
-        $noStudentsFound = 'Please enter a students name';
-    } else {
-        $noStudentsFound = 'No students found by the name "' . $name . '"';
-    }
+    $name = strip_tags($_GET['name']);
 
     $userDetails->searchStudents($name);
     $searchStudentsByName = $userDetails->getResponse();
 } else if (isset($_GET['programme'])) {
     $programmeID = $_GET['programme'];
-
-    if ($programmeID == null) {
-        $noStudentsFound = 'Please select a programme';
-    } else {
-        $noStudentsFound = "No students found on this programme";
-    }
 
     $userDetails->searchStudentsByProgramme($programmeID);
     $searchStudentsByProgramme = $userDetails->getResponse();
@@ -79,6 +66,59 @@ foreach ($getStaffDetails as $staffDetail) {
         $(document).ready(function () {
             $('select').material_select();
         });
+
+        // Client-side form validation
+        // Function to display any error messages on form submit
+        /**
+         * @return {boolean}
+         */
+        function ValidateNameForm() {
+            var isValid = true;
+
+            // Validate name
+            if (ValidateName(document.getElementById('name').value) != '') isValid = false;
+
+            return isValid;
+        }
+
+        // Function to validate the name
+        function ValidateName(content) {
+            var output;
+            if (/^\s*$/.test(content)) {
+                output = 'Name is required';
+            } else {
+                output = '';
+            }
+
+            document.getElementById('nameValidation').innerHTML = output;
+            return output;
+        }
+
+        // Function to display any error messages on form submit
+        /**
+         * @return {boolean}
+         */
+        function ValidateProgrammeForm() {
+            var isValid = true;
+
+            // Validate programme
+            if (ValidateProgramme(document.getElementById('programme').value) != '') isValid = false;
+
+            return isValid;
+        }
+
+        // Function to validate the programme
+        function ValidateProgramme(content) {
+            var output;
+            if (/^\s*$/.test(content)) {
+                output = 'Select a programme';
+            } else {
+                output = '';
+            }
+
+            document.getElementById('programmeValidation').innerHTML = output;
+            return output;
+        }
     </script>
 </head>
 <body>
@@ -102,7 +142,7 @@ foreach ($getStaffDetails as $staffDetail) {
                 <a href="uploads.php">Project Uploads</a>
             </li>
             <?php
-            if($getStaffDetails[0]['staff_authorised'] == 1){
+            if ($getStaffDetails[0]['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>';
             }
@@ -129,10 +169,12 @@ foreach ($getStaffDetails as $staffDetail) {
                     <div class="col s12 m9">
                         <label for="name">Student name</label>
                         <input type="search" name="name" id="name" placeholder="Enter a name"
-                               value="<?php echo $_GET['name']; ?>">
+                               value="<?php echo $name; ?>" onkeyup="ValidateName(this.value);"
+                               onblur="ValidateName(this.value);">
+                        <span id="nameValidation" class="red-text text-light-3 validation-error"></span>
                     </div>
                     <div class="input-field col s12 m3">
-                        <button type="submit" id="searchSubmit"
+                        <button type="submit" id="searchSubmit" onclick="return ValidateNameForm();"
                                 class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
                             Search
                         </button>
@@ -153,7 +195,8 @@ foreach ($getStaffDetails as $staffDetail) {
 
                     <div class="col s12 m9">
                         <label for="programme">Student programme</label>
-                        <select name="programme" id="programme">
+                        <select name="programme" id="programme" onkeyup="ValidateProgramme(this.value);"
+                                onblur="ValidateProgramme(this.value);">
                             <option value="">Select a programme</option>
                             <?php
                             $search = new Search ();
@@ -164,9 +207,10 @@ foreach ($getStaffDetails as $staffDetail) {
                                 echo '<option value="' . $programme['programme_id'] . '"' . (($_GET['programme'] == $programme['programme_id']) ? 'selected="selected"' : '') . '>' . $programme['programme_title'] . "</option>";
                             } ?>
                         </select>
+                        <span id="programmeValidation" class="red-text text-light-3 validation-error"></span>
                     </div>
                     <div class="input-field col s12 m3">
-                        <button type="submit" id="searchProgrammeSubmit"
+                        <button type="submit" id="searchProgrammeSubmit" onclick="return ValidateProgrammeForm();"
                                 class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
                             Search
                         </button>
@@ -180,89 +224,100 @@ foreach ($getStaffDetails as $staffDetail) {
     <!-- Search end -->
 
     <!-- Results start -->
-    <?php if ($name != null || $programmeID != null) { ?>
+    <?php if ($name != null || $programmeID != null) {
+        if ($name != null) {
+            $students = $searchStudentsByName;
+        } else {
+            $students = $searchStudentsByProgramme;
+        }
 
-        <div class="row center">
-            <div class="col s12">
-                <h5>Results</h5>
+        if (count($students) > 0) {
+            // Results were found ?>
+
+            <div class="row center">
+                <div class="col s12">
+                    <h5>Results</h5>
+                </div>
             </div>
-        </div>
 
-        <form id="allocationForm" action="allocate.php" method="POST">
+            <form id="allocationForm" action="allocate.php" method="POST">
 
-            <div class="row">
+                <div class="row">
 
-                <?php
+                    <?php
 
-                if ($name != null) {
-                    $students = $searchStudentsByName;
-                } else {
-                    $students = $searchStudentsByProgramme;
-                }
+                    foreach ($students as $student) {
+                        $userDetails->getStudentSupervisor($student['student_id']);
+                        $studentSupervisors = $userDetails->getResponse();
 
-                foreach ($students as $student) {
-                    $userDetails->getStudentSupervisor($student['student_id']);
-                    $studentSupervisors = $userDetails->getResponse();
+                        $userDetails->getStudentSecondMarker($student['student_id']);
+                        $studentSecondMarkers = $userDetails->getResponse(); ?>
 
-                    $userDetails->getStudentSecondMarker($student['student_id']);
-                    $studentSecondMarkers = $userDetails->getResponse(); ?>
-
-                    <div class="col s12 m6 l4">
-                        <div class="card">
-                            <div class="card-content">
+                        <div class="col s12 m6 l4">
+                            <div class="card">
+                                <div class="card-content">
                             <span class="card-title green-text">
                                 <?php echo $student['student_first'] . ' ' . $student['student_last']; ?>
                             </span>
 
-                                <p>
-                                    Programme: <?php echo $student['programme_title']; ?>
-                                    <br/>
-                                    Supervisor: <?php echo $studentSupervisors[0]['staff_first'] . ' ' . $studentSupervisors[0]['staff_last']; ?>
-                                    <br/>
-                                    Second
-                                    marker: <?php echo $studentSecondMarkers[0]['staff_first'] . ' ' . $studentSecondMarkers[0]['staff_last']; ?>
-                                </p>
-                            </div>
-                            <div class="card-action">
+                                    <p>
+                                        Programme: <?php echo $student['programme_title']; ?>
+                                        <br/>
+                                        Supervisor: <?php echo $studentSupervisors[0]['staff_first'] . ' ' . $studentSupervisors[0]['staff_last']; ?>
+                                        <br/>
+                                        Second
+                                        marker: <?php echo $studentSecondMarkers[0]['staff_first'] . ' ' . $studentSecondMarkers[0]['staff_last']; ?>
+                                    </p>
+                                </div>
+                                <div class="card-action">
 
-                                <?php if ($programmeID != null) {
-                                    // Searched by programme, select many ?>
-                                    <input value="<?php echo $student['student_username']; ?>" name="students[]"
-                                           type="checkbox"
-                                           id="<?php echo $student['student_username']; ?>"/>
-                                    <label for="<?php echo $student['student_username']; ?>"
-                                           class="green-text">Select</label>
-                                <?php } else {
-                                    // Searched by name, select single ?>
-                                    <input value="<?php echo $student['student_username']; ?>" name="students[]"
-                                           type="radio" id="<?php echo $student['student_username']; ?>"
-                                           class="with-gap"/>
-                                    <label for="<?php echo $student['student_username']; ?>"
-                                           class="green-text">Select</label>
-                                <?php } ?>
+                                    <?php if ($programmeID != null) {
+                                        // Searched by programme, select many ?>
+                                        <input value="<?php echo $student['student_username']; ?>" name="students[]"
+                                               type="checkbox"
+                                               id="<?php echo $student['student_username']; ?>"/>
+                                        <label for="<?php echo $student['student_username']; ?>"
+                                               class="green-text">Select</label>
+                                    <?php } else {
+                                        // Searched by name, select single ?>
+                                        <input value="<?php echo $student['student_username']; ?>" name="students[]"
+                                               type="radio" id="<?php echo $student['student_username']; ?>"
+                                               class="with-gap"/>
+                                        <label for="<?php echo $student['student_username']; ?>"
+                                               class="green-text">Select</label>
+                                    <?php } ?>
 
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                <?php } // End foreach ?>
+                    <?php } // End foreach ?>
 
-            </div>
-
-            <div class="row">
-                <input type="hidden" name="programme" value="<?php echo $programmeID; ?>"/>
-
-                <div class="input-field col s12">
-                    <button type="submit" name="allocate"
-                            class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
-                        Allocate
-                    </button>
                 </div>
-            </div>
-        </form>
 
-    <?php } else {
-        echo $noStudentsFound;
+                <div class="row">
+                    <input type="hidden" name="programme" value="<?php echo $programmeID; ?>"/>
+
+                    <div class="input-field col s12">
+                        <button type="submit" name="allocate"
+                                class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+                            Allocate
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        <?php } else {
+            // No results were found
+            if ($name != null) {
+                echo "No students found by the name '$name'";
+            } else if ($programmeID != null) {
+                echo 'No students found on this programme';
+            }
+        }
+    } else {
+        // No search entered
+        echo 'Enter search terms';
     } ?>
     <!-- Results end -->
 

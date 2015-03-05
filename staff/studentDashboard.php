@@ -9,15 +9,21 @@ include '../classes/communication.class.php';
 include '../classes/meetings.class.php';
 include '../classes/userDetails.class.php';
 
-// Redirect students
-if ($_SESSION['currentUser']['user_type'] == 'student') {
-    header ('location: ../student');
-}
 
-$currentStudent = $_SESSION['currentUser'];
+$currentStaff = $_SESSION['currentUser'];
+
 $studentDetails = $studentBannerId = $studentName = '';
 
 $newStudentId = $_GET['student'];
+
+// Determine permissions of current user
+if ($currentStaff['user_type'] === 'student') {
+    // Redirect to student dashboard
+    header('Location: /codezero/student/index.php');
+} else if ($currentStaff['staff_authorised'] !== '1') {
+    // Do not allow access to unauthorised staff
+    header('Location: index.php');
+}
 
 $newCurrentStudentQ = new UserDetails();
 $newCurrentStudentQ->getNewStudentDetails($newStudentId);
@@ -102,8 +108,14 @@ $secondMarker = $u2->getResponse();
                 <a href="blogs.php">Blog</a>
             </li>
             <li>
-                <a href="submissions.php">Project Uploads</a>
+                <a href="uploads.php">Project Uploads</a>
             </li>
+            <?php
+            if ($currentStaff['staff_authorised'] == 1) {
+                echo '<li><a href="search.php">Search</a></li>
+                    <li><a href="viewDashboards.php">View dashboards</a></li>';
+            }
+            ?>
 			<li>
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
