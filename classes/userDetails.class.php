@@ -201,21 +201,25 @@ class UserDetails {
         $this->response($row);
     }
 
-    public function supervisorStudents($user_id) {
+    public function supervisorStudents($staff_id) {
         $result = $this->con->prepare(
             'SELECT
                *
              FROM
-               esuper_user_allocation ua,
-               esuper_staff s,
-               esuper_student t
+               esuper_student s,
+               esuper_staff spv,
+               (
+                 SELECT * FROM (SELECT us3.* FROM esuper_user_allocation us3 WHERE us3.supervisor_id IS NOT NULL ORDER BY us3.last_updated DESC) us2 GROUP BY us2.student_id
+               ) spva
              WHERE
-               ua.supervisor_id = :user_id
+               spva.student_id = s.student_id
              AND
-               ua.supervisor_id = s.staff_id
+               spva.supervisor_id = spv.staff_id
              AND
-               ua.student_id = t.student_id');
-        $result->bindValue(':user_id', $user_id);
+               spv.staff_id = :staff_id
+             ORDER BY
+               s.student_last, s.student_first');
+        $result->bindValue(':staff_id', $staff_id);
 
         try {
             $result->execute();
