@@ -14,8 +14,6 @@ class UserDetails {
         }
     }
 
-
-
     // Get student details by username (including programme ID)
     public function GetStudentDetails($student_username) {
         $result = $this->con->prepare(
@@ -201,25 +199,50 @@ class UserDetails {
         $this->response($row);
     }
 
-    public function supervisorStudents($staff_id) {
+    // Function that returns a member of staff
+    public function GetStaffByStaffId($staff_id) {
+        $result = $this->con->prepare(
+            'SELECT
+               s.staff_id,
+               s.staff_first,
+               s.staff_last,
+               s.staff_username
+             FROM
+               esuper_staff s
+             WHERE
+               s.staff_active = 1
+             AND
+               s.staff_id = :staff_id');
+        $result->bindValue(':staff_id', $staff_id);
+
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
+
+    public function supervisorStudents($user_id) {
         $result = $this->con->prepare(
             'SELECT
                *
              FROM
-               esuper_student s,
-               esuper_staff spv,
-               (
-                 SELECT * FROM (SELECT us3.* FROM esuper_user_allocation us3 WHERE us3.supervisor_id IS NOT NULL ORDER BY us3.last_updated DESC) us2 GROUP BY us2.student_id
-               ) spva
+               esuper_user_allocation ua,
+               esuper_staff s,
+               esuper_student t
              WHERE
-               spva.student_id = s.student_id
+               ua.supervisor_id = :user_id
              AND
-               spva.supervisor_id = spv.staff_id
+               ua.supervisor_id = s.staff_id
              AND
-               spv.staff_id = :staff_id
-             ORDER BY
-               s.student_last, s.student_first');
-        $result->bindValue(':staff_id', $staff_id);
+               ua.student_id = t.student_id');
+        $result->bindValue(':user_id', $user_id);
 
         try {
             $result->execute();
@@ -442,7 +465,8 @@ class UserDetails {
                t.staff_first,
                t.staff_last,
                t.staff_id,
-               t.staff_profile_link
+               t.staff_profile_link,
+               t.staff_username
              FROM
                esuper_student s,
                esuper_staff t,
@@ -470,7 +494,6 @@ class UserDetails {
         $result = null;
         $this->response($row);
     }
-
 
     //used to display all unathorised staff in a drop down list on view dashboards
     public function getAllUnauthorisedStaff() {
@@ -522,7 +545,7 @@ class UserDetails {
         $this->response($row);
     }
 
-        //used to display another staffs dashboard
+    //used to display another staffs dashboard
     public function getNewStudentDetails($student_id) {
         $result = $this->con->prepare(
             'SELECT
