@@ -10,7 +10,7 @@ include '../classes/security.class.php';
 include '../classes/communication.class.php';
 include '../classes/meetings.class.php';
 
-//$currentStaff = $_SESSION['currentUser'];
+$currentStaff = $_SESSION['currentUser'];
 $newStaffId = $_GET['staff'];
 
 $newCurrentStaffQ = new UserDetails();
@@ -121,7 +121,7 @@ foreach($getStaffDetails as $staffDetail){
                 <a href="#">Project Uploads</a>
             </li>
             <?php
-            if($staffAuthorsied == 1){
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>';
             }
