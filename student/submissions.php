@@ -114,7 +114,7 @@ $superFiles = array
         )
 );
 
-print_r($superFiles);
+// print_r($superFiles);
 $p->studentProject($stu_user);
 $projectTitle = $p->getResponse ();
 
