@@ -10,7 +10,10 @@ include '../classes/communication.class.php';
 include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
 
-
+// Redirect students
+if ($_SESSION['currentUser']['user_type'] == 'student') {
+    header ('location: ../student');
+}
 
 $sta_id = $currentUser['staff_id']; // (1) = demo staff id
 $sta_user = $currentUser['staff_username']; // (1) = demo staff id

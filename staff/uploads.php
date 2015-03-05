@@ -6,6 +6,11 @@ session_start();
 
 require '../login-check.php';
 
+// Redirect students
+if ($_SESSION['currentUser']['user_type'] == 'student') {
+    header ('location: ../student');
+}
+
 $currentUser = $_SESSION['currentUser'];
 $currentStaff = $_SESSION['currentUser'];
 
@@ -15,6 +20,8 @@ include '../classes/comment.class.php';
 include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
 include '../classes/projectDetails.class.php';
+
+
 
 // Globals
 $currentStaff = $_SESSION['currentUser'];
@@ -61,7 +68,7 @@ $u = new UserDetails ();
 $u->GetAllocatedStudents($staff_username);
 $students = $u->getResponse();
 
-print_r($students);
+// print_r($students);
 // Is staff authorised
 $getStaffDetailsQ = new UserDetails ();
 $getStaffDetailsQ->isStaffAuthorised($staff_id);
@@ -86,39 +93,45 @@ if ($_GET['sid']) {
     $student_interim = $f->getResponse ();
 
         // Get Staff uploads by type
-        $f->supervisorUploads ($staff, $student, 'interim');
+        $f->supervisorUploads ($staff_username, $student, 'interim');
         $staff_interim = $f->getResponse ();
 
     $f->get ($_GET['sid'], 'initial');
     $student_initial = $f->getResponse ();
 
         // Get Staff uploads by type
-        $f->supervisorUploads ($staff, $student, 'initial');
+        $f->supervisorUploads ($staff_username, $student, 'initial');
         $staff_initial = $f->getResponse ();
 
     $f->get ($_GET['sid'], 'ethics');
     $student_ethics = $f->getResponse ();
 
         // Get Staff uploads by type
-        $f->supervisorUploads ($staff, $student, 'ethics');
+        $f->supervisorUploads ($staff_username, $student, 'ethics');
         $staff_ethics = $f->getResponse ();
 
     $f->get ($_GET['sid'], 'proposal');
     $student_proposal = $f->getResponse ();
 
         // Get Staff uploads by type
-        $f->supervisorUploads ($staff, $student, 'proposal');
+        $f->supervisorUploads ($staff_username, $student, 'proposal');
         $staff_proposal = $f->getResponse ();
 
     $f->get ($_GET['sid'], 'project');
     $student_project = $f->getResponse ();
 
         // Get Staff uploads by type
-        $f->supervisorUploads ($staff, $student, 'project');
+        $f->supervisorUploads ($staff_username, $student, 'project');
         $staff_project = $f->getResponse ();
 
     $p->studentProject($_GET['sid']);
     $student_projectTitle = $p->getResponse ();
+
+    // $f->supervisorUploads ($supervisor[0]['staff_username'], $_GET['sid']);
+// $superFiles = $f5->getResponse ();
+// $super_count = count ($superFiles);
+
+
 
     //  is this needed?
     $f->getAll($_GET['sid']);
@@ -127,7 +140,6 @@ if ($_GET['sid']) {
 } else {
     $filtered = -1;
 }
-
 
 
 

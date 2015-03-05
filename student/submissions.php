@@ -214,6 +214,24 @@ $projectTitle = $p->getResponse ();
                             );  
                         ?>
                     </p>
+                    <p><hr />
+
+                        <?php foreach ($superFiles as $sf) { 
+                        
+                        if ($sf['file_type_id'] == 3) {
+                            echo '<li class="collection-item">'; 
+                            echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
+                                <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                <button>download</button></form>";
+                                
+                            echo "</li>";
+                            } else {
+                                echo "your supervisor has not uploaded anything";
+                            }
+                        }
+                        ?>
+
+                    </p>
                 </div>
             </div>
         </div>
@@ -236,6 +254,24 @@ $projectTitle = $p->getResponse ();
                             );  
                         ?>
                     </p>
+                    <p><hr />
+
+                        <?php foreach ($superFiles as $sf) { 
+                        if ($sf['file_type_id'] == 8) {
+                        
+                            echo '<li class="collection-item">'; 
+                            echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
+                                <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                <button>download</button></form>";
+                                
+                            echo "</li>";
+                            } else {
+                                echo "your supervisor has not uploaded anything";
+                            }
+                        }
+                        ?>
+
+                    </p>
                 </div>
             </div>
         </div>
@@ -255,6 +291,24 @@ $projectTitle = $p->getResponse ();
                             : "no file uploaded yet" 
                             );  
                         ?>
+                    </p>
+                    <p><hr />
+
+                        <?php foreach ($superFiles as $sf) { 
+                        if ($sf['file_type_id'] == 5) {
+                        
+                            echo '<li class="collection-item">'; 
+                            echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
+                                <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                <button>download</button></form>";
+                                
+                            echo "</li>";
+                            } else {
+                                echo "your supervisor has not uploaded anything";
+                            }
+                        }
+                        ?>
+
                     </p>
 
                     
@@ -278,6 +332,24 @@ $projectTitle = $p->getResponse ();
                             );  
                         ?>
                     </p>
+                    <p><hr />
+
+                        <?php foreach ($superFiles as $sf) { 
+                          
+                        if ($sf['file_type_id'] == 2) {  
+                            echo '<li class="collection-item">'; 
+                            echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
+                                <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                <button>download</button></form>";
+                                
+                            echo "</li>";
+                            } else {
+                                echo "your supervisor has not uploaded anything";
+                            }
+                        }
+                        ?>
+
+                    </p>
                 </div>
             </div>
         </div>
@@ -297,6 +369,24 @@ $projectTitle = $p->getResponse ();
                             : "no file uploaded yet" 
                             );  
                         ?>
+                    </p>
+                    <p><hr />
+
+                        <?php foreach ($superFiles as $sf) { 
+                        if ($sf['file_type_id'] == 6) {
+                        
+                                echo '<li class="collection-item">'; 
+                                echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
+                                    <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                    <button>download</button></form>";
+                                    
+                                echo "</li>";
+                                } else {
+                                echo "your supervisor has not uploaded anything";
+                            }
+                            }
+                        ?>
+
                     </p>
 
                    
@@ -320,13 +410,17 @@ $projectTitle = $p->getResponse ();
 
                 
                     <?php foreach ($superFiles as $sf) { 
-                        
-                        echo '<li class="collection-item">'; 
-                        echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
-                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                            <button>download</button></form>";
-                            
-                        echo "</li>";
+                        if ($sf['file_type_id'] == 1) {
+
+                                echo '<li class="collection-item">'; 
+                                echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
+                                    <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                    <button>download</button></form>";
+                                    
+                                echo "</li>";
+                            } else {
+                                echo "your supervisor has not uploaded anything";
+                            }
                         }
                         
 

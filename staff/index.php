@@ -6,6 +6,11 @@ session_start();
 
 require '../login-check.php';
 
+// Redirect students
+if ($_SESSION['currentUser']['user_type'] == 'student') {
+    header ('location: ../student');
+}
+
 $currentStaff = $_SESSION['currentUser'];
 $userDetails = '';
 
