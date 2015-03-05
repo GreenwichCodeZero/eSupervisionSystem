@@ -95,6 +95,49 @@ foreach ($getStaffDetails as $staffDetail) {
             $(".button-collapse").sideNav();
             $('select').material_select();
         });
+
+        // Client-side form validation
+        // Function to display any error messages on form submit
+        /**
+         * @return {boolean}
+         */
+        function ValidateForm() {
+            var isValid = true;
+
+            // Validate student
+            if (ValidateStudent(document.getElementById('communication_to_id').value) != '') isValid = false;
+
+            // Validate message
+            if (ValidateMessage(document.getElementById('communication_body').value) != '') isValid = false;
+
+            return isValid;
+        }
+
+        // Function to validate the student
+        function ValidateStudent(staff) {
+            var output;
+            if (/^\s*$/.test(staff)) {
+                output = 'You must choose a student';
+            } else {
+                output = '';
+            }
+
+            document.getElementById('studentValidation').innerHTML = output;
+            return output;
+        }
+
+        // Function to validate the message
+        function ValidateMessage(type) {
+            var output;
+            if (/^\s*$/.test(type)) {
+                output = 'You must enter a message';
+            } else {
+                output = '';
+            }
+
+            document.getElementById('messageValidation').innerHTML = output;
+            return output;
+        }
     </script>
 </head>
 <body>
@@ -118,12 +161,12 @@ foreach ($getStaffDetails as $staffDetail) {
                 <a href="uploads.php">Project Uploads</a>
             </li>
             <?php
-            if($getStaffDetails[0]['staff_authorised'] == 1){
+            if ($getStaffDetails[0]['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>';
             }
             ?>
-			<li>
+            <li>
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
         </ul>
@@ -154,17 +197,22 @@ foreach ($getStaffDetails as $staffDetail) {
 
                             <div class="col s12">
                                 <label for="communication_to_id">Student</label>
-                                <select name="communication_to_id" id="communication_to_id">
+                                <select name="communication_to_id" id="communication_to_id"
+                                        onkeyup="ValidateStudent(this.value);"
+                                        onblur="ValidateStudent(this.value);">
                                     <option value="" disabled="disabled" selected="selected">Choose...</option>
                                     <?php foreach ($students as $stu) {
                                         echo '<option value="' . $stu['student_username'] . '"' . (($_GET['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
                                     } ?>
                                 </select>
+                                <span id="studentValidation" class="red-text text-light-3 validation-error"></span>
                             </div>
                             <div class="input-field col s12">
                                 <label for="communication_body">Message</label>
                                 <textarea class="materialize-textarea" name="communication_body"
-                                          id="communication_body"></textarea>
+                                          id="communication_body" onkeyup="ValidateMessage(this.value);"
+                                          onblur="ValidateMessage(this.value);"></textarea>
+                                <span id="messageValidation" class="red-text text-light-3 validation-error"></span>
                             </div>
                             <div class="file-field input-field col s12">
                                 <div class="waves-effect waves-teal waves-light green btn-flat white-text">
@@ -173,8 +221,8 @@ foreach ($getStaffDetails as $staffDetail) {
                                 </div>
                             </div>
                             <div class="input-field col s12">
-                                <button
-                                    class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+                                <button onclick="return ValidateForm();"
+                                        class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
                                     Send
                                 </button>
                             </div>
