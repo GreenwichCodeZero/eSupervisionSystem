@@ -10,6 +10,11 @@ include '../classes/security.class.php';
 include '../classes/communication.class.php';
 include '../classes/meetings.class.php';
 
+// Redirect students
+if ($_SESSION['currentUser']['user_type'] == 'student') {
+    header ('location: ../student');
+}
+
 //$currentStaff = $_SESSION['currentUser'];
 $newStaffId = $_GET['staff'];
 
