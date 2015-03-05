@@ -9,6 +9,11 @@ include '../classes/communication.class.php';
 include '../classes/meetings.class.php';
 include '../classes/userDetails.class.php';
 
+// Redirect students
+if ($_SESSION['currentUser']['user_type'] == 'student') {
+    header ('location: ../student');
+}
+
 $currentStudent = $_SESSION['currentUser'];
 $studentDetails = $studentBannerId = $studentName = '';
 

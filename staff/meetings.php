@@ -11,6 +11,11 @@ require '../login-check.php';
 require '../classes/userDetails.class.php';
 require '../classes/meetings.class.php';
 
+// Redirect students
+if ($_SESSION['currentUser']['user_type'] == 'student') {
+    header ('location: ../student');
+}
+
 // Globals
 $errorList = array();
 $outputText = $errorListOutput = '';
