@@ -147,6 +147,10 @@ if (!($link = GetConnection())) {
     if ((count($timeslots)) > 0) {
         // Staff has timeslots
         $timeslotsOptionList = '<option value="" disabled="disabled" selected="selected">Choose...</option>';
+        $timeslotsOptionListWeek0 = $timeslotsOptionListWeek1 = $timeslotsOptionListWeek2 = '';
+
+        // Get current week number
+        $currentWeekNumber = date('W');
 
         // Loop over how many weeks should be displayed. Default is 2
         for ($i = 0; $i < 2; $i++) {
@@ -201,10 +205,29 @@ if (!($link = GetConnection())) {
                     $timeslotDisplay .= ', ' . $timeStart . '-' . $timeEnd;
 
                     // Output timeslot as drop down item
-                    $timeslotsOptionList .= '<option value="' . $timeslotValue . '">' . $timeslotDisplay . '</option>';
+                    switch (date('W', $timeslotDateTime)) {
+                        case $currentWeekNumber:
+                            // Current week
+                            $timeslotsOptionListWeek0 .= '<option value="' . $timeslotValue . '">' . $timeslotDisplay . '</option>';
+
+                            break;
+                        case ($currentWeekNumber + 1):
+                            // Next week
+                            $timeslotsOptionListWeek1 .= '<option value="' . $timeslotValue . '">' . $timeslotDisplay . '</option>';
+
+                            break;
+                        case ($currentWeekNumber + 2):
+                            // Week after next week
+                            $timeslotsOptionListWeek2 .= '<option value="' . $timeslotValue . '">' . $timeslotDisplay . '</option>';
+
+                            break;
+                    }
                 }
             }
         }
+
+        // Add weeks to list
+        $timeslotsOptionList .= $timeslotsOptionListWeek0 . $timeslotsOptionListWeek1 . $timeslotsOptionListWeek2;
     } else {
         // Staff has no timeslots
         $timeslotsOptionList = '<option value="" disabled="disabled" selected="selected">None available</option>';
@@ -246,6 +269,7 @@ $getStaffDetails = $getStaffDetailsQ->getResponse();
 foreach ($getStaffDetails as $staffDetail) {
     $staffAuthorised = $staffDetail['staff_authorised'];
 }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -396,12 +420,12 @@ foreach ($getStaffDetails as $staffDetail) {
                 <a href="uploads.php">Project Uploads</a>
             </li>
             <?php
-            if($getStaffDetails[0]['staff_authorised'] == 1){
+            if ($getStaffDetails[0]['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>';
             }
             ?>
-			<li>
+            <li>
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
         </ul>
@@ -412,12 +436,12 @@ foreach ($getStaffDetails as $staffDetail) {
 <div class="container">
 
     <!-- Output message text -->
-    <div
-        class="red-text text-light-3 validation-error"><?php echo $outputText; ?><?php echo $errorListOutput; ?></div>
+    <div class="red-text text-light-3 validation-error">
+        <?php echo $outputText; ?><?php echo $errorListOutput; ?>
+    </div>
 
     <!-- MEETING RECORD DETAILS SECTION START-->
-    <?php
-    if (isset($_GET['meeting']) && isset($_GET['status'])) {
+    <?php if (isset($_GET['meeting']) && isset($_GET['status'])) {
         // Get meeting details
         $m->getSingle($meetingId);
         $updatedmeeting = $m->getResponse();
@@ -495,9 +519,7 @@ foreach ($getStaffDetails as $staffDetail) {
             </div>
         </div>
 
-    <?php
-    }
-    ?>
+    <?php } ?>
     <!-- MEETING RECORD DETAILS SECTION END-->
 
     <!-- MEETING REQUEST SECTION START-->
@@ -637,27 +659,27 @@ foreach ($getStaffDetails as $staffDetail) {
                         </div>
                         <div class="card-action">
 
-                      <?php
-                            if($meeting['meeting_status'] == "Pending"){
-                               echo'
-                                <a href="meetings.php?meeting=' .  $meeting['meeting_id'] . '&status=2"
+                            <?php
+                            if ($meeting['meeting_status'] == "Pending") {
+                                echo '
+                                <a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=2"
                                title="Accept">Accept</a>
                             <a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=3"
                                title="Decline">Decline</a>
                             <a href="meetings.php?meeting=' . $meeting['meeting_id'] . '?>&status=4"
                                title="Decline">Held</a>';
-                           }else if($meeting['meeting_status'] == "Held"){
+                            } else if ($meeting['meeting_status'] == "Held") {
                                 echo '<a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=3"
                                title="Decline">Decline</a>';
-                           }else if($meeting['meeting_status'] == "Accepted"){
-                           echo '<a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=3"
+                            } else if ($meeting['meeting_status'] == "Accepted") {
+                                echo '<a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=3"
                                title="Decline">Decline</a>
                                <a href="meetings.php?meeting=' . $meeting['meeting_id'] . '?>&status=4"
                                title="Decline">Held</a>';
-                           }
+                            }
 
-                        ?>
-                
+                            ?>
+
                         </div>
                     </div>
                 </div>

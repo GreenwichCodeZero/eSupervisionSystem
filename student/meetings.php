@@ -94,6 +94,10 @@ if (!($link = GetConnection())) {
     if ((count($timeslots)) > 0) {
         // Staff has timeslots
         $timeslotsOptionList = '<option value="" disabled="disabled" selected="selected">Choose...</option>';
+        $timeslotsOptionListWeek0 = $timeslotsOptionListWeek1 = $timeslotsOptionListWeek2 = '';
+
+        // Get current week number
+        $currentWeekNumber = date('W');
 
         // Loop over how many weeks should be displayed. Default is 2
         for ($i = 0; $i < 2; $i++) {
@@ -131,6 +135,8 @@ if (!($link = GetConnection())) {
                         break;
                 }
 
+                //todo check if available
+
                 // Add date to the value
                 $timeslotValue .= date('Y-m-d', $timeslotDateTime); // 2015-12-31
 
@@ -145,9 +151,28 @@ if (!($link = GetConnection())) {
                 $timeslotDisplay .= ', ' . $timeStart . '-' . $timeEnd;
 
                 // Output timeslot as drop down item
-                $timeslotsOptionList .= '<option value="' . $timeslotValue . '">' . $timeslotDisplay . '</option>';
+                switch (date('W', $timeslotDateTime)) {
+                    case $currentWeekNumber:
+                        // Current week
+                        $timeslotsOptionListWeek0 .= '<option value="' . $timeslotValue . '">' . $timeslotDisplay . '</option>';
+
+                        break;
+                    case ($currentWeekNumber + 1):
+                        // Next week
+                        $timeslotsOptionListWeek1 .= '<option value="' . $timeslotValue . '">' . $timeslotDisplay . '</option>';
+
+                        break;
+                    case ($currentWeekNumber + 2):
+                        // Week after next week
+                        $timeslotsOptionListWeek2 .= '<option value="' . $timeslotValue . '">' . $timeslotDisplay . '</option>';
+
+                        break;
+                }
             }
         }
+
+        // Add weeks to list
+        $timeslotsOptionList .= $timeslotsOptionListWeek0 . $timeslotsOptionListWeek1 . $timeslotsOptionListWeek2;
     } else {
         // Staff has no timeslots
         $timeslotsOptionList = '<option value="" disabled="disabled" selected="selected">None available</option>';
@@ -271,7 +296,7 @@ if (count($errorList) > 0) {
             <li>
                 <a href="uploads.php">Uploads</a>
             </li>
-			<li>
+            <li>
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
         </ul>
@@ -282,8 +307,9 @@ if (count($errorList) > 0) {
 <div class="container">
 
     <!-- Output message text -->
-    <div
-        class="red-text text-light-3 validation-error"><?php echo $outputText; ?><?php echo $errorListOutput; ?></div>
+    <div class="red-text text-light-3 validation-error">
+        <?php echo $outputText; ?><?php echo $errorListOutput; ?>
+    </div>
 
     <!-- MEETING REQUEST SECTION START-->
     <div class="row" id="sendMessage">
