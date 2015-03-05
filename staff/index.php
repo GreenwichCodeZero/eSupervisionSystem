@@ -164,7 +164,9 @@ foreach ($getStaffDetails as $staffDetail) {
                 </div>
                 <div class="card-action">
                     <a href="messages.php" title="View all messages">View All</a>
-                    <a href="#newMessageModal" title="Write new message">Message Project Students</a>
+                    <div style="display: inline-block;">
+                        <a href="#newMessageModal" title="Write new message">Message Project Students</a>
+                    </div>
                 </div>
             </div>
         </div>
