@@ -27,7 +27,7 @@ if ($_POST['file_action']){
         exit;
     }
     
-    $el->newList()->type('success')->message ($c->getResponse ())->go('messages.php');
+    $el->newList()->type('success')->message ($c->getResponse ())->go('uploads.php');
     exit;
 
 }
