@@ -10,6 +10,11 @@ require '../classes/communication.class.php';
 require '../classes/userDetails.class.php';
 require '../classes/search.class.php';
 
+// Redirect students
+if ($_SESSION['currentUser']['user_type'] == 'student') {
+    header ('location: ../student');
+}
+
 // Globals
 $currentStaff = $_SESSION['currentUser'];
 $staff_id = $currentStaff['staff_id'];
