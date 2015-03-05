@@ -25,7 +25,7 @@ $userDetails = new UserDetails ();
 // Get search results
 $name = $searchStudentsByName = $programmeID = $searchStudentsByProgramme = null;
 if (isset($_GET['name'])) {
-    $name = $_GET['name'];
+    $name = strip_tags($_GET['name']);
 
     if ($name == null) {
         $submit = 0;
@@ -124,7 +124,7 @@ foreach ($getStaffDetails as $staffDetail) {
                     <div class="col s12 m9">
                         <label for="name">Student name</label>
                         <input type="search" name="name" id="name" placeholder="Enter a name"
-                               value="<?php echo $_GET['name']; ?>">
+                               value="<?php echo $name; ?>">
                     </div>
                     <div class="input-field col s12 m3">
                         <button type="submit" id="searchSubmit"
