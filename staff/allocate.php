@@ -11,20 +11,26 @@ require '../classes/userDetails.class.php';
 require '../database-connection.php';
 require '../validation.php';
 
-// Redirect students
-if ($_SESSION['currentUser']['user_type'] == 'student') {
-    header ('location: ../student');
-}
-
 // Globals
 $currentStaff = $_SESSION['currentUser'];
 $staff_id = $currentStaff['staff_id'];
 $selectedStudents = $_POST['students'];
 
-if ($currentStaff['staff_authorised'] !== '1') {
+// Determine permissions of current user
+if ($currentStaff['user_type'] === 'student') {
+    // Redirect to staff dashboard
+    header('Location: /codezero/student/index.php');
+} else if ($currentStaff['staff_authorised'] !== '1') {
     // Do not allow access to unauthorised staff
     header('Location: index.php');
 }
+
+$userDetails = new UserDetails ();
+
+$emailHeaders = 'From: eSupervision System <esupervision@greenwich.ac.uk>' . "\r\n" .
+    'MIME-Version: 1.0' . "\r\n" .
+    'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
+    'X-Mailer: PHP/' . phpversion();
 
 $userDetails = new UserDetails ();
 
@@ -40,6 +46,22 @@ if (isset($_POST['saveAllocate'])) {
         // Database connection error occurred
         $outputText .= 'Error connecting to database, please try again.';
     } else {
+        // Server-side validation
+        // Validate allocated staff ID
+        $allocated_staff_id = mysqli_real_escape_string($link, stripslashes(strip_tags($allocated_staff_id)));
+        if (!preg_match('/^[0-9]{1,}$/', $allocated_staff_id)) {
+            array_push($errorList, 'Supervisor ID is required');
+        }
+
+        // Validate current staff ID
+        $staff_id = mysqli_real_escape_string($link, stripslashes(strip_tags($staff_id)));
+        if (!preg_match('/^[0-9]{1,}$/', $staff_id)) {
+            array_push($errorList, 'Current staff ID is required');
+        }
+
+        // Arrays of students being allocated to new staff
+        $newSupervisorStudentUsernames = $oldSupervisorStudentUsernames = $newSecondMarkerStudentUsernames = $oldSecondMarkerStudentUsernames = array();
+
         // Loop over each allocated student
         foreach ($allocatedStudents as $allocatedStudent) {
             // Get student ID
@@ -54,18 +76,6 @@ if (isset($_POST['saveAllocate'])) {
                 array_push($errorList, 'Student ID is required');
             }
 
-            // Validate supervisor ID
-            $allocated_staff_id = mysqli_real_escape_string($link, stripslashes(strip_tags($allocated_staff_id)));
-            if (!preg_match('/^[0-9]{1,}$/', $allocated_staff_id)) {
-                array_push($errorList, 'Supervisor ID is required');
-            }
-
-            // Validate current staff ID
-            $staff_id = mysqli_real_escape_string($link, stripslashes(strip_tags($staff_id)));
-            if (!preg_match('/^[0-9]{1,}$/', $staff_id)) {
-                array_push($errorList, 'Current staff ID is required');
-            }
-
             // Check for and display any errors
             if (count($errorList) > 0) {
                 $outputText = DisplayErrorMessages($errorList);
@@ -73,16 +83,25 @@ if (isset($_POST['saveAllocate'])) {
                 // No errors
                 switch ($type) {
                     case 'supervisor':
+                        // Send email to old supervisor
+                        // Get old supervisor username
+                        $userDetails->getStudentSupervisor($studentDetails['student_id']);
+                        $studentOldSupervisorDetails = $userDetails->getResponse()[0];
+                        $studentOldSupervisorUsername = $studentOldSupervisorDetails['staff_username'];
+                        $oldSupervisorStudentUsernames[$studentOldSupervisorUsername][] = $studentDetails;
+
                         // Insert into database
                         if (AllocateStudentSupervisor($link, $studentUserId, $allocated_staff_id, $staff_id)) {
-
-                            // todo US14 Send email to student
-                            /*mail(
-                                $meetingToStudentUsername . '@greenwich.ac.uk',
-                                'New Meeting Request Received',
-                                'A new meeting request was submitted and is waiting for you on the eSupervision System.',
+                            // Send email to student
+                            mail(
+                                $studentDetails['student_username'] . '@greenwich.ac.uk',
+                                'Supervisor Allocation Changed',
+                                'You have been allocated to a new supervisor, check the eSupervision System for details.',
                                 $emailHeaders
-                            );*/
+                            );
+
+                            // Send email to new supervisor
+                            $newSupervisorStudentUsernames[] = $studentDetails;
 
                             $outputText = 'Successfully allocated students\' supervisors.';
                         } else {
@@ -91,16 +110,25 @@ if (isset($_POST['saveAllocate'])) {
 
                         break;
                     case 'second':
+                        // Send email to old second marker
+                        // Get old second marker username
+                        $userDetails->getStudentSecondMarker($studentDetails['student_id']);
+                        $studentOldSecondMarkerDetails = $userDetails->getResponse()[0];
+                        $studentOldSecondMarkerUsername = $studentOldSecondMarkerDetails['staff_username'];
+                        $oldSecondMarkerStudentUsernames[$studentOldSecondMarkerUsername][] = $studentDetails;
+
                         // Insert into database
                         if (AllocateStudentSecondMarker($link, $studentUserId, $allocated_staff_id, $staff_id)) {
-
-                            // todo US14 Send email to student
-                            /*mail(
-                                $meetingToStudentUsername . '@greenwich.ac.uk',
-                                'New Meeting Request Received',
-                                'A new meeting request was submitted and is waiting for you on the eSupervision System.',
+                            // Send email to student
+                            mail(
+                                $studentDetails['student_username'] . '@greenwich.ac.uk',
+                                'Second Marker Allocation Changed',
+                                'You have been allocated to a new second marker, check the eSupervision System for details.',
                                 $emailHeaders
-                            );*/
+                            );
+
+                            // Send email to new second marker
+                            $newSecondMarkerStudentUsernames[] = $studentDetails;
 
                             $outputText = 'Successfully allocated students\' second markers.';
                         } else {
@@ -111,6 +139,94 @@ if (isset($_POST['saveAllocate'])) {
                 }
             }
         }
+
+        // EMAIL OLD STAFF START
+        switch ($type) {
+            case 'supervisor':
+                foreach ($oldSupervisorStudentUsernames as $oldSupervisorUsername => $oldSupervisorStudent) {
+                    // Email old supervisor
+                    // Create email body text
+                    $supervisorEmailBody = 'The following ' . count($oldSupervisorStudent) . ' students have been reallocated to a new supervisor:<ul>';
+                    foreach ($oldSupervisorStudent as $student) {
+                        $supervisorEmailBody .= '<li>' . $student['student_first'] . ' ' . $student['student_last'] . '</li>';
+                    }
+                    $supervisorEmailBody .= '</ul>Check the eSupervision System for details.';
+
+                    mail(
+                        $oldSupervisorUsername . '@greenwich.ac.uk',
+                        'Supervisor Allocation Changed',
+                        $supervisorEmailBody,
+                        $emailHeaders
+                    );
+                }
+
+                break;
+            case 'second':
+                foreach ($oldSecondMarkerStudentUsernames as $oldSecondMarkerUsername => $oldSecondMarkerStudent) {
+                    // Email old second marker
+                    // Create email body text
+                    $secondMarkerEmailBody = 'The following ' . count($oldSecondMarkerStudent) . ' students have been reallocated to a new second marker:<ul>';
+                    foreach ($oldSecondMarkerStudent as $student) {
+                        $secondMarkerEmailBody .= '<li>' . $student['student_first'] . ' ' . $student['student_last'] . '</li>';
+                    }
+                    $secondMarkerEmailBody .= '</ul>Check the eSupervision System for details.';
+
+                    mail(
+                        $oldSecondMarkerUsername . '@greenwich.ac.uk',
+                        'Second Marker Allocation Changed',
+                        $secondMarkerEmailBody,
+                        $emailHeaders
+                    );
+                }
+
+                break;
+
+        }
+        // EMAIL OLD STAFF END
+
+        // EMAIL NEW STAFF START
+        // Get staff username
+        $userDetails->GetStaffByStaffId($allocated_staff_id);
+        $staffDetails = $userDetails->getResponse()[0];
+        $staffUsername = $staffDetails['staff_username'];
+
+        switch ($type) {
+            case 'supervisor':
+                // Email new supervisor
+                // Create email body text
+                $supervisorEmailBody = 'You have been allocated as a supervisor to the following ' . count($newSupervisorStudentUsernames) . ' students:<ul>';
+                foreach ($newSupervisorStudentUsernames as $student) {
+                    $supervisorEmailBody .= '<li>' . $student['student_first'] . ' ' . $student['student_last'] . '</li>';
+                }
+                $supervisorEmailBody .= '</ul>Check the eSupervision System for details.';
+
+                mail(
+                    $staffUsername . '@greenwich.ac.uk',
+                    'Supervisor Allocation Changed',
+                    $supervisorEmailBody,
+                    $emailHeaders
+                );
+
+                break;
+            case 'second':
+                // Email new second marker
+                // Create email body text
+                $secondMarkerEmailBody = 'You have been allocated as a second marker to the following ' . count($newSecondMarkerStudentUsernames) . ' students:<ul>';
+                foreach ($newSecondMarkerStudentUsernames as $student) {
+                    $secondMarkerEmailBody .= '<li>' . $student['student_first'] . ' ' . $student['student_last'] . '</li>';
+                }
+                $secondMarkerEmailBody .= '</ul>Check the eSupervision System for details.';
+
+                mail(
+                    $staffUsername . '@greenwich.ac.uk',
+                    'Second Marker Allocation Changed',
+                    $secondMarkerEmailBody,
+                    $emailHeaders
+                );
+
+                break;
+        }
+        // EMAIL NEW STAFF END
     }
 } else {
     // Save selected students to session
@@ -202,12 +318,14 @@ if (isset($_POST['saveAllocate'])) {
             <li>
                 <a href="uploads.php">Project Uploads</a>
             </li>
-            <?php
-            if($getStaffDetails[0]['staff_authorised'] == 1){
-                echo '<li><a href="search.php">Search</a></li>
-                    <li><a href="viewDashboards.php">View dashboards</a></li>';
-            }
-            ?>
+            <?php if ($currentStaff['staff_authorised'] == 1) { ?>
+                <li>
+                    <a href="search.php">Search</a>
+                </li>
+                <li>
+                    <a href="viewDashboards.php">View dashboards</a>
+                </li>
+            <?php } ?>
             <li>
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
