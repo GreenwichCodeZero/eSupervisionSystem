@@ -103,7 +103,8 @@ if (isset($_POST['saveAllocate'])) {
                             // Send email to new supervisor
                             $newSupervisorStudentUsernames[] = $studentDetails;
 
-                            $outputText = 'Successfully allocated students\' supervisors.';
+                            // Redirect user
+                            header('Location: search.php?allocation=supervisor');
                         } else {
                             $outputText = 'Database error.';
                         }
@@ -130,7 +131,8 @@ if (isset($_POST['saveAllocate'])) {
                             // Send email to new second marker
                             $newSecondMarkerStudentUsernames[] = $studentDetails;
 
-                            $outputText = 'Successfully allocated students\' second markers.';
+                            // Redirect user
+                            header('Location: search.php?allocation=second');
                         } else {
                             $outputText = 'Database error.';
                         }
