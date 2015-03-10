@@ -129,6 +129,98 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
         <!--  Students without second marker ends here -->
     </div>
 
+    <div class="row">
+            <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">New report here</span>
+
+                    <div class="collection">
+                        Display info here
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+
+                    <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">New report here</span>
+
+                    <div class="collection">
+                        Display info here
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+    </div>
+
+
+        <div class="row">
+            <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">New report here</span>
+
+                    <div class="collection">
+                        Display info here
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+
+                    <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">New report here</span>
+
+                    <div class="collection">
+                        Display info here
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+    </div>
+
+
+        <div class="row">
+            <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">New report here</span>
+
+                    <div class="collection">
+                        Display info here
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+
+                    <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">New report here</span>
+
+                    <div class="collection">
+                        Display info here
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+    </div>
+
 
 </div>
 </body>
