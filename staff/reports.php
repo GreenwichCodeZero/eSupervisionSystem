@@ -134,7 +134,7 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">New report here</span>
+                    <span class="card-title green-text">Students with no meeting requests within 2 weeks</span>
 
                     <div class="collection">
                         Display info here
@@ -148,7 +148,7 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">New report here</span>
+                    <span class="card-title green-text">Students with the same supervisor and second marker</span>
 
                     <div class="collection">
                         Display info here
@@ -165,7 +165,7 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">New report here</span>
+                    <span class="card-title green-text">Students who haven't logged in for 7 days</span>
 
                     <div class="collection">
                         Display info here
@@ -179,7 +179,7 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">New report here</span>
+                    <span class="card-title green-text">Staff who have declined more then 70% of meeting requests</span>
 
                     <div class="collection">
                         Display info here
