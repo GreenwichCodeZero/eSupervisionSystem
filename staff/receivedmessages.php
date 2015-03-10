@@ -88,9 +88,10 @@ $students = $u->getResponse();
                 <a href="submissions.php">Project Uploads</a>
             </li>
 			<?php
-            if($staffAuthorsied == 1){
+            if ($staffAuthorsied == 1) {
                 echo '<li><a href="search.php">Search</a></li>
-                    <li><a href="viewDashboards.php">View dashboards</a></li>';
+                    <li><a href="viewDashboards.php">View dashboards</a></li>
+                    <li><a href="reports.php">Reports</a></li>';
             }
             ?>
 			<li>
