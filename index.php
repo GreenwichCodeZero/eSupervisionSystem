@@ -10,10 +10,6 @@ session_start();
 
 $s = $_SESSION['currentUser'];
 
-//$s['user_type'];
-
-//var_dump($s);
-
 if($s['user_type'] != null){
 RedirectToDashboard($s['user_type']);
 }
@@ -150,7 +146,7 @@ function RedirectToDashboard($userType) {
 
 <body>
 <div class="container">
-    <div class="center-align">
+    <div class="center-align" id="header">
         <h5>eSupervision</h5>
         <img id="logo" class="responsive-img" src="imgs/greenwichLogo.png" alt="University of Greenwich logo"/>
     </div>

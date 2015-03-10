@@ -116,7 +116,7 @@ $secondMarker = $u2->getResponse();
 			</p>
 		</div>
 		<div class="center-align col s4">
-			<p>
+			<p id="userName">
 				<?php echo $studentName; ?>
 			</p>
 		</div>

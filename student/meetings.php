@@ -41,7 +41,7 @@ if (!($link = GetConnection())) {
         // Validate meeting title
         $title = mysqli_real_escape_string($link, stripslashes(strip_tags($_POST['title'])));
         if (preg_match('/^\s*$/', $title)) {
-            array_push($errorList, 'Title is required');
+            array_push($errorList, 'Subject is required');
         }
 
         // Validate meeting type
@@ -321,14 +321,14 @@ if (count($errorList) > 0) {
                    onclick="toggleForm('#sendMessage', '#newMessage');"></i>
 
                 <div class="card-content">
-                    <span class="card-title green-text">Request Meeting</span>
+                    <span class="card-title green-text">Request a Meeting</span>
 
                     <p>Request a meeting
                         with <?php echo $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last']; ?>.</p>
 
                     <form name="meeting" method="post" action="meetings.php">
                         <div class="input-field col s6">
-                            <label for="title">Title</label>
+                            <label for="title">Subject</label>
                             <input id="title" name="title" type="text" onkeyup="ValidateTitle(this.value);"
                                    onblur="ValidateTitle(this.value);"/>
                             <span id="titleValidation" class="red-text text-light-3 validation-error"></span>
@@ -377,8 +377,7 @@ if (count($errorList) > 0) {
         <div class="col s12">
             <div class="card">
                 <a onclick="toggleForm('#sendMessage', '#newMessage');" class="c_right_align" id="newMessage">
-                    <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Request
-                        Meeting
+                    <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Request a Meeting
                     </div>
                 </a>
 

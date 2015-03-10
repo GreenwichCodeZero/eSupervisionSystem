@@ -124,9 +124,13 @@ $projectTitle = $p->getResponse ();
 ?>
 
 
-  <title>Submissions</title>
-    <link href="../css/styles.css" rel="stylesheet" type="text/css" />
-    <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection" />
+	<title>Submissions</title>
+    <meta name="author" content="Code Zero"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
+    <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="../js/materialize.min.js"></script>
     <script>
