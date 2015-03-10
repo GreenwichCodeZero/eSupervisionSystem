@@ -84,8 +84,6 @@ foreach ($getStaffDetails as $staffDetail) {
     <meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!--<link href="css/styles.css" rel="stylesheet" type="text/css"/>-->
     <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -145,6 +143,25 @@ foreach ($getStaffDetails as $staffDetail) {
         </div>
     </div>
     <div class="row">
+		
+		<!--  Project students starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">List of project students</span>
+
+                    <div class="collection">
+                        <?php
+                        foreach ($students as $student) {
+                            echo "<a class='collection-item' href='#'>" . $student['student_first'] . " " . $student['student_last'] . "</a>";
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Project students ends here -->
+		
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
@@ -158,6 +175,7 @@ foreach ($getStaffDetails as $staffDetail) {
                 </div>
             </div>
         </div>
+
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
@@ -175,28 +193,11 @@ foreach ($getStaffDetails as $staffDetail) {
                 </div>
             </div>
         </div>
-    </div>
+	</div>
 
+	<h5>Exceptions</h5>
     <div class="row">
-        <!--  Project students starts here -->
-        <div class="col s12 l6">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title green-text">List of project students</span>
-
-                    <div class="collection">
-                        <?php
-                        foreach ($students as $student) {
-                            echo "<a class='collection-item' href='#'>" . $student['student_first'] . " " . $student['student_last'] . "</a>";
-                        }
-                        ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--  Project students ends here -->
-
-        <!--  Students without supervisor starts here -->
+	<!--  Students without supervisor starts here -->
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
@@ -213,9 +214,7 @@ foreach ($getStaffDetails as $staffDetail) {
             </div>
         </div>
         <!--  Students without supervisor ends here -->
-    </div>
 
-    <div class="row">
         <!--  Students without second marker starts here -->
         <div class="col s12 l6">
             <div class="card">

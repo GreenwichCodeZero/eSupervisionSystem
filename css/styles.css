@@ -23,3 +23,10 @@ body {}
 	display: block;
 	margin-bottom: 30px;
 }
+#header{
+margin-top:30px;}
+
+#userName{
+font-size:24px;}
+div.select-wrapper span.select-dropdown{
+margin-top:-7px;}

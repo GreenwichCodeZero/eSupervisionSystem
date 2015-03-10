@@ -23,8 +23,7 @@ if ($currentStaff['user_type'] === 'student') {
 
 <head>
     <title>eSupervision - Reports</title>
-
-    <meta name="author" content="Code Zero"/>
+	<meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
