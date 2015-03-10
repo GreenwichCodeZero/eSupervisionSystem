@@ -167,8 +167,11 @@ $superFiles = array
 
 
 ?>
+<!DOCTYPE html>
+<html>
+
 <head>
-    <title>Student Uploads</title>
+    <title>eSupervision - Student Uploads</title>
     <meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -187,6 +190,7 @@ $superFiles = array
         $(document).ready(function () {
             $('select').material_select();
             $(".button-collapse").sideNav();
+            $('.modal-trigger').leanModal();
         });
     </script>
 </head>
@@ -764,9 +768,4 @@ $superFiles = array
 </div>
 <!-- end container -->
 </body>
-
-<script>
-    $(document).ready(function () {
-        $('.modal-trigger').leanModal();
-    });
-</script>
+</html>

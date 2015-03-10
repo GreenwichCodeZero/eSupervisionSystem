@@ -68,9 +68,11 @@ foreach($getStaffDetails as $staffDetail){
 }
 // End is staff authorised
 ?>
+<!DOCTYPE html>
+<html>
 
 <head>
-    <title>Student Blog Posts</title>
+    <title>eSupervison - Blog</title>
    <meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -144,7 +146,7 @@ foreach($getStaffDetails as $staffDetail){
 
 
         <div class="col s10 m12 offset-s1 card">
-          
+
 
             <div class="card-content">
                 <span class="card-title green-text">Student Blog History</span>
@@ -189,7 +191,7 @@ foreach($getStaffDetails as $staffDetail){
 
                 <?php if ($blog_count > 0) {
                     $count = 0;
-                    foreach ($blogs as $b) { 
+                    foreach ($blogs as $b) {
                     ++$count;
                         ?>
 
@@ -267,13 +269,13 @@ foreach($getStaffDetails as $staffDetail){
                                     $prettyDate = date('l j F Y', $date);
 
                                     // Output date and time
-                                    echo $prettyDate . ', ' . substr($comment['comment_time_added'], 0, -3); 
+                                    echo $prettyDate . ', ' . substr($comment['comment_time_added'], 0, -3);
                                 ?>
 
 
-                             </b> 
+                             </b>
                              </p>
-                                
+
                             <p><?php echo $comment['comment_body']; ?></p>
 
                             <!--  COMMENT HTML END -->
@@ -298,13 +300,13 @@ foreach($getStaffDetails as $staffDetail){
                                                     <input type='hidden' name='comment_student_id' value='<?php echo $_GET['sid']; ?>'/>
                                                     <input type='hidden' name='comment_communication_id' value='<?php echo $b['communication_id']; ?>'/>
 
-                                                
+
                                                     <div class="input-field col s12">
                                                         <label for="comment_body">Your comment:</label>
                                                         <textarea class="materialize-textarea" name="comment_body"
                                                                   id="communication_body"></textarea>
                                                     </div>
-                                                    
+
                                                     <div class="input-field col s12">
                                                         <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
                                                             Submit
@@ -324,7 +326,7 @@ foreach($getStaffDetails as $staffDetail){
                             ?>
 
 
-                              
+
 
 
                             </li>
@@ -341,8 +343,10 @@ foreach($getStaffDetails as $staffDetail){
             </div>
         </div>
         <!--MESSAGING SECTION END-->
-    </div>     
+    </div>
 
 </div>
 <!-- end container -->
 </body>
+
+</html>

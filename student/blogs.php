@@ -42,9 +42,11 @@ $u->getStudentSupervisor($stu_id);
 $supervisor = $u->getResponse();
 
 ?>
+<!DOCTYPE html>
+<html>
 
 <head>
-    <title>Blogs</title>
+    <title>eSupervision - Blogs</title>
     <meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -61,6 +63,7 @@ $supervisor = $u->getResponse();
 
         $(document).ready(function () {
             $(".button-collapse").sideNav();
+            $('.modal-trigger').leanModal();
         });
     </script>
 </head>
@@ -185,8 +188,4 @@ $supervisor = $u->getResponse();
 </div>
 <!-- end container -->
 </body>
-<script>
-    $(document).ready(function () {
-        $('.modal-trigger').leanModal();
-    });
-</script>
+</html>

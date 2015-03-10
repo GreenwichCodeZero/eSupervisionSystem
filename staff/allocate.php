@@ -255,7 +255,7 @@ if (isset($_POST['saveAllocate'])) {
 <html>
 
 <head>
-    <title>eSupervision - Allocate</title>
+    <title>eSupervision - Allocation</title>
     <meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
