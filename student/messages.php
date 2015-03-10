@@ -44,9 +44,11 @@ $supervisor = $u->getResponse();
 
 
 ?>
+<!DOCTYPE html>
+<html>
 
 <head>
-    <title>Messages</title>
+    <title>eSupervision - Messages</title>
 	<meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -173,3 +175,4 @@ $supervisor = $u->getResponse();
 </div>
 <!-- end container -->
 </body>
+</html>
