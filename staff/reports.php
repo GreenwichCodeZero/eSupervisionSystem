@@ -3,9 +3,12 @@
 // Initialise session
 session_start();
 
-error_reporting(0);
+error_reporting(1);
 
 require '../login-check.php';
+include '../classes/userDetails.class.php';
+include '../classes/security.class.php';
+include '../classes/reports.class.php';
 
 // Globals
 $currentStaff = $_SESSION['currentUser'];
@@ -17,6 +20,21 @@ if ($currentStaff['user_type'] === 'student') {
     header('Location: /codezero/student/index.php');
 }
 
+$getStaffDetailsQ = new UserDetails ();
+$getStaffDetailsQ->isStaffAuthorised($staff_id);
+$getStaffDetails = $getStaffDetailsQ->getResponse();
+
+$noSupervisorQ = new UserDetails();
+$noSupervisorQ->noSupervisor();
+$noSupervisors = $noSupervisorQ->getResponse();
+
+$noSecondMarkerQ = new UserDetails();
+$noSecondMarkerQ->noSecondMarker();
+$noSecondMarkers = $noSecondMarkerQ->getResponse();
+
+$notLoggedin7DaysQ = new Reports();
+$notLoggedin7DaysQ->notLoggedIn7Days();
+$notLoggedIn7Days = $notLoggedin7DaysQ->getResponse();
 ?>
 <!DOCTYPE html>
 <html>
@@ -58,17 +76,14 @@ if ($currentStaff['user_type'] === 'student') {
             <li>
                 <a href="uploads.php">Project Uploads</a>
             </li>
-            <?php if ($currentStaff['staff_authorised'] == 1) { ?>
-                <li>
-                    <a href="search.php">Search</a>
-                </li>
-                <li>
-                    <a href="viewDashboards.php">View dashboards</a>
-                </li>
-            <?php } ?>
-            <li>
-                <a href="reports.php">Reports</a>
-            </li>
+     <?php
+            if ($getStaffDetails[0]['staff_authorised'] == 1) {
+                echo '<li><a href="search.php">Search</a></li>
+                    <li><a href="viewDashboards.php">View dashboards</a></li>
+                    <li><a href="reports.php">Reports</a></li>';
+            }
+            ?>
+
             <li>
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
@@ -79,7 +94,134 @@ if ($currentStaff['user_type'] === 'student') {
 
 <div class="container">
 
-    Reports placeholder
+    
+    <h1>Reports</h1>
+    <div class="row">
+    <!--  Students without supervisor starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Students without a supervisor</span>
+
+                        <?php
+                        foreach ($noSupervisors as $noSupervisor) {
+                            echo "<br>" . $noSupervisor['student_first'] . " " . $noSupervisor['student_last'];
+                        }
+                        ?>
+                </div>
+            </div>
+        </div>
+        <!--  Students without supervisor ends here -->
+
+        <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Students without a second marker</span>
+                        <?php
+                        foreach ($noSecondMarkers as $noSecondMarker) {
+                            echo "<br>" . $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'];
+                        }
+                        ?>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+    </div>
+
+    <div class="row">
+            <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Students with no meeting requests within 2 weeks</span>
+
+                    <div class="collection">
+                        Display info here
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+
+                    <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Students with the same supervisor and second marker</span>
+
+                    <div class="collection">
+                        Display info here
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+    </div>
+
+
+        <div class="row">
+            <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Students who haven't logged in for the past 7 days</span>
+                        <?php
+                            foreach($notLoggedIn7Days as $notLoggedIn){
+                               echo '<br>' . $notLoggedIn['student_first'] . " " . $notLoggedIn['student_last'];
+                            }
+                        ?>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+
+                    <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Staff who have declined more then 70% of meeting requests</span>
+
+                    <div class="collection">
+                        Display info here
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+    </div>
+
+
+        <div class="row">
+            <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">New report here</span>
+
+                    <div class="collection">
+                        Display info here
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+
+                    <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">New report here</span>
+
+                    <div class="collection">
+                        Display info here
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+    </div>
+
 
 </div>
 </body>

@@ -59,14 +59,6 @@ $studentsSupervised = new UserDetails ();
 $studentsSupervised->supervisorStudents($staff_id);
 $students = $studentsSupervised->getResponse();
 
-$noSupervisorQ = new UserDetails ();
-$noSupervisorQ->noSupervisor();
-$noSupervisors = $noSupervisorQ->getResponse();
-
-$noSecondMarkerQ = new UserDetails ();
-$noSecondMarkerQ->noSecondMarker();
-$noSecondMarkers = $noSecondMarkerQ->getResponse();
-
 $getStaffDetailsQ = new UserDetails ();
 $getStaffDetailsQ->isStaffAuthorised($staff_id);
 $getStaffDetails = $getStaffDetailsQ->getResponse();
@@ -115,10 +107,12 @@ foreach ($getStaffDetails as $staffDetail) {
             <li>
                 <a href="uploads.php">Project Uploads</a>
             </li>
+
             <?php
             if ($staffAuthorsied == 1) {
                 echo '<li><a href="search.php">Search</a></li>
-                    <li><a href="viewDashboards.php">View dashboards</a></li>';
+                    <li><a href="viewDashboards.php">View dashboards</a></li>
+                    <li><a href="reports.php">Reports</a></li>';
             }
             ?>
             <li>
@@ -194,45 +188,6 @@ foreach ($getStaffDetails as $staffDetail) {
             </div>
         </div>
 	</div>
-
-	<h5>Exceptions</h5>
-    <div class="row">
-	<!--  Students without supervisor starts here -->
-        <div class="col s12 l6">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title green-text">Students without a supervisor</span>
-
-                    <div class="collection">
-                        <?php
-                        foreach ($noSupervisors as $noSupervisor) {
-                            echo "<a class='collection-item' href='#'>" . $noSupervisor['student_first'] . " " . $noSupervisor['student_last'] . "</a>";
-                        }
-                        ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--  Students without supervisor ends here -->
-
-        <!--  Students without second marker starts here -->
-        <div class="col s12 l6">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title green-text">Students without a second marker</span>
-
-                    <div class="collection">
-                        <?php
-                        foreach ($noSecondMarkers as $noSecondMarker) {
-                            echo "<a class='collection-item' href='#'>" . $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'] . "</a>";
-                        }
-                        ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--  Students without second marker ends here -->
-    </div>
 
     <!-- Start New Message Modal -->
     <div id="newMessageModal" class="modal modal-fixed-footer">
