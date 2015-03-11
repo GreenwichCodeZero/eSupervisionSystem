@@ -14,6 +14,28 @@ class UserDetails {
         }
     }
 
+//update students last login date
+public function updateLoggedInDate($user_name) {
+        $result = $this->con->prepare(
+            'Update
+              esuper_student
+            Set 
+              last_login_date = "' . date("Y-m-d H:i:s") . '"
+            WHERE
+              student_username = :user_name
+         ');
+        $result->bindValue(':user_name', $user_name);
+
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+    }
+
+
     // Get student details by username (including programme ID)
     public function GetStudentDetails($student_username) {
         $result = $this->con->prepare(
