@@ -3,11 +3,12 @@
 // Initialise session
 session_start();
 
-error_reporting(0);
+error_reporting(1);
 
 require '../login-check.php';
 include '../classes/userDetails.class.php';
 include '../classes/security.class.php';
+include '../classes/reports.class.php';
 
 // Globals
 $currentStaff = $_SESSION['currentUser'];
@@ -30,6 +31,10 @@ $noSupervisors = $noSupervisorQ->getResponse();
 $noSecondMarkerQ = new UserDetails();
 $noSecondMarkerQ->noSecondMarker();
 $noSecondMarkers = $noSecondMarkerQ->getResponse();
+
+$notLoggedin7DaysQ = new Reports();
+$notLoggedin7DaysQ->notLoggedIn7Days();
+$notLoggedIn7Days = $notLoggedin7DaysQ->getResponse();
 ?>
 <!DOCTYPE html>
 <html>
@@ -98,13 +103,11 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
                 <div class="card-content">
                     <span class="card-title green-text">Students without a supervisor</span>
 
-                    <div class="collection">
                         <?php
                         foreach ($noSupervisors as $noSupervisor) {
-                            echo "<a class='collection-item' href='#'>" . $noSupervisor['student_first'] . " " . $noSupervisor['student_last'] . "</a>";
+                            echo "<br>" . $noSupervisor['student_first'] . " " . $noSupervisor['student_last'];
                         }
                         ?>
-                    </div>
                 </div>
             </div>
         </div>
@@ -115,14 +118,11 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Students without a second marker</span>
-
-                    <div class="collection">
                         <?php
                         foreach ($noSecondMarkers as $noSecondMarker) {
-                            echo "<a class='collection-item' href='#'>" . $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'] . "</a>";
+                            echo "<br>" . $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'];
                         }
                         ?>
-                    </div>
                 </div>
             </div>
         </div>
@@ -165,11 +165,12 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">Students who haven't logged in for 7 days</span>
-
-                    <div class="collection">
-                        Display info here
-                    </div>
+                    <span class="card-title green-text">Students who haven't logged in for the past 7 days</span>
+                        <?php
+                            foreach($notLoggedIn7Days as $notLoggedIn){
+                               echo '<br>' . $notLoggedIn['student_first'] . " " . $notLoggedIn['student_last'];
+                            }
+                        ?>
                 </div>
             </div>
         </div>

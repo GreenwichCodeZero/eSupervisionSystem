@@ -1,9 +1,13 @@
 <?php
 // Page which serves as the home page and login page
 
-error_reporting(0);
+error_reporting(1);
 require 'database-connection.php';
 require 'validation.php';
+include 'classes/security.class.php';
+include 'classes/userDetails.class.php';
+
+$loggedInDateTime = new UserDetails();
 
 // Initialise session
 session_start();
@@ -44,6 +48,7 @@ if (isset($_POST['login'])) {
                 // User is active
                 $_SESSION['currentUser'] = $currentUser;
 
+                $loggedInDateTime->updateLoggedInDate($username);    //update users last log in date and time
                 // Logged in successfully
                 // Check if 'remember username' was checked
                 if (isset($_POST['rememberUsername'])) {
