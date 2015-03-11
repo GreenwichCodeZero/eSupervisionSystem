@@ -427,7 +427,8 @@ foreach ($getStaffDetails as $staffDetail) {
             <?php
             if ($getStaffDetails[0]['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
-                    <li><a href="viewDashboards.php">View dashboards</a></li>';
+                    <li><a href="viewDashboards.php">View dashboards</a></li>
+                    <li><a href="reports.php">Reports</a></li>';
             }
             ?>
             <li>
