@@ -259,7 +259,6 @@ foreach($getStaffDetails as $staffDetail){
                             ?>
 
                             <!--  COMMENT HTML START -->
-							<hr />
                             <p class="grey lighten-3">
                             <b>
                                 Comment from <?php echo $comment_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>
