@@ -260,7 +260,7 @@ foreach($getStaffDetails as $staffDetail){
 
                             <!--  COMMENT HTML START -->
 
-                            <p>
+                            <p class="grey lighten-3">
                             <b>
                                 Comment from <?php echo $comment_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>
 
@@ -272,12 +272,10 @@ foreach($getStaffDetails as $staffDetail){
                                     // Output date and time
                                     echo $prettyDate . ', ' . substr($comment['comment_time_added'], 0, -3);
                                 ?>
-
-
                              </b>
                              </p>
 
-                            <p><?php echo $comment['comment_body']; ?></p>
+                            <p class="grey lighten-3"><?php echo $comment['comment_body']; ?></p>
 
                             <!--  COMMENT HTML END -->
 
