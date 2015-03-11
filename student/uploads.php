@@ -47,10 +47,11 @@ $supervisor = $u->getResponse();
 // $f->getSubmissions ();
 
 ?>
-
+<!DOCTYPE html>
+<html>
 
 <head>
-	<title>Submissions</title>
+	<title>eSupervision - Submissions</title>
     <meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -67,6 +68,7 @@ $supervisor = $u->getResponse();
 
         $(document).ready(function () {
             $(".button-collapse").sideNav();
+            $('select').material_select();
         });
     </script>
 </head>
@@ -154,9 +156,5 @@ $supervisor = $u->getResponse();
 		</div>
 	</div>
 	<!-- end container -->
-	<script>
-	 $(document).ready(function() {
-		$('select').material_select();
-	  });
-	</script>
 </body>
+</html>

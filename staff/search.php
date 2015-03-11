@@ -13,7 +13,7 @@ require '../classes/search.class.php';
 
 // Redirect students
 if ($_SESSION['currentUser']['user_type'] == 'student') {
-    header ('location: ../student');
+    header('location: ../student');
 }
 
 // Globals
@@ -40,6 +40,7 @@ if (isset($_GET['name'])) {
     $userDetails->searchStudentsByProgramme($programmeID);
     $searchStudentsByProgramme = $userDetails->getResponse();
 }
+
 $getStaffDetailsQ = new UserDetails ();
 $getStaffDetailsQ->isStaffAuthorised($staff_id);
 $getStaffDetails = $getStaffDetailsQ->getResponse();
@@ -53,7 +54,7 @@ foreach ($getStaffDetails as $staffDetail) {
 
 <head>
     <title>eSupervision - Search</title>
-	<meta name="author" content="Code Zero"/>
+    <meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
@@ -308,14 +309,32 @@ foreach ($getStaffDetails as $staffDetail) {
         <?php } else {
             // No results were found
             if ($name != null) {
-                echo "No students found by the name '$name'";
+                echo "<p style=\"border: thin #990000 solid; padding: 10px; background:#EBCCCC;\">No students found by the name '$name'.</p>";
             } else if ($programmeID != null) {
-                echo 'No students found on this programme';
+                echo '<p style="border: thin #990000 solid; padding: 10px; background:#EBCCCC;">No students found on this programme.</p>';
             }
+        }
+    } else if (isset($_GET['allocation'])) {
+        // Allocation confirmation
+        if ($_GET['allocation'] == 'supervisor') {
+            echo '<p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">Successfully allocated students\' supervisors.</p>';
+        } else if ($_GET['allocation'] == 'second') {
+            echo '<p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">Successfully allocated students\' second markers.</p>';
+        }
+
+        // Check for student clash errors
+        if (isset($_GET['clashes'])) {
+            echo '<div style="border: thin #990000 solid; padding-left: 10px; padding-right: 10px; background:#EBCCCC;"><p>The following students were not allocated as the selected member of staff is already allocated:</p><ul>';
+
+            foreach ($_SESSION['clashes'] as $clash) {
+                echo '<li>' . $clash . '</li>';
+            }
+
+            echo '</ul></div>';
         }
     } else {
         // No search entered
-        echo 'Enter search terms';
+        echo '<p>Enter search terms.</p>';
     } ?>
     <!-- Results end -->
 

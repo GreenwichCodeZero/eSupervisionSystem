@@ -84,9 +84,11 @@ $projectTitle = $p->getResponse ();
 // // $f->getSubmissions ();
 
 ?>
+<!DOCTYPE html>
+<html>
+<head>
 
-
-	<title>Submissions</title>
+	<title>eSupervision - Submissions</title>
 	<meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -103,6 +105,7 @@ $projectTitle = $p->getResponse ();
 
         $(document).ready(function () {
             $(".button-collapse").sideNav();
+            $('select').material_select();
         });
     </script>
 </head>
@@ -451,8 +454,5 @@ $projectTitle = $p->getResponse ();
     </div>
 
 </div> <!-- end container -->
-</body><script>
- $(document).ready(function() {
-    $('select').material_select();
-  });
-</script>
+</body>
+</html>

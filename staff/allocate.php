@@ -60,7 +60,7 @@ if (isset($_POST['saveAllocate'])) {
         }
 
         // Arrays of students being allocated to new staff
-        $newSupervisorStudentUsernames = $oldSupervisorStudentUsernames = $newSecondMarkerStudentUsernames = $oldSecondMarkerStudentUsernames = array();
+        $newSupervisorStudentUsernames = $oldSupervisorStudentUsernames = $newSecondMarkerStudentUsernames = $oldSecondMarkerStudentUsernames = $studentClashes = array();
 
         // Loop over each allocated student
         foreach ($allocatedStudents as $allocatedStudent) {
@@ -90,22 +90,25 @@ if (isset($_POST['saveAllocate'])) {
                         $studentOldSupervisorUsername = $studentOldSupervisorDetails['staff_username'];
                         $oldSupervisorStudentUsernames[$studentOldSupervisorUsername][] = $studentDetails;
 
-                        // Insert into database
-                        if (AllocateStudentSupervisor($link, $studentUserId, $allocated_staff_id, $staff_id)) {
-                            // Send email to student
-                            mail(
-                                $studentDetails['student_username'] . '@greenwich.ac.uk',
-                                'Supervisor Allocation Changed',
-                                'You have been allocated to a new supervisor, check the eSupervision System for details.',
-                                $emailHeaders
-                            );
-
-                            // Send email to new supervisor
-                            $newSupervisorStudentUsernames[] = $studentDetails;
-
-                            $outputText = 'Successfully allocated students\' supervisors.';
+                        if ($studentOldSupervisorDetails['staff_id'] == $allocated_staff_id) {
+                            // Selected student is already allocated selected supervisor
+                            $studentClashes[] = $studentDetails['student_first'] . ' ' . $studentDetails['student_last'];
                         } else {
-                            $outputText = 'Database error.';
+                            // Insert into database
+                            if (AllocateStudentSupervisor($link, $studentUserId, $allocated_staff_id, $staff_id)) {
+                                // Send email to student
+                                mail(
+                                    $studentDetails['student_username'] . '@greenwich.ac.uk',
+                                    'Supervisor Allocation Changed',
+                                    'You have been allocated to a new supervisor, check the eSupervision System for details.',
+                                    $emailHeaders
+                                );
+
+                                // Send email to new supervisor
+                                $newSupervisorStudentUsernames[] = $studentDetails;
+                            } else {
+                                $outputText = 'Database error.';
+                            }
                         }
 
                         break;
@@ -117,22 +120,25 @@ if (isset($_POST['saveAllocate'])) {
                         $studentOldSecondMarkerUsername = $studentOldSecondMarkerDetails['staff_username'];
                         $oldSecondMarkerStudentUsernames[$studentOldSecondMarkerUsername][] = $studentDetails;
 
-                        // Insert into database
-                        if (AllocateStudentSecondMarker($link, $studentUserId, $allocated_staff_id, $staff_id)) {
-                            // Send email to student
-                            mail(
-                                $studentDetails['student_username'] . '@greenwich.ac.uk',
-                                'Second Marker Allocation Changed',
-                                'You have been allocated to a new second marker, check the eSupervision System for details.',
-                                $emailHeaders
-                            );
-
-                            // Send email to new second marker
-                            $newSecondMarkerStudentUsernames[] = $studentDetails;
-
-                            $outputText = 'Successfully allocated students\' second markers.';
+                        if ($studentOldSecondMarkerDetails['staff_id'] == $allocated_staff_id) {
+                            // Selected student is already allocated selected second marker
+                            $studentClashes[] = $studentDetails['student_first'] . ' ' . $studentDetails['student_last'];
                         } else {
-                            $outputText = 'Database error.';
+                            // Insert into database
+                            if (AllocateStudentSecondMarker($link, $studentUserId, $allocated_staff_id, $staff_id)) {
+                                // Send email to student
+                                mail(
+                                    $studentDetails['student_username'] . '@greenwich.ac.uk',
+                                    'Second Marker Allocation Changed',
+                                    'You have been allocated to a new second marker, check the eSupervision System for details.',
+                                    $emailHeaders
+                                );
+
+                                // Send email to new second marker
+                                $newSecondMarkerStudentUsernames[] = $studentDetails;
+                            } else {
+                                $outputText = 'Database error.';
+                            }
                         }
 
                         break;
@@ -227,6 +233,17 @@ if (isset($_POST['saveAllocate'])) {
                 break;
         }
         // EMAIL NEW STAFF END
+
+        // Redirect user
+        if (count($studentClashes) > 0) {
+            $_SESSION['clashes'] = $studentClashes;
+
+            // Redirect user
+            header('Location: search.php?allocation=' . $type . '&clashes=true');
+        } else {
+            // Redirect user
+            header('Location: search.php?allocation=' . $type);
+        }
     }
 } else {
     // Save selected students to session
@@ -238,7 +255,7 @@ if (isset($_POST['saveAllocate'])) {
 <html>
 
 <head>
-    <title>eSupervision - Allocate</title>
+    <title>eSupervision - Allocation</title>
     <meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">

@@ -45,9 +45,12 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
 // // $f->getSubmissions ();
 
 ?>
+<!DOCTYPE html>
+<html>
 
+<head>
 
-	<title>Submissions</title>
+	<title>eSupervision - Submissions</title>
 	<meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -64,6 +67,7 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
 
         $(document).ready(function () {
             $(".button-collapse").sideNav();
+            $('select').material_select();
         });
     </script>
 </head>
@@ -222,8 +226,5 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
 
 
 </div> <!-- end container -->
-</body><script>
- $(document).ready(function() {
-    $('select').material_select();
-  });
-</script>
+</body>
+</html>
