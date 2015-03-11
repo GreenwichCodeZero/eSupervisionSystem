@@ -151,31 +151,25 @@ $supervisor = $u->getResponse();
                             ?>
 
                              <!--  COMMENT HTML START -->
+							<hr />
+							<p class="grey lighten-3">
+								<b>
+									Comment from <?php echo $comment_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>
 
-                            <p><hr />
-                            <b>
-                                Comment from <?php echo $comment_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>
+									<?php
+									// Pretty format the date
+										$date = strtotime($comment['comment_date_added']);
+										$prettyDate = date('l j F Y', $date);
 
-                                <?php
-                                // Pretty format the date
-                                    $date = strtotime($comment['comment_date_added']);
-                                    $prettyDate = date('l j F Y', $date);
-
-                                    // Output date and time
-                                    echo $prettyDate . ', ' . substr($comment['comment_time_added'], 0, -3); 
-                                ?>
-
-
-                             </b> 
+										// Output date and time
+										echo $prettyDate . ', ' . substr($comment['comment_time_added'], 0, -3); 
+									?>
+								 </b> 
                              </p>
-                                
-                            <p><?php echo $comment['comment_body']; ?></p>
+							 <p class="grey lighten-3"><?php echo $comment['comment_body']; ?></p>
 
                             <!--  COMMENT HTML END -->
-
-                            <?
- }
-
+                            <? }
                         echo "</li>";
                     } ?>
                 </ul>
