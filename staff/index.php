@@ -164,8 +164,7 @@ foreach ($getStaffDetails as $staffDetail) {
                     <p>You have submitted <?php echo $meeting_count; ?> meeting records.</p>
                 </div>
                 <div class="card-action">
-                    <a href="meetings.php" title="View all meetings">View All</a>
-                    <a href="#" title="Request new meeting">Request</a>
+                    <a href="meetings.php" title="View all meetings">View or Request</a>
                 </div>
             </div>
         </div>
@@ -180,40 +179,11 @@ foreach ($getStaffDetails as $staffDetail) {
                     <p>You have received <?php echo $received_count; ?> messages.</p>
                 </div>
                 <div class="card-action">
-                    <a href="messages.php" title="View all messages">View All</a>
-                    <div style="display: inline-block;">
-                        <a href="#newMessageModal" title="Write new message">Message Project Students</a>
-                    </div>
+                    <a href="messages.php" title="View all messages">View or Send</a>
                 </div>
             </div>
         </div>
 	</div>
-
-    <!-- Start New Message Modal -->
-    <div id="newMessageModal" class="modal modal-fixed-footer">
-        <form method="post" action="messages.php">
-            <div class="modal-content">
-                <h4>Send a message to supervisor</h4>
-
-                <textarea name="communication_body"></textarea>
-                <input type="hidden" name="communication_action" value="sendmessage"/>
-                <input type="hidden" name="communication_from_id"
-                       value="<?php echo $currentStaff['student_username']; ?>" ?>
-                <input type="hidden" name="communication_to_id"
-                       value="<?php echo $supervisor[0]['staff_username']; ?>"/>
-            </div>
-            <div class="modal-footer">
-
-                <button class="waves-effect waves-green btn-flat ">Submit</button>
-            </div>
-        </form>
-    </div>
-    <!-- End New Message Modal -->
-    <script>
-        $(document).ready(function () {
-            $('.modal-trigger').leanModal();
-        });
-    </script>
 </body>
 
 </html>
