@@ -30,17 +30,24 @@ if ($_POST['communication_action']) {
 
 }
 
-$c->getAll('message', $stu_user, 'student');
+$u = new UserDetails ();
+$u->getStudentSupervisor($stu_id);
+$supervisor = $u->getResponse();
+
+// $c->getAll('message', $stu_user, 'student', $supervisor[0]['staff_username']);
+$c->getAll('message', $stu_user, 'student', $supervisor[0]['staff_username']);
+
 $sent = $c->getResponse();
-$sent_count = count($sent);
+$message_count = count($sent);
+
+// echo "<pre>";
+// print_r ($sent);
+// echo "</pre>";
 
 $c->received($stu_user, 'student');
 $received = $c->getResponse();
 $received_count = count($received);
 
-$u = new UserDetails ();
-$u->getStudentSupervisor($stu_id);
-$supervisor = $u->getResponse();
 
 
 ?>
@@ -72,7 +79,7 @@ $supervisor = $u->getResponse();
 <body>
 <nav>
     <div class="nav-wrapper green">
-        <ul id="nav-mobile" class="side-nav">
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li>
                 <a href="index.php">Dashboard</a>
             </li>
@@ -106,10 +113,11 @@ $supervisor = $u->getResponse();
                 $el = new errorList ();
                 if ($el->exists ()){
                     ?>
-                    <p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+                    <p class='<?php echo $el->getType (); ?>' style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
                    <?php echo $el->getResponse (); ?>
                     </p>
                    <?
+
                 }
             ?>
         </div>
@@ -144,29 +152,66 @@ $supervisor = $u->getResponse();
 			</a>
 			<div class="card-content">
 				<span class="card-title green-text">Message History</span>
-				<?php 
-				if ($received_count > 0) {
-					echo "<div><a href='receivedmessages.php'>Click here to view messages you have received</a></div>";
-				}
-				?>
-				<p class="green-text">You have submitted
-					<?php echo $sent_count; ?> messages.</p>
+
+
+				<p class="green-text"><?php  echo '<p>There are ' . $message_count . ' messages between you and ' . $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last'] . '.</p>'; ?>
+
 				<ul class="collection">
-					<?php foreach ($sent as $s) { 
-						echo '<li class="collection-item">'; 
-						echo ' <form action="readfile.php" method="POST">',
-								"<span><p><b> ".$s[ 'communication_body']."</b></p>",
-								"<p>eCommunication to ".$s['staff_first']." ".$s['staff_last']." added on ". $s['communication_date_added']." at ". $s['communication_time_added']. "</p></span>";
-							
-						if ($s['communication_file_id'] > 0 ) {
-							echo '&emsp; 
-							   
-							<input type="hidden" name="file_id" value="'.$s['communication_file_id'].'" />
-							 <button class="btn waves-light" >Submit
-								View <i class="mdi-content-send right"></i> </button>';
-						}
-						echo "</form>", "</li>";
-					} ?>
+
+                <?php  
+
+                if ($message_count > 0) {                
+                     foreach ($sent as $s) { ?>
+                            <li class="collection-item" <?php echo ($s['communication_from_id'] == $stu_user) ? 'style="background-color: #fafafa;"' : '' ?> >
+                                <form action="readfile.php" method="POST">
+                                    <p>
+                                        <span class="green-text">
+                                            <b>
+                                                <?php if ($s['communication_from_id'] == $stu_user) {
+                                                    // Message is from current student user
+                                                    echo 'Me';
+                                                } else {
+                                                    // Message is from staff
+                                                    echo $s['staff_first'] . " " . $s['staff_last'];
+                                                } ?>
+                                            </b>
+                                        </span>
+                                        &#8212;
+
+                                        <?php
+                                        // Pretty format the date
+                                        $date = strtotime($s['communication_date_added']);
+                                        $prettyDate = date('l j F Y', $date);
+
+                                        // Output date and time
+                                        echo $prettyDate . ', ' . substr($s['communication_time_added'], 0, -3); ?>
+                                    </p>
+
+                                    <p>
+                                        <?php echo $s['communication_body']; ?>
+                                    </p>
+
+                                    <?php
+                                    if ($s['communication_file_id'] > 0) { ?>
+                                        <hr/>
+                                        <p>
+                                            <input type="hidden" name="file_id"
+                                                   value="' . $s['communication_file_id'] . '"/>
+                                            <button
+                                                class="waves-effect waves-teal waves-light green btn-flat white-text"
+                                                style="margin-bottom: 0; margin-top: 15px;">
+                                                View File<i class="mdi-editor-attach-file right"></i></button>
+                                        </p>
+                                    <?php } ?>
+                                </form>
+                            </li>
+				    <?php	}  // END FOREACH
+
+                } else {// End If ?>
+
+                    <li class="collection-item">There are no messages to display.</li>
+                <?php } ?>
+
 				</ul>
 			</div>
 		</div>
