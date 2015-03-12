@@ -184,8 +184,8 @@ foreach ($getStaffDetails as $staffDetail) {
 
             </div>
 
-            <div class="row center">
-                <p><b>or</b></p>
+            <div>
+                <b>OR</b>
             </div>
 
             <div class="row">

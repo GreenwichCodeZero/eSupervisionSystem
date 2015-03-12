@@ -35,6 +35,41 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
 $notLoggedin7DaysQ = new Reports();
 $notLoggedin7DaysQ->notLoggedIn7Days();
 $notLoggedIn7Days = $notLoggedin7DaysQ->getResponse();
+
+
+$allStudentsQ = new UserDetails();
+$allStudentsQ->GetAllStudents();
+$allStudents = $allStudentsQ->getResponse();
+
+$studentSupervisorsQ = new UserDetails();
+$studentSecondMarkersQ = new UserDetails();
+
+$test = array();
+
+foreach($allStudents as $student){
+    
+    $studentSupervisorsQ->getStudentSupervisor($student['student_id']);
+    $studentSupervisors = $studentSupervisorsQ->getResponse();
+
+    foreach($studentSupervisors as $stuSupervisorMarkers){
+        $a = $stuSupervisorMarkers['staff_id'];
+
+    }
+
+    $studentSecondMarkersQ->getStudentSecondMarker($student['student_id']);
+    $studentSecondMarkers = $studentSecondMarkersQ->getResponse();
+
+    foreach($studentSecondMarkers as $stuSecondMarkers){
+        $b = $stuSecondMarkers['staff_id'];
+
+    }
+
+    if($a == $b){
+        array_push($test, $student['student_username']);
+    }
+}
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -149,10 +184,18 @@ $notLoggedIn7Days = $notLoggedin7DaysQ->getResponse();
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Students with the same supervisor and second marker</span>
+<?php
+        $stuDetailsQ = new UserDetails();
 
-                    <div class="collection">
-                        Display info here
-                    </div>
+        foreach($test as $id){
+            $stuDetailsQ->GetStudentDetails($id);
+            $stuDetails = $stuDetailsQ->getResponse();
+
+            foreach($stuDetails as $stu){
+                echo "<br>" . $stu['student_first'] .  " " . $stu['student_last'];
+            }
+        }
+?>
                 </div>
             </div>
         </div>

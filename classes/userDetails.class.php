@@ -14,6 +14,23 @@ class UserDetails {
         }
     }
 
+// Get all students
+    public function GetAllStudents() {
+        $result = $this->con->prepare(
+            'SELECT * FROM esuper_student');
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
+
 //update students last login date
 public function updateLoggedInDate($user_name) {
         $result = $this->con->prepare(
@@ -452,7 +469,7 @@ public function updateLoggedInDate($user_name) {
                t.staff_id,
                t.staff_profile_link,
                t.staff_username
-             FROM
+               FROM
                esuper_student s,
                esuper_staff t,
                esuper_user_allocation a
@@ -488,7 +505,8 @@ public function updateLoggedInDate($user_name) {
                t.staff_last,
                t.staff_id,
                t.staff_profile_link,
-               t.staff_username
+               t.staff_username,
+               s.student_id
              FROM
                esuper_student s,
                esuper_staff t,
