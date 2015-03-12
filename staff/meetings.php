@@ -439,8 +439,10 @@ foreach ($getStaffDetails as $staffDetail) {
 <div class="container">
 
     <!-- Output message text -->
+    <?php echo $outputText; ?>
+
     <div class="red-text text-light-3 validation-error">
-        <?php echo $outputText; ?><?php echo $errorListOutput; ?>
+        <?php echo $errorListOutput; ?>
     </div>
 
     <!-- MEETING RECORD DETAILS SECTION START-->
