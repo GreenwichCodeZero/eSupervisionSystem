@@ -51,6 +51,10 @@ class errorList {
 		return $message;
 	}
 
+	public function getType () {
+		return $_SESSION['response']['type'];
+	}
+
 
 }
 
