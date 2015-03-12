@@ -190,7 +190,6 @@ $superFiles = array
         $(document).ready(function () {
             $('select').material_select();
             $(".button-collapse").sideNav();
-            $('.modal-trigger').leanModal();
         });
     </script>
 </head>
@@ -230,537 +229,393 @@ $superFiles = array
     </nav>
 
 <div class="container">
-    
- <div class="row">
-
-
-        <div class="col s10 m12 offset-s1 card">
-          
-
-            <div class="card-content">
-                <span class="card-title green-text">Student Upload History</span>
+	<div class="row">
+		<div class="col s10 m12 offset-s1 card">
+			<div class="card-content">
+				<span class="card-title green-text">Student Upload History</span>
                 <?php if ($filtered) {
                     // Get student name
                     $ud = new UserDetails ();
                     $ud->GetStudentDetails($_GET['sid']);
                     $student = $ud->getResponse();
-
                     if ( !isset($_GET['sid']) ) {
                         echo '<p>Your allocated students have submitted '. $file_count .' blog posts collectively.</p>';
                     } else {
-
                         echo '<p>'. $student[0]['student_first'] . ' ' . $student[0]['student_last'] . ' has submitted '. $file_count .' blog posts.</p>';
                     }
-
-
                 } ?>
 
-                <div class="row">
-                    <!-- STUDENT FILTER FORM START -->
-                    <form id="communication_filter" action="" method="GET">
-                        <div class="col s12 m9">
-                            <label for="communication_student_id_filter">Select a student</label>
-                            <select name="sid" id="communication_student_id_filter">
-                                <option value="" disabled="disabled" selected="selected">Choose...</option>
-                                <?php foreach ($students as $stu) {
-                                    echo '<option value="' . $stu['student_username'] . '"' . (($_GET['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
-                                } ?>
-                            </select>
-                        </div>
-                        <div class="input-field col s12 m3">
-
-                            <button type="submit"
-                                    class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
-                                Filter
-                            </button>
-                        </div>
-                    </form>
-                    <!-- STUDENT FILTER FORM END -->
-                </div>
+				<!-- STUDENT FILTER FORM START -->
+				<form id="communication_filter" action="" method="GET">
+						<label for="communication_student_id_filter">Select a student</label>
+						<select name="sid" id="communication_student_id_filter">
+							<option value="" disabled="disabled" selected="selected">Choose...</option>
+							<?php foreach ($students as $stu) {
+								echo '<option value="' . $stu['student_username'] . '"' . (($_GET['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
+							} ?>
+						</select>
+						<button type="submit" class="c_right-align waves-effect waves-teal waves-light blue btn-flat white-text">Filter</button>
+				</form>
+                <!-- STUDENT FILTER FORM END -->
 
                 <?php if ($filtered > 0) { ?>
+					<!-- Uploads SECTION START -->
+					 <div>
+						<?php
+							$el = new errorList ();
+							if ($el->exists ()){
+								?>
+								<p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+									<?php echo $el->getResponse (); ?>
+								</p>
+							   <?
+							}
+						?>
+					</div>
+					<br/><br/>
+						<div>
+							<h5 class="center-align">Project Uploads</h5>
+							<div id="submitBlog">
+								<i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
+								<!-- NEW FILE UPLOAD FORM START -->
+								<form id="communication" method="POST" action="" enctype="multipart/form-data">
+									<input type='hidden' name='file_action' value='uploadfile'/>
+									<input type='hidden' name='communication_action' value='sendmessage' />
+									<input type="hidden" name="communication_from_id" value="<?php echo $staff_username; ?>">
+									<input type='hidden' name='communication_type_id' value='2'/>
+									<div class="col s6">
+										<input type='hidden' name="communication_to_id" value='<?php echo $_GET['sid']; ?>'>
+										<select name="file_type_id">
+										<?php foreach ($fileTypes as $ft) {
+												echo "<option value='".$ft['file_type_id']."'>".$ft['file_type_name']."</option>";
+											}?>
+										</select>		
+									</div>
+									<div class="input-field col s12">
+										<label for="communication_body">Upload</label>
+										<input type='hidden' name="communication_body" value = '### FILE UPLOAD - no content ###' />
+									</div>
+									<div class="file-field input-field col s12">
+										<div class="waves-effect waves-teal waves-light green btn-flat white-text">
+											<span>File</span>
+											<input type="file" name="fileToUpload" id="fileToUpload"/>
+										</div>
+									</div>
+									<div class="input-field">
+										<button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Upload</button>
+									</div>
+								</form>
+							</div>
+						</div>
+						<!-- NEW UPLOAD FORM END             -->
+						<div class="col s12">
+							<div class="card-content">
+                                <span class="card-title green-text">Supervisor Uploads</span>
+								<div class='c_right-align'>
+									<a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry"> 
+										<button class="waves-effect waves-teal waves-light green btn-flat white-text">Submit new file</button>
+									</a>
+								</div>
+                                <p class="green-text"><?php echo $supervisor[0]['staff_first']." ".$supervisor[0]['staff_last'];?> has uploaded
+                                    <?php echo $super_count; ?> files</p>
+                                <ul class="collection">
+									<?php 
+									if ($superFiles['feedback']['count'] > 0) {
+										foreach ($superFiles['feedback']['files'] as $sf) { 
+											echo '<li class="collection-item">'; 
+											$date = strtotime($sf['communication_date_added']);
+											$prettyDate = date('l j F Y', $date);
 
-                    
-                    <div class="row">
-                        <!-- Uploads SECTION START -->
-                         <div class="row">
-                            <?php
-                                $el = new errorList ();
-                                if ($el->exists ()){
-                                    ?>
-                                    <p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
-                                   <?php echo $el->getResponse (); ?>
-                                    </p>
-                                   <?
-                                }
-                            ?>
-                        </div>
-                    </div>
+											// Output date and time
+											echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
 
-                    <div class="row">
-                        <h5 class="center-align">Project Uploads</h5>
-                    </div>
-
-
-                        <div id="submitBlog" class="row">
-                            <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
-
-                        <!-- NEW FILE UPLOAD FORM START -->
-
-                          <form id="communication" method="POST"
-                              action=""
-                              enctype="multipart/form-data">
-                            <input type='hidden' name='file_action' value='uploadfile'/>
-                            <input type='hidden' name='communication_action' value='sendmessage' />
-                            <input type="hidden" name="communication_from_id" value="<?php echo $staff_username; ?>">
-                            <input type='hidden' name='communication_type_id' value='2'/>
-
-                           
-
-                            <div class="col s12">
-                                <input type='hidden' name="communication_to_id" value='<?php echo $_GET['sid']; ?>'>
-
-                            <select name="file_type_id">
-                             <?php foreach ($fileTypes as $ft) {
-                                        echo "<option value='".$ft['file_type_id']."'>".$ft['file_type_name']."</option>";
-                                    }
-                                    ?>
-                            </select>
-                                    
-                            </div>
-
-                            <div class="input-field col s12">
-                                <label for="communication_body">Message</label>
-                                <input type='hidden' name="communication_body" value = '### FILE UPLOAD - no content ###' />
-                            </div>
-                            <div class="file-field input-field col s12">
-                                <div class="waves-effect waves-teal waves-light green btn-flat white-text">
-                                    <span>File</span>
-                                    <input type="file" name="fileToUpload" id="fileToUpload"/>
-                                </div>
-                            </div>
-                            <div class="input-field col s12">
-                                <button
-                                    class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
-                                    Send
-                                </button>
-                            </div>
-                        </form>
-
-
-                        <!-- NEW UPLOAD FORM END             -->
-                        </div>
-
-
-                    <div class="row">
-                  <a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry" class="c_right-align"> 
-                                <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit new file</div>
-                            </a>
-                    </div>     
-
-
-
-                    <div class="row">
-
-                            <div class="card">
-                            <form method = 'post'>
-                                <div class="card-content">
-                                    <span class="card-title green-text">Project Title</span>
-
-                                    <p>
-                                        <input type='text' name ='title' placeholder='<?php echo ( $student_projectTitle ? $student_projectTitle[0]['project_title'] : 'Insert title ...' ); ?>' />
-                                        <input type='hidden' name='projectDetails_action' value = 'projectDetails_action' />
-                                        <button>Update</button>
-                                    </p>
-                                </div>
-                                </form>
-                            </div>
-
-                    </div>
-
-                    <div class="Row">
-                        <div class="col s12 m12 l6">
+											echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
+												<input type='hidden' name='file_id' value='".$sf['file_id']."' />
+												<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>                                            
+												</form>";
+											echo "</li>";
+											}                  
+										} else {
+											echo ' <li class="collection-item">
+											You have not uploaded anything yet
+											</li> ';
+											}
+										} else if ($blog_count == 0) {
+											// No messages found for current student
+											echo '<li class="collection-item">No posts to display</li>';
+										} ?>
+								</ul>
+							</div>
+						</div>
+						<br/>
+                        <div class="col s12 m6">
                             <div class="card">
                                 <div class="card-content">
-                                    <span class="card-title green-text">Project Proposal</span>
-
-                                    <p>
-                                       
-                                           Latest Upload: 
-                                           <?php echo ( 
-                                            $student_proposal[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_proposal[0]['file_id']."'/><a>".$student_proposal[0]['file_name']."</a><button>download</button>
-                                            </form>"
-                                            : "no file uploaded yet" 
-                                            );  
-                                        ?>
-                                    </p>
-
-                                   <hr />
-                                    <p>
-                                        <?php 
-                                
-                                if ($superFiles['proposal']['count'] > 0) {
-                                    foreach ($superFiles['proposal']['files'] as $sf) { 
-                                        
-                                        echo '<li class="collection-item">'; 
-
-                                        $date = strtotime($sf['communication_date_added']);
-                                        $prettyDate = date('l j F Y', $date);
-
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
-
-                                        echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
-                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
-                                            
-                                        echo "</li>";
-                                        }                  
-
-                                        
-                                  
-                                } else {
-                               
-
-                                     echo ' <li class="collection-item">
-                                    You have not uploaded anything
-                                    </li> ';
-                                
-                                }
-                                ?></p>
-                                </div>
-                                </div>
-                            </div>
-
-                          <div class="col s12 m12 l6">
+									<form method = 'post'>
+										<span class="card-title green-text">Project Title</span>
+										<div>
+											<input type='text' name ='title' placeholder='<?php echo ( $student_projectTitle ? $student_projectTitle[0]['project_title'] : 'Insert title ...' ); ?>' />
+											<input type='hidden' name='projectDetails_action' value = 'projectDetails_action' />
+											<button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Update</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col s12 m6">
                             <div class="card">
                                 <div class="card-content">
-                                    <span class="card-title
-                                    green-text">Contextual Report</span>
+									<span class="card-title green-text">Project Proposal</span>
+									<div class='section'>Latest Upload: 
+										<ul class="collection">
+										<?php 
+										echo "<li class='collection-item'>";
+											echo (
+												$student_proposal[0]['file_id'] > 0 ? 
+												"<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_proposal[0]['file_id']."'/><a>".$student_proposal[0]['file_name']."</a>
+												<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
+												</form>"
+												: "You have not uploaded anything yet" );
+											echo "</li>";
+												
+												if ($superFiles['proposal']['count'] > 0) {
+													foreach ($superFiles['proposal']['files'] as $sf) { 
+														
+														echo '<li class="collection-item">'; 
 
-                                    <p>
-                                       
-                                           Latest Upload: 
-                                           <?php echo ( 
-                                            $student_contextual[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_contextual[0]['file_id']."'/><a>".$student_contextual[0]['file_name']."</a><button>download</button>
-                                            </form>"
-                                            : "no file uploaded yet" 
-                                            );  
-                                        ?>
-                                    </p>
+														$date = strtotime($sf['communication_date_added']);
+														$prettyDate = date('l j F Y', $date);
 
-                                   <hr />
-                                    <p>
-                                        <?php 
-                                
-                                if ($superFiles['contextual']['count'] > 0) {
-                                    foreach ($superFiles['contextual']['files'] as $sf) { 
-                                        
-                                        echo '<li class="collection-item">'; 
+														// Output date and time
+														echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
 
-                                        $date = strtotime($sf['communication_date_added']);
-                                        $prettyDate = date('l j F Y', $date);
+														echo ' <form action="readfile.php" method="POST">', "<div>{$sf['communication_body']}</div><a> {$sf[ 'file_name']}</a>                    
+															<input type='hidden' name='file_id' value='".$sf['file_id']."' />
+															<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+															
+														echo "</li>";
+													}                  
+												} else {
+													echo ' <li class="collection-item">
+													You have not uploaded anything yet
+													</li> ';
+												}
+											?>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
 
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
+						<div class="col s12 m6">
+							<div class="card">
+								<div class="card-content">
+									<span class="card-title green-text">Contextual Report</span>
+									<div>Latest Upload: 
+										<ul class="collection">
+											<?php 
+												echo "<li class='collection-item'>";
+												echo ( 
+													$student_contextual[0]['file_id'] > 0 ? 
+													"<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_contextual[0]['file_id']."'/><a>".$student_contextual[0]['file_name']."</a> <button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
+													</form>"
+													: "You have not uploaded anything yet" 
+													);  
+											
+												if ($superFiles['contextual']['count'] > 0) {
+													foreach ($superFiles['contextual']['files'] as $sf) { 
+														
+														echo '<li class="collection-item">'; 
 
-                                        echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
-                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
-                                            
-                                        echo "</li>";
-                                        }                  
+														$date = strtotime($sf['communication_date_added']);
+														$prettyDate = date('l j F Y', $date);
 
-                                        
-                                  
-                                } else {
-                               
+														// Output date and time
+														echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
 
-                                     echo ' <li class="collection-item">
-                                    You have not uploaded anything
-                                    </li> ';
-                                
-                                }
-                                ?></p>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col s12 m12 l6">
+														echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
+															<input type='hidden' name='file_id' value='".$sf['file_id']."' />
+															<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
+															</form>";
+														echo "</li>";
+														}                    
+												} else {
+													echo ' <li class="collection-item">
+													You have not uploaded anything yet
+													</li> ';
+												}?>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+
+                        <div class="col s12 m6">
                             <div class="card">
                                 <div class="card-content">
                                     <span class="card-title green-text">Inital Report</span>
+                                    <div>Latest Upload: 
+										<ul class="collection">
+											<?php 
+											echo "<li class='collection-item'>";
+											echo ( 
+												$student_initial[0]['file_id'] > 0 ? 
+												"<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_initial[0]['file_id']."'/><a>".$student_initial[0]['file_name']."</a>
+												 <button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
+												</form>"
+												: "You have not uploaded anything yet" 
+												);
+												if ($superFiles['initial']['count'] > 0) {
+													foreach ($superFiles['initial']['files'] as $sf) { 
+														
+														echo '<li class="collection-item">'; 
 
-                                    <p>
-                                        
-                                           Latest Upload: 
-                                           <?php echo ( 
-                                            $student_initial[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_initial[0]['file_id']."'/><a>".$student_initial[0]['file_name']."</a><button>download</button>
-                                            </form>"
-                                            : "no file uploaded yet" 
-                                            );  
-                                        ?>
-                                    </p>
-                                    <hr />
-                                    <p>
-                                        <?php 
-                                
-                                if ($superFiles['initial']['count'] > 0) {
-                                    foreach ($superFiles['initial']['files'] as $sf) { 
-                                        
-                                        echo '<li class="collection-item">'; 
+														$date = strtotime($sf['communication_date_added']);
+														$prettyDate = date('l j F Y', $date);
 
-                                        $date = strtotime($sf['communication_date_added']);
-                                        $prettyDate = date('l j F Y', $date);
+														// Output date and time
+														echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
 
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
-
-                                        echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
-                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
-                                            
-                                        echo "</li>";
-                                        }                  
-
-                                        
-                                  
-                                } else {
-                               
-
-                                     echo ' <li class="collection-item">
-                                    You have not uploaded anything
-                                    </li> ';
-                                
-                                }
-                                ?></p>
+														echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
+															<input type='hidden' name='file_id' value='".$sf['file_id']."' />
+															 <button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+															echo "</li>";
+														}  
+												} else {
+													 echo ' <li class="collection-item">
+													You have not uploaded anything yet
+													</li> ';
+												}
+												?>
+										</ul>
+									</div>
                                 </div>
                             </div>
                         </div>
-
-
-                        <div class="col s12 m12 l6">
+                        <div class="col s12 m6">
                             <div class="card">
                                 <div class="card-content">
                                     <span class="card-title green-text">Interim Report</span>
 
-                                    <p>
-                                           Latest Upload: 
-                                           <?php echo ( 
-                                            $student_interim[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_interim[0]['file_id']."'/><a>".$student_interim[0]['file_name']."</a><button>download</button>
-                                            </form>"
-                                            : "no file uploaded yet" 
-                                            );  
-                                        ?>
-                                    </p>
-                                    <hr />
-                                    <p>    <?php 
-                                
-                                if ($superFiles['interim']['count'] > 0) {
-                                    foreach ($superFiles['interim']['files'] as $sf) { 
-                                        
-                                        echo '<li class="collection-item">'; 
+                                    <div>Latest Upload: 
+                                           <ul class="collection">
+											<?php 
+												echo "<li class='collection-item'>";
+												echo ( 
+												$student_interim[0]['file_id'] > 0 ? 
+												"<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_interim[0]['file_id']."'/><a>".$student_interim[0]['file_name']."</a> <button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
+												</form>"
+												: "You have not uploaded anything yet" 
+												);  
+											
+											if ($superFiles['interim']['count'] > 0) {
+												foreach ($superFiles['interim']['files'] as $sf) { 
+													
+													echo '<li class="collection-item">'; 
 
-                                        $date = strtotime($sf['communication_date_added']);
-                                        $prettyDate = date('l j F Y', $date);
+													$date = strtotime($sf['communication_date_added']);
+													$prettyDate = date('l j F Y', $date);
 
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
+													// Output date and time
+													echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
 
-                                        echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
-                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
-                                            
-                                        echo "</li>";
-                                        }                  
-
-                                        
-                                  
-                                } else {
-                               
-
-                                     echo ' <li class="collection-item">
-                                    You have not uploaded anything
-                                    </li> ';
-                                
-                                }
-                                ?></p>
-
-                                    
-                                </div>
+													echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
+														<input type='hidden' name='file_id' value='".$sf['file_id']."' />
+														<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+													echo "</li>";
+													}
+											} else {
+												 echo ' <li class="collection-item">
+												You have not uploaded anything yet
+												</li> ';
+											}?>
+										</ul>
+									</div>
+                               </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12 m12 l6">
+                        <div class="col s12 m6">
                             <div class="card">
                                 <div class="card-content">
                                     <span class="card-title green-text">Project Report</span>
-
-                                    <p>
-                                           Latest Upload: 
-                                           <?php echo ( 
+									<div>Latest Upload: 
+                                        <ul class="collection">
+											<?php 
+												echo "<li class='collection-item'>";
+												echo ( 
                                             $student_project[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_project[0]['file_id']."'/><a>".$student_project[0]['file_name']."</a><button>download</button>
+                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_project[0]['file_id']."'/><a>".$student_project[0]['file_name']."</a>
+											<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
                                             </form>"
                                             : "no file uploaded yet" 
                                             );  
-                                        ?>
-                                    </p>
-                                    <hr />
-                                    <p>    <?php 
-                                
-                                if ($superFiles['project']['count'] > 0) {
-                                    foreach ($superFiles['project']['files'] as $sf) { 
-                                        
-                                        echo '<li class="collection-item">'; 
+                                   
+											if ($superFiles['project']['count'] > 0) {
+												foreach ($superFiles['project']['files'] as $sf) { 
+													
+													echo '<li class="collection-item">'; 
 
-                                        $date = strtotime($sf['communication_date_added']);
-                                        $prettyDate = date('l j F Y', $date);
+													$date = strtotime($sf['communication_date_added']);
+													$prettyDate = date('l j F Y', $date);
 
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
+													// Output date and time
+													echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
 
-                                        echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
-                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
-                                            
-                                        echo "</li>";
-                                        }                  
-
-                                        
-                                  
-                                } else {
-                               
-
-                                     echo ' <li class="collection-item">
-                                    You have not uploaded anything
-                                    </li> ';
-                                
-                                }
-                                ?></p>
+													echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
+														<input type='hidden' name='file_id' value='".$sf['file_id']."' />
+														 <button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+													echo "</li>";
+													}           
+											} else {
+												echo ' <li class="collection-item">
+												You have not uploaded anything yet
+												</li> ';
+											}?>
+										</ul>
+									</div>
                                 </div>
                             </div>
                         </div>
-
-
-                        <div class="col s12 m12 l6">
+                        <div class="col s12 m6">
                             <div class="card">
                                 <div class="card-content">
                                     <span class="card-title green-text">Research Ethics</span>
+									<div>Latest Upload: 
+										<ul class="collection">
+											<?php 
+												echo "<li class='collection-item'>";
+												echo ( 
+												$student_ethics[0]['file_id'] > 0 ? 
+												"<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_ethics[0]['file_id']."'/><a>".$student_ethics[0]['file_name']."</a>
+												 <button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
+												</form>"
+												: "You have not uploaded anything yet</li>");
+												if ($superFiles['ethics']['count'] > 0) {
+													foreach ($superFiles['ethics']['files'] as $sf) { 
+														
+														echo '<li class="collection-item">';
+														$date = strtotime($sf['communication_date_added']);
+														$prettyDate = date('l j F Y', $date);
 
-                                    <p>
-                                           Latest Upload: 
-                                           <?php echo ( 
-                                            $student_ethics[0]['file_id'] > 0 ? 
-                                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_ethics[0]['file_id']."'/><a>".$student_ethics[0]['file_name']."</a><button>download</button>
-                                            </form>"
-                                            : "no file uploaded yet" 
-                                            );  
-                                        ?>
-                                    </p><hr />
-                                    <p>    <?php 
-                                
-                                if ($superFiles['ethics']['count'] > 0) {
-                                    foreach ($superFiles['ethics']['files'] as $sf) { 
-                                        
-                                        echo '<li class="collection-item">'; 
+														// Output date and time
+														echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
 
-                                        $date = strtotime($sf['communication_date_added']);
-                                        $prettyDate = date('l j F Y', $date);
-
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
-
-                                        echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
-                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
-                                            
-                                        echo "</li>";
-                                        }                  
-
-                                        
-                                  
-                                } else {
-                               
-
-                                     echo ' <li class="collection-item">
-                                    You have not uploaded anything
-                                    </li> ';
-                                
-                                }
-                                ?></p>
-
-                                   
+														echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
+															<input type='hidden' name='file_id' value='".$sf['file_id']."' />
+															 <button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+														echo "</li>";
+														}        
+												} else {
+													echo ' <li class="collection-item">
+													You have not uploaded anything yet
+													</li> ';
+												}
+												?>
+										</ul>
+									</div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    </div>
-                    <div class="row">
-                 <div class="col s10 m12 offset-s1 card">
-                            
-                            <div class="card-content">
-                                <span class="card-title green-text">Supervisor Uploads</span>
-                                <p class="green-text"><?php echo $supervisor[0]['staff_first']." ".$supervisor[0]['staff_last'];?> has uploaded
-                                    <?php echo $super_count; ?> files</p>
-                                
-                                <ul class="collection">
-                                <?php 
-                                
-                                if ($superFiles['feedback']['count'] > 0) {
-                                    foreach ($superFiles['feedback']['files'] as $sf) { 
-                                        
-                                        echo '<li class="collection-item">'; 
-
-                                        $date = strtotime($sf['communication_date_added']);
-                                        $prettyDate = date('l j F Y', $date);
-
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3); 
-
-                                        echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
-                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
-                                            
-                                        echo "</li>";
-                                        }                  
-
-                                        
-                                  
-                                } else {
-                               
-
-                                     echo ' <li class="collection-item">
-                                    You have not uploaded anything
-                                    </li> ';
-                                
-                                }
-                                ?>
-                    </ul>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                  <?php  } else if ($blog_count == 0) {
-
-                    // No messages found for current student
-                    
-                    echo '<ul class="collection"><li class="collection-item">No posts to display</li></ul>';
-                } ?>
-            </div>
-        </div>
-        <!--MESSAGING SECTION END-->
     </div>     
 
 
