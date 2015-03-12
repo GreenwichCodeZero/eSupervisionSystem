@@ -169,8 +169,7 @@ foreach ($getStaffDetails as $staffDetail) {
                     <div class="col s12 m9">
                         <label for="name">Student name</label>
                         <input type="search" name="name" id="name" placeholder="Enter a name"
-                               value="<?php echo $name; ?>" onkeyup="ValidateName(this.value);"
-                               onblur="ValidateName(this.value);">
+                               value="<?php echo $name; ?>" onkeyup="ValidateName(this.value);">
                         <span id="nameValidation" class="red-text text-light-3 validation-error"></span>
                     </div>
                     <div class="input-field col s12 m3">
@@ -195,8 +194,7 @@ foreach ($getStaffDetails as $staffDetail) {
 
                     <div class="col s12 m9">
                         <label for="programme">Student programme</label>
-                        <select name="programme" id="programme" onkeyup="ValidateProgramme(this.value);"
-                                onblur="ValidateProgramme(this.value);">
+                        <select name="programme" id="programme" onkeyup="ValidateProgramme(this.value);">
                             <option value="">Select a programme</option>
                             <?php
                             $search = new Search ();
@@ -333,9 +331,6 @@ foreach ($getStaffDetails as $staffDetail) {
 
             echo '</ul></div>';
         }
-    } else {
-        // No search entered
-        echo '<p>Enter search terms.</p>';
     } ?>
     <!-- Results end -->
 
