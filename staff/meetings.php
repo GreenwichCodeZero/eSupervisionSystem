@@ -115,9 +115,6 @@ if (!($link = GetConnection())) {
             $errorListOutput = DisplayErrorMessages($errorList);
         } else {
             // No errors
-
-            echo '<script type="text/javascript">alert("' . $meetingId . ' ' . $contentRecord . '");</script>';
-
             // Insert record into database
             if (UpdateRecordMeeting($link, $meetingId, $contentRecord)) {
                 // Saved
