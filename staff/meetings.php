@@ -671,17 +671,12 @@ foreach ($getStaffDetails as $staffDetail) {
                                 <a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=2"
                                title="Accept">Accept</a>
                             <a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=3"
-                               title="Decline">Decline</a>
-                            <a href="meetings.php?meeting=' . $meeting['meeting_id'] . '?>&status=4"
-                               title="Decline">Held</a>';
-                            } else if ($meeting['meeting_status'] == "Held") {
-                                echo '<a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=3"
                                title="Decline">Decline</a>';
-                            } else if ($meeting['meeting_status'] == "Accepted") {
+                            }  else if ($meeting['meeting_status'] == "Accepted") {
                                 echo '<a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=3"
                                title="Decline">Decline</a>
-                               <a href="meetings.php?meeting=' . $meeting['meeting_id'] . '?>&status=4"
-                               title="Decline">Held</a>';
+                               <a href="meetings.php?meeting=' . $meeting['meeting_id'] . '&status=4"
+                               title="Held">Held</a>';
                             }
 
                             ?>
