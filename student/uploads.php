@@ -75,7 +75,7 @@ $supervisor = $u->getResponse();
 <body>
     <nav>
         <div class="nav-wrapper green">
-            <ul id="nav-mobile" class="side-nav">
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li>
                     <a href="index.php">Dashboard</a>
                 </li>

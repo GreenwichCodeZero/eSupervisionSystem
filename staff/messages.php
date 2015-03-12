@@ -39,10 +39,7 @@ if ($_POST['communication_action']) {
     exit;
 }
 
-$el = new errorList ();
-if ($el->exists()) {
-    echo $el->getResponse();
-}
+
 
 // Determine which messages to display
 if ($_GET['sid']) {
@@ -51,10 +48,10 @@ if ($_GET['sid']) {
 
     // Get messages and count
     $sent = $c->getResponse();
-    $sent_count = count($sent);
+    $message_count = count($sent);
 } else {
     // Get sent messages from all students
-    $sent_count = -1;
+    $message_count = -1;
 }
 
 // Get count of received messages
@@ -148,7 +145,7 @@ foreach ($getStaffDetails as $staffDetail) {
 
 <nav>
     <div class="nav-wrapper green">
-        <ul id="nav-mobile" class="side-nav">
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li>
                 <a href="index.php">Dashboard</a>
             </li>
@@ -183,7 +180,19 @@ foreach ($getStaffDetails as $staffDetail) {
 <div class="container">
     <div class="row">
         <!-- MESSAGE SECTION START-->
+ <div>
+            <?php
+                $el = new errorList ();
+                if ($el->exists ()){
+                    ?>
+                    <p class='<?php echo $el->getType (); ?>' style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+                   <?php echo $el->getResponse (); ?>
+                    </p>
+                   <?
 
+                }
+            ?>
+        </div>
         <!-- NEW MESSAGE SECTION START-->
         <div class="row" id="sendMessage">
             <div class="col s12">
@@ -247,13 +256,13 @@ foreach ($getStaffDetails as $staffDetail) {
 
             <div class="card-content">
                 <span class="card-title green-text">Message History</span>
-                <?php if ($sent_count > 0) {
+                <?php if ($message_count > 0) {
                     // Get student name
                     $ud = new UserDetails ();
                     $ud->GetStudentDetails($_GET['sid']);
                     $student = $ud->getResponse();
 
-                    echo '<p>There are ' . $sent_count . ' messages between you and ' . $student[0]['student_first'] . ' ' . $student[0]['student_last'] . '.</p>';
+                    echo '<p>There are ' . $message_count . ' messages between you and ' . $student[0]['student_first'] . ' ' . $student[0]['student_last'] . '.</p>';
                 } ?>
 
                 <div class="row">
@@ -279,7 +288,7 @@ foreach ($getStaffDetails as $staffDetail) {
                     <!-- STUDENT FILTER FORM END -->
                 </div>
 
-                <?php if ($sent_count > 0) {
+                <?php if ($message_count > 0) {
                     foreach ($sent as $s) { ?>
                         <ul class="collection">
                             <li class="collection-item" <?php echo ($s['communication_from_id'] == $staff_username) ? 'style="background-color: #fafafa;"' : '' ?> >
@@ -327,7 +336,7 @@ foreach ($getStaffDetails as $staffDetail) {
                             </li>
                         </ul>
                     <?php }
-                } else if ($sent_count == 0) {
+                } else if ($message_count == 0) {
                     // No messages found for current student
                     echo '<ul class="collection"><li class="collection-item">No messages</li></ul>';
                 } ?>
