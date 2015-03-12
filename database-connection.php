@@ -33,7 +33,32 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         if (mysqli_num_rows($studentResult) == 1) {
             // User found in student table
             if (password_verify($password, $studentPasswordHash)) {
-                $sql = "SELECT student_id, student_first, student_last, student_username, student_banner_id, student_active AS is_active FROM esuper_student WHERE student_username = '$username'";
+                $sql =
+                    "SELECT
+                       s.student_id,
+                       s.student_first,
+                       s.student_last,
+                       s.student_username,
+                       s.student_banner_id,
+                       s.student_active AS is_active,
+                       p.programme_id,
+                       p.programme_title
+                     FROM
+                       esuper_student s,
+                       esuper_programme p,
+                       (SELECT * FROM (
+                         SELECT us3.* FROM esuper_user_programme us3 ORDER BY us3.last_updated DESC
+                       ) us2
+                       GROUP BY us2.student_id) us
+                     WHERE
+                       s.student_username = '$username'
+                     AND
+                       p.programme_id = us.programme_id
+                     AND
+                       us.student_id = s.student_id
+                     ORDER BY
+                       s.student_last ASC, s.student_first ASC";
+
                 $result = mysqli_query($link, $sql);
                 $student = mysqli_fetch_assoc($result);
                 $student += array('user_type' => 'student');
@@ -57,7 +82,6 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
 
     // Function that returns timeslots by staff username
     function GetStaffTimeslots($link, $staffUsername) {
-        //todo make sure timeslot is available and not already taken
         $sql = "SELECT mt.timeslot_id, mt.timeslot_day, mt.timeslot_time
                 FROM esuper_meeting_timeslot mt
                 JOIN esuper_staff s ON mt.staff_id = s.staff_id
