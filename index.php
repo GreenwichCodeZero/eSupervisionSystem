@@ -63,7 +63,7 @@ if (isset($_POST['login'])) {
                 RedirectToDashboard($_SESSION['currentUser']['user_type']);
             } else {
                 // User is not active
-                array_push($errorList, 'Your account is not active, contact student services');
+                array_push($errorList, 'Your account is not active, contact IT support');
             }
 
             // Close connection
