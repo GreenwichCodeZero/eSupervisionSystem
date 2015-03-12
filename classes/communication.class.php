@@ -262,28 +262,39 @@ class Communication {
 
                         break;
                     case 'student':
-                        $result = $this->con->prepare(
-                            'SELECT
-						`esuper_communication`.`communication_id`
-						, `esuper_communication`.`communication_body`
-						, `esuper_communication`.`communication_date_added`
-						, `esuper_communication`.`communication_time_added`
-						, `esuper_communication`.`communication_file_id`
-						, `esuper_staff`.`staff_first`
-						, `esuper_staff`.`staff_last`
-						FROM
-						`esuper_communication`,
-						`esuper_staff`
-						 WHERE
-						`esuper_communication`.`communication_type_id` = 2
-						AND
-						`esuper_communication`.`communication_from_id` = :user
-						AND
-						`esuper_staff`.`staff_username` = `esuper_communication`.`communication_to_id`
-						ORDER BY `esuper_communication`.communication_date_added DESC, `esuper_communication`.communication_time_added DESC');
+                        $sql = 'SELECT
+                                  c.communication_id,
+                                  c.communication_body,
+                                  c.communication_date_added,
+                                  c.communication_time_added,
+                                  c.communication_file_id,
+                                  s.staff_first,
+                                  s.staff_last,
+                                  c.communication_from_id,
+                                  c.communication_to_id
+                                FROM
+                                  esuper_communication c,
+                                  esuper_staff s
+                                WHERE
+                                  c.communication_type_id = 2
+                                AND
+                                  (s.staff_username = c.communication_from_id OR s.staff_username = c.communication_to_id)';
 
-                        $result->bindValue(':user', $user);
+                        // Add filter if necessary
+                        if ($filter_username != null) {
+                            $sql .= ' AND
+                                        (
+                                          (c.communication_from_id = :staff_username AND c.communication_to_id = :student_username)
+                                        OR
+                                          (c.communication_from_id = :student_username AND c.communication_to_id = :staff_username)
+                                        )';
+                        }
 
+                        $sql .= ' ORDER BY c.communication_date_added DESC, c.communication_time_added DESC';
+
+                        $result = $this->con->prepare($sql);
+                        $result->bindValue(':staff_username', $filter_username);
+                        $result->bindValue(':student_username', $user);
                         break;
                 }
 
