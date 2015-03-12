@@ -1,32 +1,49 @@
-* {}
-body {}
-
-#logo{
-    max-width:200px;
+#logo {
+    max-width: 200px;
 }
-.c_right-align{
+
+.c_right-align {
     float: right;
 }
-.c_left-align{
-    float:left;
-}
-#sendMessage, #submitBlog, #requestMeeting{
-    display:none;
+
+.c_left-align {
+    float: left;
 }
 
-#studentSubmit{
-	display: block;
-	margin-bottom: 100px;
+#sendMessage, #submitBlog, #requestMeeting {
+    display: none;
 }
 
-#staffSubmit{
-	display: block;
-	margin-bottom: 30px;
+#studentSubmit {
+    display: block;
+    margin-bottom: 100px;
 }
-#header{
-margin-top:30px;}
 
-#userName{
-font-size:24px;}
-div.select-wrapper span.select-dropdown{
-margin-top:-7px;}
+#staffSubmit {
+    display: block;
+    margin-bottom: 30px;
+}
+
+#header {
+    margin-top: 30px;
+}
+
+#userName {
+    font-size: 24px;
+}
+
+div.select-wrapper span.select-dropdown {
+    margin-top: -7px;
+}
+
+.error {
+    border: thin #990000 solid;
+    padding: 10px;
+    background: #EBCCCC;
+}
+
+.success {
+    border: thin #7CCD7C solid;
+    padding: 10px;
+    background: #E0EEE0;
+}

@@ -124,7 +124,7 @@ foreach ($getStaffDetails as $staffDetail) {
 
 <nav>
     <div class="nav-wrapper green">
-        <ul id="nav-mobile" class="side-nav">
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li>
                 <a href="index.php">Dashboard</a>
             </li>
@@ -310,22 +310,22 @@ foreach ($getStaffDetails as $staffDetail) {
         <?php } else {
             // No results were found
             if ($name != null) {
-                echo "<p style=\"border: thin #990000 solid; padding: 10px; background:#EBCCCC;\">No students found by the name '$name'.</p>";
+                echo "<p class=\"error\">No students found by the name '$name'.</p>";
             } else if ($programmeID != null) {
-                echo '<p style="border: thin #990000 solid; padding: 10px; background:#EBCCCC;">No students found on this programme.</p>';
+                echo '<p class="error">No students found on this programme.</p>';
             }
         }
     } else if (isset($_GET['allocation'])) {
         // Allocation confirmation
         if ($_GET['allocation'] == 'supervisor') {
-            echo '<p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">Successfully allocated students\' supervisors.</p>';
+            echo '<p class="success">Successfully allocated students\' supervisors.</p>';
         } else if ($_GET['allocation'] == 'second') {
-            echo '<p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">Successfully allocated students\' second markers.</p>';
+            echo '<p class="success">Successfully allocated students\' second markers.</p>';
         }
 
         // Check for student clash errors
         if (isset($_GET['clashes'])) {
-            echo '<div style="border: thin #990000 solid; padding-left: 10px; padding-right: 10px; background:#EBCCCC;"><p>The following students were not allocated as the selected member of staff is already allocated:</p><ul>';
+            echo '<div class="error"><p>The following students were not allocated as the selected member of staff is already allocated:</p><ul>';
 
             foreach ($_SESSION['clashes'] as $clash) {
                 echo '<li>' . $clash . '</li>';

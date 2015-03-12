@@ -115,9 +115,6 @@ if (!($link = GetConnection())) {
             $errorListOutput = DisplayErrorMessages($errorList);
         } else {
             // No errors
-
-            echo '<script type="text/javascript">alert("' . $meetingId . ' ' . $contentRecord . '");</script>';
-
             // Insert record into database
             if (UpdateRecordMeeting($link, $meetingId, $contentRecord)) {
                 // Saved
@@ -408,7 +405,7 @@ foreach ($getStaffDetails as $staffDetail) {
 
 <nav>
     <div class="nav-wrapper green">
-        <ul id="nav-mobile" class="side-nav">
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li>
                 <a href="index.php">Dashboard</a>
             </li>
@@ -442,8 +439,10 @@ foreach ($getStaffDetails as $staffDetail) {
 <div class="container">
 
     <!-- Output message text -->
+    <?php echo $outputText; ?>
+
     <div class="red-text text-light-3 validation-error">
-        <?php echo $outputText; ?><?php echo $errorListOutput; ?>
+        <?php echo $errorListOutput; ?>
     </div>
 
     <!-- MEETING RECORD DETAILS SECTION START-->
