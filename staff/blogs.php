@@ -200,7 +200,7 @@ foreach($getStaffDetails as $staffDetail){
                             <li class="collection-item" <?php echo ($b['communication_from_id'] == $staff_username) ? 'style="background-color: #fafafa;"' : '' ?> >
 
                             <?php if ($b['communication_comment_id'] == 0){ ?>
-                                <a onClick="toggleForm('#sendMessage<?php echo $count; ?>', '#newMessage');" class="c_right_align" id="newMessage<?php echo $count; ?>">
+                                <a onClick="toggleForm('#addComment<?php echo $count; ?>', '#newComment');" class="c_right_align" id="newComment<?php echo $count; ?>">
                                     <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Write a comment
                                     </div>
                                 </a>
@@ -259,8 +259,7 @@ foreach($getStaffDetails as $staffDetail){
                             ?>
 
                             <!--  COMMENT HTML START -->
-
-                            <p>
+                            <p class="grey lighten-3">
                             <b>
                                 Comment from <?php echo $comment_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>
 
@@ -272,12 +271,10 @@ foreach($getStaffDetails as $staffDetail){
                                     // Output date and time
                                     echo $prettyDate . ', ' . substr($comment['comment_time_added'], 0, -3);
                                 ?>
-
-
                              </b>
                              </p>
 
-                            <p><?php echo $comment['comment_body']; ?></p>
+                            <p class="grey lighten-3"><?php echo $comment['comment_body']; ?></p>
 
                             <!--  COMMENT HTML END -->
 
@@ -286,10 +283,10 @@ foreach($getStaffDetails as $staffDetail){
 
                             ?>
                                 <!-- NEW COMMENT SECTION START-->
-                                <div class="row" id="sendMessage<?php echo $count; ?>">
+                                <div class="row" id="addComment<?php echo $count; ?>">
                                     <div class="col s12">
                                             <i class="small mdi-content-clear c_right-align"
-                                               onclick="toggleForm('#sendMessage<?php echo $count; ?>', '#newMessage<?php echo $count; ?>');"></i>
+                                               onclick="toggleForm('#addComment<?php echo $count; ?>', '#newComment<?php echo $count; ?>');"></i>
 
                                             <div class="card-content">
 
