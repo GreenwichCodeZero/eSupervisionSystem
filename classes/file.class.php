@@ -1,5 +1,4 @@
 <?php
-// include ''; // include security class
 
 class File {
 
@@ -17,8 +16,7 @@ class File {
 	public function __construct () {
 
 		$s = new Security (); 
-			$s->clean ($_POST);
-
+			$_POST = $s->clean ($_POST);
 
 		try { $this->con = $s->db (); }
 
@@ -187,17 +185,57 @@ class File {
 	}
 	
 	// Find a comment by comment id, type, who posted etc.
-	public function getAll ( $user ) { 
+	public function getAll ( $user , $file_type = null) { 
 
-		
-			$result = $this->con->prepare(
-			'SELECT  
-			`file_id`, 
-			`file_name`
+			$sql = "SELECT  
+			file_id, 
+			file_name
 			FROM
-			`esuper_file` 
+			esuper_file 
 			WHERE 
-			`file_owner` = "'.$user.'"');
+			file_owner = '$user'";
+
+			if ($file_type) {
+				switch ($file_type) {
+					case "interim":
+					$type_id = 5;
+					break;
+					case "project":
+					$type_id = 2;
+					break;
+					case "ethics":
+					$type_id =6;
+
+					break;
+					case "initial":
+					$type_id = 8;
+					break;
+
+					case "proposal":
+					$type_id = 3;
+					break;
+
+					case "feedback":
+					$type_id = 1;
+					break;
+
+					case 'contextual':
+					$type_id = 4;
+					break;
+
+					default: 
+					$type_id = 1;
+					break;
+				} // End switch
+
+			$sql = "SELECT  file_id ,  file_name 
+			FROM  esuper_file 
+			WHERE  file_owner =  '$user'
+			AND file_type_id = $type_id";
+
+		} // End IF
+
+		$result = $this->con->prepare($sql);
 
         try {
         	$result->execute();
@@ -212,6 +250,7 @@ class File {
         $row = $result->fetchAll();
         $result = null;
         $this->response ($row);
+        return $this;
 	}
 
 	public function readFile ($file_id) {
@@ -391,14 +430,6 @@ class File {
         $this->response ($row);
         return $this;
     
-	}
-
-	public function fileForStudent ( $super, $student ) {
-
-		// insert file
-		// 
-		// insert communication
-
 	}
 
 

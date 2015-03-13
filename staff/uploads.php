@@ -2,8 +2,6 @@
 
 session_start();
 
-session_start();
-
 require '../login-check.php';
 
 // Redirect students
@@ -21,7 +19,10 @@ include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
 include '../classes/projectDetails.class.php';
 
-
+function getArrayPath($arr,$path) {
+    foreach($path as $item) {$arr = $arr[$item];}
+    return $arr;
+}
 
 // Globals
 $currentStaff = $_SESSION['currentUser'];
@@ -113,6 +114,46 @@ if ($_GET['sid']) {
 
     $p->studentProject($_GET['sid']);
     $student_projectTitle = $p->getResponse ();
+
+
+
+
+$studentFiles = array 
+(    
+    "interim" => array 
+        ( 
+        "files" => $f->getAll($_GET['sid'], 'interim')->getResponse () ,
+        "count" => count ($f->getAll($_GET['sid'], 'interim')->getResponse ())
+        ),
+
+    "initial" => array (
+        "files" => $f->getAll($_GET['sid'], 'initial')->getResponse () ,
+        "count" => count ($f->getAll($_GET['sid'], 'initial')->getResponse ())
+        ), 
+    "ethics" => array (
+        "files" => $f->getAll($_GET['sid'], 'ethics')->getResponse () ,
+        "count" => count ($f->getAll($_GET['sid'], 'ethics')->getResponse ())
+        ),
+    "proposal" => array (
+        "files" => $f->getAll($_GET['sid'], 'proposal')->getResponse () ,
+        "count" => count ($f->getAll($_GET['sid'], 'proposal')->getResponse ())
+        ),
+    "project" => array (
+        "files" => $f->getAll($_GET['sid'], 'project')->getResponse () ,
+        "count" => count ($f->getAll($_GET['sid'], 'project')->getResponse ())
+        ),
+    "contextual" => array (
+        "files" => $f->getAll($_GET['sid'], 'contextual')->getResponse () ,
+        "count" => count ($f->getAll($_GET['sid'], 'contextual')->getResponse ())
+        ),
+    "feedback" => array (
+        "files" => $f->getAll($_GET['sid'], 'feedback')->getResponse () ,
+        "count" => count ($f->getAll($_GET['sid'], 'feedback')->getResponse ())
+        )
+);
+
+
+
 
 
 $superFiles = array 
@@ -228,22 +269,25 @@ $superFiles = array
         </div>
     </nav>
 
+
 <div class="container">
+ <div>
+						<?php
+							$el = new errorList ();
+							if ($el->exists ()){
+								?>
+								<p class='<?php echo $el->getType (); ?>' style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+									<?php echo $el->getResponse (); ?>
+								</p>
+							   <?
+							}
+						?>
+					</div>
 	<div class="row">
 		<div class="col s10 m12 offset-s1 card">
 			<div class="card-content">
 				<span class="card-title green-text">Student Upload History</span>
-                <?php if ($filtered) {
-                    // Get student name
-                    $ud = new UserDetails ();
-                    $ud->GetStudentDetails($_GET['sid']);
-                    $student = $ud->getResponse();
-                    if ( !isset($_GET['sid']) ) {
-                        echo '<p>Your allocated students have submitted '. $file_count .' blog posts collectively.</p>';
-                    } else {
-                        echo '<p>'. $student[0]['student_first'] . ' ' . $student[0]['student_last'] . ' has submitted '. $file_count .' blog posts.</p>';
-                    }
-                } ?>
+             
 
 				<!-- STUDENT FILTER FORM START -->
 				<form id="communication_filter" action="" method="GET">
@@ -259,22 +303,19 @@ $superFiles = array
                 <!-- STUDENT FILTER FORM END -->
 
                 <?php if ($filtered > 0) { ?>
+                <!-- START UPLOADS BY STUDENT -->
+
+
 					<!-- Uploads SECTION START -->
-					 <div>
-						<?php
-							$el = new errorList ();
-							if ($el->exists ()){
-								?>
-								<p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
-									<?php echo $el->getResponse (); ?>
-								</p>
-							   <?
-							}
-						?>
+					<div class="col s12">
+							<h5 class="center-align">Project Uploads for <?php echo $stu['student_first'], ' ',$stu['student_last'] .' (',$stu['student_username'],')'; ?></h5>
+							<br /><br />
 					</div>
-					<br/><br/>
-						<div>
-							<h5 class="center-align">Project Uploads</h5>
+
+					<?php if (! isset ($_GET['type'])) {   ?>
+
+					<div class="col s12">
+
 							<div id="submitBlog">
 								<i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
 								<!-- NEW FILE UPLOAD FORM START -->
@@ -301,15 +342,19 @@ $superFiles = array
 											<input type="file" name="fileToUpload" id="fileToUpload"/>
 										</div>
 									</div>
+
 									<div class="input-field">
 										<button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Upload</button>
 									</div>
 								</form>
 							</div>
 						</div>
-						<!-- NEW UPLOAD FORM END             -->
-						<div class="col s12">
-							<div class="card-content">
+						<!-- NEW UPLOAD FORM END -->
+						
+						</div>
+						<br/>
+
+						<div class="col s12" style="background-color: #fafafa; margin-bottom: 10px; border: thin solid #ccc;">
                                 <span class="card-title green-text">Supervisor Uploads</span>
 								<div class='c_right-align'>
 									<a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry"> 
@@ -339,33 +384,33 @@ $superFiles = array
 											echo ' <li class="collection-item">
 											You have not uploaded anything yet
 											</li> ';
-											}
-										} else if ($blog_count == 0) {
-											// No messages found for current student
-											echo '<li class="collection-item">No posts to display</li>';
 										} ?>
+										
 								</ul>
-							</div>
+							
 						</div>
-						<br/>
+
+
                         <div class="col s12 m6">
                             <div class="card">
                                 <div class="card-content">
-									<form method = 'post'>
 										<span class="card-title green-text">Project Title</span>
 										<div>
-											<input type='text' name ='title' placeholder='<?php echo ( $student_projectTitle ? $student_projectTitle[0]['project_title'] : 'Insert title ...' ); ?>' />
-											<input type='hidden' name='projectDetails_action' value = 'projectDetails_action' />
-											<button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Update</button>
+											<h5><?php echo ( $student_projectTitle ? ucfirst ($student_projectTitle[0]['project_title']) : 'A title has not yet been submitted for this project'); ?></h5>
+
 										</div>
-									</form>
 								</div>
 							</div>
 						</div>
 						<div class="col s12 m6">
                             <div class="card">
                                 <div class="card-content">
+								<div class='c_right-align'>
+										<a href="uploads.php?sid=<?php echo $_GET['sid'];?>&type=3" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</a>
+								</div>
+
 									<span class="card-title green-text">Project Proposal</span>
+
 									<div class='section'>Latest Upload: 
 										<ul class="collection">
 										<?php 
@@ -410,6 +455,9 @@ $superFiles = array
 						<div class="col s12 m6">
 							<div class="card">
 								<div class="card-content">
+								<div class='c_right-align'>
+										<a href="uploads.php?sid=<?php echo $_GET['sid'];?>&type=4" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</a>
+								</div>
 									<span class="card-title green-text">Contextual Report</span>
 									<div>Latest Upload: 
 										<ul class="collection">
@@ -453,6 +501,9 @@ $superFiles = array
                         <div class="col s12 m6">
                             <div class="card">
                                 <div class="card-content">
+								<div class='c_right-align'>
+										<a href="uploads.php?sid=<?php echo $_GET['sid'];?>&type=8" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</a>
+								</div>
                                     <span class="card-title green-text">Inital Report</span>
                                     <div>Latest Upload: 
 										<ul class="collection">
@@ -495,6 +546,9 @@ $superFiles = array
                         <div class="col s12 m6">
                             <div class="card">
                                 <div class="card-content">
+								<div class='c_right-align'>
+										<a href="uploads.php?sid=<?php echo $_GET['sid'];?>&type=5" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</a>
+								</div>
                                     <span class="card-title green-text">Interim Report</span>
 
                                     <div>Latest Upload: 
@@ -537,6 +591,9 @@ $superFiles = array
                         <div class="col s12 m6">
                             <div class="card">
                                 <div class="card-content">
+								<div class='c_right-align'>
+										<a href="uploads.php?sid=<?php echo $_GET['sid'];?>&type=2" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</a>
+								</div>
                                     <span class="card-title green-text">Project Report</span>
 									<div>Latest Upload: 
                                         <ul class="collection">
@@ -579,6 +636,9 @@ $superFiles = array
                         <div class="col s12 m6">
                             <div class="card">
                                 <div class="card-content">
+								<div class='c_right-align'>
+										<a href="uploads.php?sid=<?php echo $_GET['sid'];?>&type=6" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</a>
+								</div>
                                     <span class="card-title green-text">Research Ethics</span>
 									<div>Latest Upload: 
 										<ul class="collection">
@@ -602,7 +662,7 @@ $superFiles = array
 
 														echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>                    
 															<input type='hidden' name='file_id' value='".$sf['file_id']."' />
-															 <button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+															 <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
 														echo "</li>";
 														}        
 												} else {
@@ -616,9 +676,40 @@ $superFiles = array
                                 </div>
                             </div>
                         </div>
+
+						<!-- START FILTER BY TYPE -->
+                         <?php }  else { ?>
+                        <div class="row">
+							<div class="col s12"  style='background-color: #fafafa; margin-bottom: 10px; border: thin solid #ccc;'>
+	                                 
+			
+	                                 <?php
+	                                 foreach ($fileTypes as $ft) {
+
+	                                 	// check file type exists
+	                                 	if ($_GET['type'] == $ft['file_type_id']) {
+	                                		
+	                                		$file_filter = $ft['file_type_name'];?>
+	                                           <span class="card-title green-text"><?php echo $ft['file_type_name']; ?></span>'; 
+                                               
+	                                 	
+
+										<div class='c_right-align'><a href="uploads.php?sid=<?php echo $_GET['sid'];?>" class="waves-effect waves-teal waves-light blue lighten-1 btn-flat white-text">GO BACK</a></div>
+    <?php  } }}?>
+
+    <?php 
+                                            print_r ($studentFiles[$file_filter]); ?>
+								</div>
+							</div>
+						</div>
+
+                               
+					
+					
+
+                    </div>
+                </div>
     </div>     
-
-
 
  
 </div>
