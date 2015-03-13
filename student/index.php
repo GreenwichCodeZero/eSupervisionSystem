@@ -7,7 +7,7 @@ session_start();
 require '../login-check.php';
 
 $currentStudent = $_SESSION['currentUser'];
-$studentDetails = $studentBannerId = $studentName = '';
+$studentDetails = $studentBannerId = $studentName = $studentProgramme = '';
 
 // Determine permissions of current user
 if ($currentStudent['user_type'] === 'staff') {
@@ -18,6 +18,7 @@ if ($currentStudent['user_type'] === 'staff') {
      $studentDetails = 'Student: '. $currentStudent['student_username'];
 	 $studentBannerId= 'BannerID: '. $currentStudent['student_banner_id'];
 	 $studentName = $currentStudent['student_first'] . ' ' . $currentStudent['student_last'];
+     $studentProgramme = $currentStudent['programme_title'];
 }
 
 include '../classes/communication.class.php';
@@ -119,6 +120,8 @@ $secondMarker = $u2->getResponse();
 			<p id="userName">
 				<?php echo $studentName; ?>
 			</p>
+
+            <?php echo $studentProgramme; ?>
 		</div>
 		<div class="right-align col s4">
 			<p>

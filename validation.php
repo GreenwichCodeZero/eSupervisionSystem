@@ -9,13 +9,13 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
 } else {
     // Function to display any error messages
     function DisplayErrorMessages($errorList) {
-        $errorListOutput = '<div class="error"><ul>';
+        $errorListOutput = '<ul>';
 
         for ($i = 0; $i < count($errorList); $i++) {
             $errorListOutput .= '<li>' . $errorList[$i] . '</li>';
         }
 
-        $errorListOutput .= '</ul></div>';
+        $errorListOutput .= '</ul>';
 
         return $errorListOutput;
     }
