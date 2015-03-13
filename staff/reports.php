@@ -41,6 +41,10 @@ $allStudentsQ = new UserDetails();
 $allStudentsQ->GetAllStudents();
 $allStudents = $allStudentsQ->getResponse();
 
+$notActiveButAssignedToASupervisorQ = new Reports();
+$notActiveButAssignedToASupervisorQ->notActiveButAssignedToASupervisor();
+$notActiveButAssignedToASupervisors = $notActiveButAssignedToASupervisorQ->getResponse();
+
 $studentSupervisorsQ = new UserDetails();
 $studentSecondMarkersQ = new UserDetails();
 
@@ -240,11 +244,14 @@ foreach($allStudents as $student){
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">New report here</span>
+                    <span class="card-title green-text">Inactive students assigned to a supervisor</span>
 
-                    <div class="collection">
-                        Display info here
-                    </div>
+                  <?php
+                    foreach($notActiveButAssignedToASupervisors as $inactiveStudent){
+                        echo "<br>" . $inactiveStudent['student_first'] . " " . $inactiveStudent['student_last'];
+                    }
+
+                  ?>
                 </div>
             </div>
         </div>
