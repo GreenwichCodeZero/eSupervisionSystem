@@ -669,7 +669,30 @@ $superFiles = array
                             </div>
                         </div>
 
+
+
+
+
+
+
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+<!-- POLLY I'M WORKING BELOW THIS LINE -->
+
 						<!-- START FILTER BY TYPE -->
+
+
+
                          <?php }  else { ?>
                         <div class="row">
 							<div class="col s12"  style='background-color: #fafafa; margin-bottom: 10px; border: thin solid #ccc;'>
@@ -696,7 +719,7 @@ $superFiles = array
                                     case 1:
                                                 if (is_array ($studentFiles['formative']['files'])) {
                                                     foreach ($studentFiles['formative']['files'] as $file) {
-                                                          echo '<li class="collection-item">';
+                                                          echo '<ul class="collection"><li class="collection-item">';
 
                                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
@@ -710,13 +733,13 @@ $superFiles = array
                                     case 2:
                                                 if (is_array ($studentFiles['project']['files'])) {
                                                     foreach ($studentFiles['project']['files'] as $file) {
-                                                          echo '<li class="collection-item">';
+                                                          echo '<ul class="collection"><li class="collection-item">';
 
                                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                                         //      
-                                                        echo "</li>";
+                                                        echo "</li></ul>";
 
                                                     } // End Foreach
                                                 } else { echo "There are no uploads of this type"; }// End Is Array            
@@ -724,13 +747,13 @@ $superFiles = array
                                     case 3:
                                                 if (is_array ($studentFiles['proposal']['files'])) {
                                                     foreach ($studentFiles['proposal']['files'] as $file) {
-                                                          echo '<li class="collection-item">';
+                                                          echo '<ul class="collection"><li class="collection-item">';
 
                                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                                         //      
-                                                        echo "</li>";
+                                                        echo "</li></ul>";
 
                                                     } // End Foreach
                                                 } else { echo "There are no uploads of this type"; }// End Is Array            
@@ -738,13 +761,13 @@ $superFiles = array
                                     case 4:
                                                 if (is_array ($studentFiles['contextual']['files'])) {
                                                     foreach ($studentFiles['contextual']['files'] as $file) {
-                                                          echo '<li class="collection-item">';
+                                                          echo '<ul class="collection"><li class="collection-item">';
 
                                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                                         //      
-                                                        echo "</li>";
+                                                        echo "</li></ul>";
 
                                                     } // End Foreach
                                                 } else { echo "There are no uploads of this type"; }// End Is Array            
@@ -752,27 +775,27 @@ $superFiles = array
                                     case 5:
                                                 if (is_array ($studentFiles['interim']['files'])) {
                                                     foreach ($studentFiles['interim']['files'] as $file) {
-                                                          echo '<li class="collection-item">';
+                                                          echo '<ul class="collection"><li class="collection-item">';
 
                                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                                         //      
-                                                        echo "</li>";
+                                                        echo "</li></ul>";
 
                                                     } // End Foreach
                                                 } else { echo "There are no uploads of this type"; }// End Is Array            
                                     break;
                                     case 6:
-                                                if (is_array ($studentFiles['ethics']['files'])) {
-                                                    foreach ($studentFiles['ethics']['files'] as $file) {
-                                                          echo '<li class="collection-item">';
+                                                if (is_array ($studentFiles['etchis']['files'])) {
+                                                    foreach ($studentFiles['etchis']['files'] as $file) {
+                                                          echo '<ul class="collection"><li class="collection-item">';
 
                                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                                         //      
-                                                        echo "</li>";
+                                                        echo "</li></ul>";
 
                                                     } // End Foreach
                                                 } else { echo "There are no uploads of this type"; }// End Is Array            
