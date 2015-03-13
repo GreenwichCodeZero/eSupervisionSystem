@@ -19,11 +19,6 @@ include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
 include '../classes/projectDetails.class.php';
 
-function getArrayPath($arr,$path) {
-    foreach($path as $item) {$arr = $arr[$item];}
-    return $arr;
-}
-
 // Globals
 $currentStaff = $_SESSION['currentUser'];
 $staff_id = $currentStaff['staff_id'];
@@ -151,9 +146,6 @@ $studentFiles = array
         "count" => count ($f->getAll($_GET['sid'], 'feedback')->getResponse ())
         )
 );
-
-
-
 
 
 $superFiles = array 
@@ -681,29 +673,123 @@ $superFiles = array
                          <?php }  else { ?>
                         <div class="row">
 							<div class="col s12"  style='background-color: #fafafa; margin-bottom: 10px; border: thin solid #ccc;'>
-	                                 
-			
-	                                 <?php
-	                                 foreach ($fileTypes as $ft) {
+                             <div class='c_right-align'><a href="uploads.php?sid=<?php echo $_GET['sid'];?>" class="waves-effect waves-teal waves-light blue lighten-1 btn-flat white-text">GO BACK</a></div>
 
-	                                 	// check file type exists
-	                                 	if ($_GET['type'] == $ft['file_type_id']) {
-	                                		
-	                                		$file_filter = $ft['file_type_name'];?>
-	                                           <span class="card-title green-text"><?php echo $ft['file_type_name']; ?></span>'; 
+                             <ul class="collection">
+	                          <?php        
+			                     foreach ($fileTypes as $ft) {
+
+                                        // check file type exists
+                                        if ($_GET['type'] == $ft['file_type_id']) {
+                                            
+                                            // Decipher FILE TYPE and echo header
+                                            $file_filter = $ft['file_type_name'];
+                                            echo '<span class="card-title green-text">'.$ft['file_type_name'].'</span>'; 
                                                
-	                                 	
+                                        
+                                        } // End If filetype exist
+                                       
+	                            } // End foreach
 
-										<div class='c_right-align'><a href="uploads.php?sid=<?php echo $_GET['sid'];?>" class="waves-effect waves-teal waves-light blue lighten-1 btn-flat white-text">GO BACK</a></div>
-    <?php  } }}?>
+                              switch  ($_GET['type'])
+                                 {
+                                    case 1:
+                                                if (is_array ($studentFiles['formative']['files'])) {
+                                                    foreach ($studentFiles['formative']['files'] as $file) {
+                                                          echo '<li class="collection-item">';
 
-    <?php 
-                                            print_r ($studentFiles[$file_filter]); ?>
+                                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
+                                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                                             <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                        //      
+                                                        echo "</li>";
+
+                                                    } // End Foreach
+                                                } else { echo "There are no uploads of this type"; }// End Is Array            
+                                    break;
+                                    case 2:
+                                                if (is_array ($studentFiles['project']['files'])) {
+                                                    foreach ($studentFiles['project']['files'] as $file) {
+                                                          echo '<li class="collection-item">';
+
+                                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
+                                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                                             <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                        //      
+                                                        echo "</li>";
+
+                                                    } // End Foreach
+                                                } else { echo "There are no uploads of this type"; }// End Is Array            
+                                    break;
+                                    case 3:
+                                                if (is_array ($studentFiles['proposal']['files'])) {
+                                                    foreach ($studentFiles['proposal']['files'] as $file) {
+                                                          echo '<li class="collection-item">';
+
+                                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
+                                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                                             <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                        //      
+                                                        echo "</li>";
+
+                                                    } // End Foreach
+                                                } else { echo "There are no uploads of this type"; }// End Is Array            
+                                    break;
+                                    case 4:
+                                                if (is_array ($studentFiles['contextual']['files'])) {
+                                                    foreach ($studentFiles['contextual']['files'] as $file) {
+                                                          echo '<li class="collection-item">';
+
+                                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
+                                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                                             <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                        //      
+                                                        echo "</li>";
+
+                                                    } // End Foreach
+                                                } else { echo "There are no uploads of this type"; }// End Is Array            
+                                    break;
+                                    case 5:
+                                                if (is_array ($studentFiles['interim']['files'])) {
+                                                    foreach ($studentFiles['interim']['files'] as $file) {
+                                                          echo '<li class="collection-item">';
+
+                                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
+                                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                                             <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                        //      
+                                                        echo "</li>";
+
+                                                    } // End Foreach
+                                                } else { echo "There are no uploads of this type"; }// End Is Array            
+                                    break;
+                                    case 6:
+                                                if (is_array ($studentFiles['ethics']['files'])) {
+                                                    foreach ($studentFiles['ethics']['files'] as $file) {
+                                                          echo '<li class="collection-item">';
+
+                                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
+                                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                                             <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                        //      
+                                                        echo "</li>";
+
+                                                    } // End Foreach
+                                                } else { echo "There are no uploads of this type"; }// End Is Array            
+                                    break;
+
+                                 }
+
+                                ?>
+                                </ul>
 								</div>
 							</div>
 						</div>
 
-                               
+                        <?php }  // END FILTER BY TYPE
+                        }
+
+                        ?> 
 					
 					
 
