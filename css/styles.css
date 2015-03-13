@@ -30,6 +30,8 @@
 
 #userName {
     font-size: 24px;
+    margin-top: 15px;
+    margin-bottom: 0px;
 }
 
 div.select-wrapper span.select-dropdown {
