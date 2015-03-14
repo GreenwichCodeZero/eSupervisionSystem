@@ -68,31 +68,52 @@ $supervisor = $u->getResponse();
     </script>
 </head>
 <body>
-<nav>
-    <div class="nav-wrapper green">
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li>
-                <a href="index.php">Dashboard</a>
-            </li>
-            <li>
-                <a href="meetings.php">Meetings</a>
-            </li>
-            <li>
-                <a href="messages.php">Messages</a>
-            </li>
-            <li>
-                <a href="blogs.php">Blog</a>
-            </li>
-            <li>
-                <a href="submissions.php">Project Uploads</a>
-            </li>
-			<li>
-                <a href="../logout.php" title="Logout">Logout</a>
-            </li>
-        </ul>
-        <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
-    </div>
-</nav>
+	<nav>
+		<div class="nav-wrapper green">
+			<ul class="right hide-on-med-and-down">
+				<li>
+					<a href="index.php">Dashboard</a>
+				</li>
+				<li>
+					<a href="meetings.php">Meetings</a>
+				</li>
+				<li>
+					<a href="messages.php">Messages</a>
+				</li>
+				<li>
+					<a href="blogs.php">Blog</a>
+				</li>
+				<li>
+					<a href="submissions.php">Project Uploads</a>
+				</li>
+				<li>
+					<a href="../logout.php" title="Logout">Logout</a>
+				</li>
+			</ul>
+
+			<ul id="nav-mobile" class="side-nav hide-on-large-only">
+				<li>
+					<a href="index.php">Dashboard</a>
+				</li>
+				<li>
+					<a href="meetings.php">Meetings</a>
+				</li>
+				<li>
+					<a href="messages.php">Messages</a>
+				</li>
+				<li>
+					<a href="blogs.php">Blog</a>
+				</li>
+				<li>
+					<a href="submissions.php">Project Uploads</a>
+				</li>
+				<li>
+					<a href="../logout.php" title="Logout">Logout</a>
+				</li>
+			</ul>
+			<a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
+		</div>
+	</nav>
 
 <div class="container">
     <div class="row">

@@ -121,10 +121,9 @@ foreach ($getStaffDetails as $staffDetail) {
     </script>
 </head>
 <body>
-
 <nav>
     <div class="nav-wrapper green">
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <ul class="right hide-on-med-and-down">
             <li>
                 <a href="index.php">Dashboard</a>
             </li>
@@ -140,8 +139,9 @@ foreach ($getStaffDetails as $staffDetail) {
             <li>
                 <a href="uploads.php">Project Uploads</a>
             </li>
-                        <?php
-            if ($getStaffDetails[0]['staff_authorised'] == 1) {
+
+            <?php
+            if ($staffAuthorsied == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
@@ -151,6 +151,34 @@ foreach ($getStaffDetails as $staffDetail) {
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
         </ul>
+		<ul id="nav-mobile" class="side-nav hide-on-large-only">
+			<li>
+				<a href="index.php">Dashboard</a>
+			</li>
+			<li>
+				<a href="meetings.php">Meetings</a>
+			</li>
+			<li>
+				<a href="messages.php">Messages</a>
+			</li>
+			<li>
+				<a href="blogs.php">Blog</a>
+			</li>
+			<li>
+				<a href="uploads.php">Project Uploads</a>
+			</li>
+
+			<?php
+			if ($staffAuthorsied == 1) {
+				echo '<li><a href="search.php">Search</a></li>
+					<li><a href="viewDashboards.php">View dashboards</a></li>
+					<li><a href="reports.php">Reports</a></li>';
+			}
+			?>
+			<li>
+				<a href="../logout.php" title="Logout">Logout</a>
+			</li>
+		</ul>
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
     </div>
 </nav>
