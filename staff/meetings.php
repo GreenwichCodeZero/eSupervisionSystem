@@ -561,7 +561,7 @@ if (count($errorList) > 0) {
                             <span id="titleValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
 
-                        <div class="col s6" style="margin-top:-20px;">
+                        <div class="col s6 marginTopFix">
                             <label for="type">Type</label>
                             <select id="type" name="type">
                                 <option value="1">Virtual</option>

@@ -34,9 +34,10 @@
     margin-bottom: 0px;
 }
 
-div.select-wrapper span.select-dropdown {
-    margin-top: -7px;
+.marginTopFix {
+    margin-top: -20px;
 }
+
 
 .error {
     border: thin #990000 solid;
