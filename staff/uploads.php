@@ -825,7 +825,7 @@ if ($_POST['sid']) {
                                         echo "</li></ul>";
 
                                     } // End Foreach
-                                } else { echo "There are nof uploads of this type"; }// End Is Array
+                                } else { echo "There are no uploads of this type"; }// End Is Array
                                 break;
                             case 5:
                                 if (is_array ($studentFiles['interim']['files'])) {
