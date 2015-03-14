@@ -200,9 +200,9 @@ $students = $u->getResponse();
                 $el = new errorList ();
                 if ($el->exists ()){
                     ?>
-                    <p class='<?php echo $el->getType (); ?>' style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
-                   <?php echo $el->getResponse (); ?>
-                    </p>
+                     <p class='<?php echo $el->getType(); ?>'>
+                    <?php echo $el->getResponse(); ?>
+                </p>
                    <?
 
                 }
