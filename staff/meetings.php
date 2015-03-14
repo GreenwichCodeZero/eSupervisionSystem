@@ -20,8 +20,6 @@ if ($_SESSION['currentUser']['user_type'] == 'student') {
 $errorList = array();
 $outputText = $errorListOutput = '';
 $currentStaff = $_SESSION['currentUser'];
-$currentStaff = $_SESSION['currentUser'];
-
 $staff_id = $currentStaff['staff_id'];
 
 // Determine permissions of current user
@@ -264,14 +262,6 @@ if (count($errorList) > 0) {
     $errorListOutput = DisplayErrorMessages($errorList);
 }
 
-$getStaffDetailsQ = new UserDetails ();
-$getStaffDetailsQ->isStaffAuthorised($staff_id);
-$getStaffDetails = $getStaffDetailsQ->getResponse();
-
-foreach ($getStaffDetails as $staffDetail) {
-    $staffAuthorised = $staffDetail['staff_authorised'];
-}
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -422,7 +412,7 @@ foreach ($getStaffDetails as $staffDetail) {
             </li>
 
             <?php
-            if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
@@ -450,7 +440,7 @@ foreach ($getStaffDetails as $staffDetail) {
 			</li>
 
 			<?php
-			if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
 				echo '<li><a href="search.php">Search</a></li>
 					<li><a href="viewDashboards.php">View dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';
