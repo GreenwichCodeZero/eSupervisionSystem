@@ -275,7 +275,8 @@ if ($_POST['sid']) {
                         <option value="" disabled="disabled" selected="selected">Choose...</option>
                         <?php foreach ($students as $stu) {
                             echo '<option value="' . $stu['student_username'] . '"' . (($_POST['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
-                        } ?>
+                        }
+                         ?>
                     </select>
                     <input type='hidden' name='action' value='filter' />
                     <button type="submit" class="c_right-align waves-effect waves-teal waves-light blue btn-flat white-text">Filter</button>
@@ -288,7 +289,14 @@ if ($_POST['sid']) {
 
                 <!-- Uploads SECTION START -->
                 <div class="col s12">
+                        <?php foreach ($students as $stu) { 
+                            if ($stu['student_username'] == $_POST['sid']) {
+                        ?>
                     <h5 class="center-align">Project Uploads for <?php echo $stu['student_first'], ' ',$stu['student_last'] .' (',$stu['student_username'],')'; ?></h5>
+
+                    <?php } // end if                       
+                    } // end foreach
+                    ?>
                     <br /><br />
                 </div>
 
@@ -834,8 +842,8 @@ if ($_POST['sid']) {
                                 } else { echo "There are no uploads of this type"; }// End Is Array
                                 break;
                             case 6:
-                                if (is_array ($studentFiles['etchis']['files'])) {
-                                    foreach ($studentFiles['etchis']['files'] as $file) {
+                                if (is_array ($studentFiles['ethics']['files'])) {
+                                    foreach ($studentFiles['ethics']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
 
                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>

@@ -59,25 +59,25 @@ $f->fileTypes ();
 $fileTypes = $f->getResponse ();
 
 // Get Student uploads by type
-$f->get ($_GET['sid'], 'interim');
+$f->get ($stu_user, 'interim');
 $student_interim = $f->getResponse ();
 
-$f->get ($_GET['sid'], 'initial');
+$f->get ($stu_user, 'initial');
 $student_initial = $f->getResponse ();
 
-$f->get ($_GET['sid'], 'ethics');
+$f->get ($stu_user, 'ethics');
 $student_ethics = $f->getResponse ();
 
-$f->get ($_GET['sid'], 'proposal');
+$f->get ($stu_user, 'proposal');
 $student_proposal = $f->getResponse ();
 
-// $f->get ($_GET['sid'], 'contextual');
-// $student_proposal = $f->getResponse ();
+$f->get ($stu_user, 'contextual');
+$student_contextual = $f->getResponse ();
 
-$f->get ($_GET['sid'], 'project');
+$f->get ($stu_user, 'project');
 $student_project = $f->getResponse ();
 
-$p->studentProject($_GET['sid']);
+$p->studentProject($stu_user);
 $student_projectTitle = $p->getResponse ();
 
 
@@ -310,7 +310,7 @@ $projectTitle = $p->getResponse ();
 
 
                             echo ' <li class="collection-item">
-                                    You have not uploaded anything
+                                    Your tutor has not uploaded anything
                                     </li> ';
 
                         }
@@ -329,8 +329,8 @@ $projectTitle = $p->getResponse ();
 
                         Latest Upload:
                         <?php echo (
-                        $contextual[0]['file_id'] > 0 ?
-                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$contextual[0]['file_id']."'/><a>".$contextual[0]['file_name']."</a><button>download</button>
+                        $student_contextual[0]['file_id'] > 0 ?
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_contextual[0]['file_id']."'/><a>".$student_contextual[0]['file_name']."</a><button>download</button>
                             </form>"
                             : "no file uploaded yet"
                         );
@@ -364,7 +364,7 @@ $projectTitle = $p->getResponse ();
 
 
                             echo ' <li class="collection-item">
-                                    You have not uploaded anything
+                                    Your tutor has not uploaded anything
                                     </li> ';
 
                         }
@@ -384,8 +384,8 @@ $projectTitle = $p->getResponse ();
 
                         Latest Upload:
                         <?php echo (
-                        $initial[0]['file_id'] > 0 ?
-                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$initial[0]['file_id']."'/><a>".$initial[0]['file_name']."</a><button>download</button>
+                        $student_initial[0]['file_id'] > 0 ?
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_initial[0]['file_id']."'/><a>".$student_initial[0]['file_name']."</a><button>download</button>
                             </form>"
                             : "no file uploaded yet"
                         );
@@ -419,7 +419,7 @@ $projectTitle = $p->getResponse ();
 
 
                             echo ' <li class="collection-item">
-                                    You have not uploaded anything
+                                    Your tutor has not uploaded anything
                                     </li> ';
 
                         }
@@ -437,8 +437,8 @@ $projectTitle = $p->getResponse ();
                     <p>
                         Latest Upload:
                         <?php echo (
-                        $interim[0]['file_id'] > 0 ?
-                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$interim[0]['file_id']."'/><a>".$interim[0]['file_name']."</a><button>download</button>
+                        $student_interim[0]['file_id'] > 0 ?
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_interim[0]['file_id']."'/><a>".$student_interim[0]['file_name']."</a><button>download</button>
                             </form>"
                             : "no file uploaded yet"
                         );
@@ -472,7 +472,7 @@ $projectTitle = $p->getResponse ();
 
 
                             echo ' <li class="collection-item">
-                                    You have not uploaded anything
+                                    Your tutor has not uploaded anything
                                     </li> ';
 
                         }
@@ -492,8 +492,8 @@ $projectTitle = $p->getResponse ();
                     <p>
                         Latest Upload:
                         <?php echo (
-                        $project[0]['file_id'] > 0 ?
-                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$project[0]['file_id']."'/><a>".$project[0]['file_name']."</a><button>download</button>
+                        $student_project[0]['file_id'] > 0 ?
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_project[0]['file_id']."'/><a>".$student_project[0]['file_name']."</a><button>download</button>
                             </form>"
                             : "no file uploaded yet"
                         );
@@ -527,7 +527,7 @@ $projectTitle = $p->getResponse ();
 
 
                             echo ' <li class="collection-item">
-                                    You have not uploaded anything
+                                    Your tutor has not uploaded anything
                                     </li> ';
 
                         }
@@ -545,8 +545,8 @@ $projectTitle = $p->getResponse ();
                     <p>
                         Latest Upload:
                         <?php echo (
-                        $ethics[0]['file_id'] > 0 ?
-                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$ethics[0]['file_id']."'/><a>".$ethics[0]['file_name']."</a><button>download</button>
+                        $student_ethics[0]['file_id'] > 0 ?
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_ethics[0]['file_id']."'/><a>".$student_ethics[0]['file_name']."</a><button>download</button>
                             </form>"
                             : "no file uploaded yet"
                         );
@@ -580,7 +580,7 @@ $projectTitle = $p->getResponse ();
 
 
                             echo ' <li class="collection-item">
-                                    You have not uploaded anything
+                                    Your tutor has not uploaded anything
                                     </li> ';
 
                         }
