@@ -171,10 +171,10 @@ foreach ($getStaffDetails as $staffDetail) {
 </nav>
 <div class="container">
     <div class="row">
-        <h4 class="center-align">You are viewing
+        <h5 class="center-align">You are viewing
             staff: <?php echo $newCurrentStaff[0]['staff_first'] . " " . $newCurrentStaff[0]['staff_last'] . "s "; ?>
-            eSupervision Dashboard</h4>
-        <h5 class="center-align"><a href="viewDashboards.php">Go back to view dashboards</a></h5>
+            eSupervision Dashboard</h5>
+        <h6 class="center-align"><a href="viewDashboards.php">Go back to view dashboards</a></h6>
     </div>
     <div class="row">
         <div class="col s10 offset-s1 m8 offset-m2 l6 offset-l3 center-align">
@@ -292,7 +292,7 @@ foreach ($getStaffDetails as $staffDetail) {
             </div>
             <div class="modal-footer">
 
-                <button class="waves-effect waves-green btn-flat ">Submit</button>
+                <button class="waves-effect waves-green btn-flat">Submit</button>
             </div>
         </form>
     </div>
