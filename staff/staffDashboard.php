@@ -1,8 +1,9 @@
 <?php
-// A dashboard placeholder, demonstrating access to the current user
 
 // Initialise session
 session_start();
+
+error_reporting(0);
 
 require '../login-check.php';
 include '../classes/userDetails.class.php';
@@ -10,9 +11,7 @@ include '../classes/security.class.php';
 include '../classes/communication.class.php';
 include '../classes/meetings.class.php';
 
-
 $currentStaff = $_SESSION['currentUser'];
-
 $newStaffId = $_GET['staff'];
 
 // Determine permissions of current user
@@ -28,29 +27,11 @@ $newCurrentStaffQ = new UserDetails();
 $newCurrentStaffQ->getNewStaffDetails($newStaffId);
 $newCurrentStaff = $newCurrentStaffQ->getResponse();
 
-//echo "new staff id = " . $newStaffId;
-
-$userDetails = '';
-
-// All staff only things here
 $staffDetails = 'Staff: ' . $newCurrentStaff[0]['staff_username'];
 $staffName = $newCurrentStaff[0]['staff_first'] . ' ' . $newCurrentStaff[0]['staff_last'];
 
-if ($newCurrentStaff[0]['staff_authorised'] === '1') {
-    // Authorised staff only things here
-    $userDetails .= '<li>staff_authorised: yes</li>';
-} else {
-    // Unauthorised staff only things here
-    $userDetails .= '<li>staff_authorised: no</li>';
-}
-
-
-// $_SESSION['user']['id']
-$staff_username = $newCurrentStaff[0]['staff_username']; // (1) = demo staff id
+$staff_username = $newCurrentStaff[0]['staff_username'];
 $staff_id = $newCurrentStaff[0]['staff_id'];
-
-// PRINT USER VARIABLES TO TOP OF BROWSER
-
 
 $c = new Communication ();
 
@@ -79,13 +60,6 @@ $noSecondMarkerQ = new UserDetails ();
 $noSecondMarkerQ->noSecondMarker();
 $noSecondMarkers = $noSecondMarkerQ->getResponse();
 
-$getStaffDetailsQ = new UserDetails ();
-$getStaffDetailsQ->isStaffAuthorised($newStaffId);
-$getStaffDetails = $getStaffDetailsQ->getResponse();
-
-foreach ($getStaffDetails as $staffDetail) {
-    $staffAuthorsied = $staffDetail['staff_authorised'];
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -128,7 +102,7 @@ foreach ($getStaffDetails as $staffDetail) {
             </li>
 
             <?php
-            if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
@@ -156,7 +130,7 @@ foreach ($getStaffDetails as $staffDetail) {
 			</li>
 
 			<?php
-			if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
 				echo '<li><a href="search.php">Search</a></li>
 					<li><a href="viewDashboards.php">View dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';
