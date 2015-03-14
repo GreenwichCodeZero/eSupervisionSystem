@@ -3,7 +3,7 @@
 // Initialise session
 session_start();
 
-error_reporting(1);
+error_reporting(0);
 
 require '../login-check.php';
 include '../classes/userDetails.class.php';
@@ -20,59 +20,52 @@ if ($currentStaff['user_type'] === 'student') {
     header('Location: /codezero/student/index.php');
 }
 
-$getStaffDetailsQ = new UserDetails ();
-$getStaffDetailsQ->isStaffAuthorised($staff_id);
-$getStaffDetails = $getStaffDetailsQ->getResponse();
+$userDetails = new UserDetails();
+$reports = new Reports();
 
-$noSupervisorQ = new UserDetails();
-$noSupervisorQ->noSupervisor();
-$noSupervisors = $noSupervisorQ->getResponse();
+$userDetails->isStaffAuthorised($staff_id);
+$getStaffDetails = $userDetails->getResponse();
 
-$noSecondMarkerQ = new UserDetails();
-$noSecondMarkerQ->noSecondMarker();
-$noSecondMarkers = $noSecondMarkerQ->getResponse();
+$userDetails->noSupervisor();
+$noSupervisors = $userDetails->getResponse();
 
-$notLoggedin7DaysQ = new Reports();
-$notLoggedin7DaysQ->notLoggedIn7Days();
-$notLoggedIn7Days = $notLoggedin7DaysQ->getResponse();
+$userDetails->noSecondMarker();
+$noSecondMarkers = $userDetails->getResponse();
 
+$reports->StaffOver70PercentMeetingsDeclined();
+$staffMeetingsDeclined = $reports->getResponse();
 
-$allStudentsQ = new UserDetails();
-$allStudentsQ->GetAllStudents();
-$allStudents = $allStudentsQ->getResponse();
+$reports->notLoggedIn7Days();
+$notLoggedIn7Days = $reports->getResponse();
 
-$notActiveButAssignedToASupervisorQ = new Reports();
-$notActiveButAssignedToASupervisorQ->notActiveButAssignedToASupervisor();
-$notActiveButAssignedToASupervisors = $notActiveButAssignedToASupervisorQ->getResponse();
+$userDetails->GetAllStudents();
+$allStudents = $userDetails->getResponse();
 
-$studentSupervisorsQ = new UserDetails();
-$studentSecondMarkersQ = new UserDetails();
+$reports->notActiveButAssignedToASupervisor();
+$notActiveButAssignedToASupervisors = $reports->getResponse();
 
 $test = array();
 
-foreach($allStudents as $student){
-    
-    $studentSupervisorsQ->getStudentSupervisor($student['student_id']);
-    $studentSupervisors = $studentSupervisorsQ->getResponse();
+foreach ($allStudents as $student) {
 
-    foreach($studentSupervisors as $stuSupervisorMarkers){
+    $userDetails->getStudentSupervisor($student['student_id']);
+    $studentSupervisors = $userDetails->getResponse();
+
+    foreach ($studentSupervisors as $stuSupervisorMarkers) {
         $a = $stuSupervisorMarkers['staff_id'];
-
     }
 
-    $studentSecondMarkersQ->getStudentSecondMarker($student['student_id']);
-    $studentSecondMarkers = $studentSecondMarkersQ->getResponse();
+    $userDetails->getStudentSecondMarker($student['student_id']);
+    $studentSecondMarkers = $userDetails->getResponse();
 
-    foreach($studentSecondMarkers as $stuSecondMarkers){
+    foreach ($studentSecondMarkers as $stuSecondMarkers) {
         $b = $stuSecondMarkers['staff_id'];
-
     }
 
-    if($a == $b){
+    if ($a == $b) {
         array_push($test, $student['student_username']);
     }
 }
-
 
 ?>
 <!DOCTYPE html>
@@ -80,7 +73,7 @@ foreach($allStudents as $student){
 
 <head>
     <title>eSupervision - Reports</title>
-	<meta name="author" content="Code Zero"/>
+    <meta name="author" content="Code Zero"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -116,7 +109,7 @@ foreach($allStudents as $student){
             </li>
 
             <?php
-            if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
@@ -126,77 +119,77 @@ foreach($allStudents as $student){
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
         </ul>
-		<ul id="nav-mobile" class="side-nav hide-on-large-only">
-			<li>
-				<a href="index.php">Dashboard</a>
-			</li>
-			<li>
-				<a href="meetings.php">Meetings</a>
-			</li>
-			<li>
-				<a href="messages.php">Messages</a>
-			</li>
-			<li>
-				<a href="blogs.php">Blog</a>
-			</li>
-			<li>
-				<a href="uploads.php">Project Uploads</a>
-			</li>
+        <ul id="nav-mobile" class="side-nav hide-on-large-only">
+            <li>
+                <a href="index.php">Dashboard</a>
+            </li>
+            <li>
+                <a href="meetings.php">Meetings</a>
+            </li>
+            <li>
+                <a href="messages.php">Messages</a>
+            </li>
+            <li>
+                <a href="blogs.php">Blog</a>
+            </li>
+            <li>
+                <a href="uploads.php">Project Uploads</a>
+            </li>
 
-			<?php
-			if ($staffAuthorsied == 1) {
-				echo '<li><a href="search.php">Search</a></li>
+            <?php
+            if ($currentStaff['staff_authorised'] == 1) {
+                echo '<li><a href="search.php">Search</a></li>
 					<li><a href="viewDashboards.php">View dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';
-			}
-			?>
-			<li>
-				<a href="../logout.php" title="Logout">Logout</a>
-			</li>
-		</ul>
+            }
+            ?>
+            <li>
+                <a href="../logout.php" title="Logout">Logout</a>
+            </li>
+        </ul>
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
     </div>
 </nav>
 
 <div class="container">
 
-    
     <h1>Reports</h1>
+
     <div class="row">
-    <!--  Students without supervisor starts here -->
+        <!-- Students without a supervisor starts here -->
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Students without a supervisor</span>
 
-                        <?php
-                        foreach ($noSupervisors as $noSupervisor) {
-                            echo "<br>" . $noSupervisor['student_first'] . " " . $noSupervisor['student_last'];
-                        }
-                        ?>
+                    <?php
+                    foreach ($noSupervisors as $noSupervisor) {
+                        echo "<br>" . $noSupervisor['student_first'] . " " . $noSupervisor['student_last'];
+                    }
+                    ?>
                 </div>
             </div>
         </div>
-        <!--  Students without supervisor ends here -->
+        <!-- Students without a supervisor ends here -->
 
-        <!--  Students without second marker starts here -->
+        <!-- Students without a second marker starts here -->
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Students without a second marker</span>
-                        <?php
-                        foreach ($noSecondMarkers as $noSecondMarker) {
-                            echo "<br>" . $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'];
-                        }
-                        ?>
+                    <?php
+                    foreach ($noSecondMarkers as $noSecondMarker) {
+                        echo "<br>" . $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'];
+                    }
+                    ?>
                 </div>
             </div>
         </div>
-        <!--  Students without second marker ends here -->
+        <!-- Students without a second marker ends here -->
     </div>
 
     <div class="row">
-            <!--  Students without second marker starts here -->
+        <!-- Students with no meeting requests within 2 weeks starts here -->
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
@@ -208,83 +201,82 @@ foreach($allStudents as $student){
                 </div>
             </div>
         </div>
-        <!--  Students without second marker ends here -->
+        <!--  Students with no meeting requests within 2 weeks ends here -->
 
-                    <!--  Students without second marker starts here -->
+        <!-- Students with the same supervisor and second marker starts here -->
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Students with the same supervisor and second marker</span>
-<?php
-        $stuDetailsQ = new UserDetails();
+                    <?php
+                    $stuDetailsQ = new UserDetails();
 
-        foreach($test as $id){
-            $stuDetailsQ->GetStudentDetails($id);
-            $stuDetails = $stuDetailsQ->getResponse();
+                    foreach ($test as $id) {
+                        $stuDetailsQ->GetStudentDetails($id);
+                        $stuDetails = $stuDetailsQ->getResponse();
 
-            foreach($stuDetails as $stu){
-                echo "<br>" . $stu['student_first'] .  " " . $stu['student_last'];
-            }
-        }
-?>
+                        foreach ($stuDetails as $stu) {
+                            echo "<br>" . $stu['student_first'] . " " . $stu['student_last'];
+                        }
+                    }
+                    ?>
                 </div>
             </div>
         </div>
-        <!--  Students without second marker ends here -->
+        <!-- Students with the same supervisor and second marker ends here -->
     </div>
 
-
-        <div class="row">
-            <!--  Students without second marker starts here -->
+    <div class="row">
+        <!-- Students who haven't logged in for the past 7 days starts here -->
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Students who haven't logged in for the past 7 days</span>
-                        <?php
-                            foreach($notLoggedIn7Days as $notLoggedIn){
-                               echo '<br>' . $notLoggedIn['student_first'] . " " . $notLoggedIn['student_last'];
-                            }
-                        ?>
+                    <?php
+                    foreach ($notLoggedIn7Days as $notLoggedIn) {
+                        echo '<br>' . $notLoggedIn['student_first'] . " " . $notLoggedIn['student_last'];
+                    }
+                    ?>
                 </div>
             </div>
         </div>
-        <!--  Students without second marker ends here -->
+        <!-- Students who haven't logged in for the past 7 days ends here -->
 
-                    <!--  Students without second marker starts here -->
+        <!-- Staff who have declined more than 70% of meeting requests starts here -->
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">Staff who have declined more then 70% of meeting requests</span>
+                    <span class="card-title green-text">Staff who have declined more than 70% of meeting requests</span>
 
-                    <div class="collection">
-                        Display info here
-                    </div>
+                    <?php foreach ($staffMeetingsDeclined as $staff) {
+                        echo '<br>' . $staff['staff_first'] . ' ' . $staff['staff_last'];
+                    } ?>
+
                 </div>
             </div>
         </div>
-        <!--  Students without second marker ends here -->
+        <!-- Staff who have declined more than 70% of meeting requests ends here -->
     </div>
 
-
-        <div class="row">
-            <!--  Students without second marker starts here -->
+    <div class="row">
+        <!-- Inactive students assigned to a supervisor starts here -->
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Inactive students assigned to a supervisor</span>
 
-                  <?php
-                    foreach($notActiveButAssignedToASupervisors as $inactiveStudent){
+                    <?php
+                    foreach ($notActiveButAssignedToASupervisors as $inactiveStudent) {
                         echo "<br>" . $inactiveStudent['student_first'] . " " . $inactiveStudent['student_last'];
                     }
 
-                  ?>
+                    ?>
                 </div>
             </div>
         </div>
-        <!--  Students without second marker ends here -->
+        <!-- Inactive students assigned to a supervisor ends here -->
 
-                    <!--  Students without second marker starts here -->
+        <!-- *** starts here -->
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
@@ -296,9 +288,8 @@ foreach($allStudents as $student){
                 </div>
             </div>
         </div>
-        <!--  Students without second marker ends here -->
+        <!-- *** ends here -->
     </div>
-
 
 </div>
 </body>
