@@ -549,12 +549,10 @@ if (count($errorList) > 0) {
     <div class="row" id="sendMessage">
         <div class="col s12">
             <div class="card">
-                <i class="small mdi-content-clear c_right-align"
-                   onclick="toggleForm('#sendMessage', '#newMessage');"></i>
-
                 <div class="card-content">
                     <span class="card-title green-text">Request Meeting</span>
-
+					<i class="small mdi-content-clear c_right-align"
+                   onclick="toggleForm('#sendMessage', '#newMessage');"></i>
                     <form name="meeting" method="post" action="meetings.php">
                         <div class="input-field col s6">
                             <label for="title">Subject</label>
