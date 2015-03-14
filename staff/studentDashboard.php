@@ -152,8 +152,8 @@ $secondMarker = $u2->getResponse();
     </div>
 </nav>
 <div class="container">
-    <h4 class="center-align">You are viewing student: <?php echo $newCurrentStudent[0]['student_first'] . " " . $newCurrentStudent[0]['student_last'] . "s "; ?> eSupervision Dashboard</h4>
-    <h5 class="center-align"><a href="viewDashboards.php">Go back to view dashboards</a></h5>
+    <h5 class="center-align">You are viewing student: <?php echo $newCurrentStudent[0]['student_first'] . " " . $newCurrentStudent[0]['student_last'] . "s "; ?> eSupervision Dashboard</h5>
+    <h6 class="center-align"><a href="viewDashboards.php">Go back to view dashboards</a></h6>
 
 	<div class="row">
 		<div class="left-align col s4">
