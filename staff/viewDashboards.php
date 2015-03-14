@@ -1,4 +1,5 @@
 <?php
+
 // Initialise session
 session_start();
 
@@ -39,13 +40,6 @@ $getAllProjectStudentsQ = new UserDetails();
 $getAllProjectStudentsQ->GetAllocatedStudents($staff_username);
 $getAllProjectStudents = $getAllProjectStudentsQ->getResponse();
 
-$getStaffDetailsQ = new UserDetails ();
-$getStaffDetailsQ->isStaffAuthorised($staff_id);
-$getStaffDetails = $getStaffDetailsQ->getResponse();
-
-foreach ($getStaffDetails as $staffDetail) {
-    $staffAuthorised = $staffDetail['staff_authorised'];
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -87,7 +81,7 @@ foreach ($getStaffDetails as $staffDetail) {
             </li>
 
             <?php
-            if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
@@ -115,7 +109,7 @@ foreach ($getStaffDetails as $staffDetail) {
 			</li>
 
 			<?php
-			if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
 				echo '<li><a href="search.php">Search</a></li>
 					<li><a href="viewDashboards.php">View dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';

@@ -1,19 +1,17 @@
 <?php
-// Student dashboard page
 
 // Initialise session
 session_start();
+
+error_reporting(0);
 
 require '../login-check.php';
 include '../classes/communication.class.php';
 include '../classes/meetings.class.php';
 include '../classes/userDetails.class.php';
 
-
 $currentStaff = $_SESSION['currentUser'];
-
 $studentDetails = $studentBannerId = $studentName = '';
-
 $newStudentId = $_GET['student'];
 
 // Determine permissions of current user
@@ -29,13 +27,9 @@ $newCurrentStudentQ = new UserDetails();
 $newCurrentStudentQ->getNewStudentDetails($newStudentId);
 $newCurrentStudent = $newCurrentStudentQ->getResponse();
 
-    // Student only things here
-     $studentDetails = 'Student: '. $newCurrentStudent[0]['student_username'];
-	 $studentBannerId= 'BannerID: '. $newCurrentStudent[0]['student_banner_id'];
-	 $studentName = $newCurrentStudent[0]['student_first'] . ' ' . $newCurrentStudent[0]['student_last'];
-
-
-
+$studentDetails = 'Student: '. $newCurrentStudent[0]['student_username'];
+$studentBannerId= 'BannerID: '. $newCurrentStudent[0]['student_banner_id'];
+$studentName = $newCurrentStudent[0]['student_first'] . ' ' . $newCurrentStudent[0]['student_last'];
 
 $user_id = $newCurrentStudent[0]['student_id'];
 $user_user = $newCurrentStudent[0]['student_username'];
@@ -110,7 +104,7 @@ $secondMarker = $u2->getResponse();
             </li>
 
             <?php
-            if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
@@ -138,7 +132,7 @@ $secondMarker = $u2->getResponse();
 			</li>
 
 			<?php
-			if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
 				echo '<li><a href="search.php">Search</a></li>
 					<li><a href="viewDashboards.php">View dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';

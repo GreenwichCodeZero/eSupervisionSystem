@@ -1,22 +1,21 @@
 <?php
 
+// Initialise session
 session_start();
 
+error_reporting(0);
+
 require '../login-check.php';
-
-// Redirect students
-if ($_SESSION['currentUser']['user_type'] == 'student') {
-    header ('location: ../student');
-}
-
-$currentStaff = $_SESSION['currentUser'];
-
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
 include '../classes/comment.class.php';
 include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
 
+// Redirect students
+if ($_SESSION['currentUser']['user_type'] == 'student') {
+    header ('location: ../student');
+}
 
 // Globals
 $currentStaff = $_SESSION['currentUser'];
@@ -58,15 +57,6 @@ $u = new UserDetails ();
 $u->GetAllocatedStudents($staff_username);
 $students = $u->getResponse();
 
-// Is staff authorised
-$getStaffDetailsQ = new UserDetails ();
-$getStaffDetailsQ->isStaffAuthorised($staff_id);
-$getStaffDetails = $getStaffDetailsQ->getResponse();
-
-foreach($getStaffDetails as $staffDetail){
-    $staffAuthorsied = $staffDetail['staff_authorised'];
-}
-// End is staff authorised
 ?>
 <!DOCTYPE html>
 <html>
@@ -114,7 +104,7 @@ foreach($getStaffDetails as $staffDetail){
             </li>
 
             <?php
-            if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
@@ -142,7 +132,7 @@ foreach($getStaffDetails as $staffDetail){
 			</li>
 
 			<?php
-			if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
 				echo '<li><a href="search.php">Search</a></li>
 					<li><a href="viewDashboards.php">View dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';

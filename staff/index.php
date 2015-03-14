@@ -1,10 +1,12 @@
 <?php
-// A dashboard placeholder, demonstrating access to the current user
 
 // Initialise session
 session_start();
 
 require '../login-check.php';
+include '../classes/communication.class.php';
+include '../classes/meetings.class.php';
+include '../classes/userDetails.class.php';
 
 // Redirect students
 if ($_SESSION['currentUser']['user_type'] == 'student') {
@@ -29,15 +31,9 @@ if ($currentStaff['user_type'] === 'staff') {
     }
 }
 
-include '../classes/communication.class.php';
-include '../classes/meetings.class.php';
-include '../classes/userDetails.class.php';
 
-// $_SESSION['user']['id']
 $staff_username = $currentStaff['staff_username']; // (1) = demo staff id
 $staff_id = $currentStaff['staff_id'];
-
-// PRINT USER VARIABLES TO TOP OF BROWSER
 
 
 $c = new Communication ();
@@ -59,13 +55,6 @@ $studentsSupervised = new UserDetails ();
 $studentsSupervised->supervisorStudents($staff_id);
 $students = $studentsSupervised->getResponse();
 
-$getStaffDetailsQ = new UserDetails ();
-$getStaffDetailsQ->isStaffAuthorised($staff_id);
-$getStaffDetails = $getStaffDetailsQ->getResponse();
-
-foreach ($getStaffDetails as $staffDetail) {
-    $staffAuthorsied = $staffDetail['staff_authorised'];
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -109,7 +98,7 @@ foreach ($getStaffDetails as $staffDetail) {
             </li>
 
             <?php
-            if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
@@ -137,7 +126,7 @@ foreach ($getStaffDetails as $staffDetail) {
 			</li>
 
 			<?php
-			if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
 				echo '<li><a href="search.php">Search</a></li>
 					<li><a href="viewDashboards.php">View dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';
