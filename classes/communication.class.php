@@ -34,7 +34,7 @@ class Communication {
         try {
             $this->con = $s->db();
         } catch (Exception $e) {
-            echo $e->getMessage();
+            throw new Exception ($e->getMessage());
             exit;
         }
     }
@@ -108,7 +108,7 @@ class Communication {
                 $f->add($this->from, $type_id = ( $file_type_id > 0 ) ? $file_type_id : 1);
                 // $f->add($this->from, 1);
             } catch (Exception $e) {
-                echo $e->getMessage();
+                throw new Exception ($e->getMessage());
                 exit;
             }
 
@@ -135,7 +135,7 @@ class Communication {
         try {
             $result->execute();
         } catch (PDOException $e) {
-            echo "\n\n\r\r" . $e->getMessage();
+            throw new Exception ($e->getMessage());
             exit;
         }
 
@@ -304,8 +304,7 @@ class Communication {
         try {
             $result->execute();
         } catch (PDOException $e) {
-            echo "ERROR:";
-            echo "\n\n\r\r" . $e->getMessage();
+            throw new Exception ($e->getMessage());
             exit;
         }
 
@@ -366,8 +365,7 @@ class Communication {
         try {
             $this->result->execute();
         } catch (PDOException $e) {
-            echo "ERROR:";
-            echo "\n\n\r\r" . $e->getMessage();
+            throw new Exception ($e->getMessage());
             exit;
         }
 
@@ -393,8 +391,7 @@ class Communication {
         try {
             $result->execute();
         } catch (PDOException $e) {
-            echo "ERROR:";
-            echo "\n\n\r\r" . $e->getMessage();
+            throw new Exception ($e->getMessage());
             exit;
         }
 
