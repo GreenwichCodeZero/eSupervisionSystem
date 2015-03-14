@@ -147,221 +147,177 @@ $students = $u->getResponse();
 </nav>
 
 <div class="container">
-    <div class="row">
+	<div class="row">
+				<?php
+					$el = new errorList ();
+					if ($el->exists ()){
+						?>
+						<p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+					   <?php echo $el->getResponse (); ?>
+						</p>
+					   <?
+					}
+				?>
+	</div>
+	<div class="row">
+		<div class="col s10 m12 offset-s1 card">
+			<div class="card-content">
+				<span class="card-title green-text">Student Blog History</span>
+				<?php if ($blog_count > 0) {
+					// Get student name
+					$ud = new UserDetails ();
+					$ud->GetStudentDetails($_GET['sid']);
+					$student = $ud->getResponse();
 
-<div class="row">
-            <?php
-                $el = new errorList ();
-                if ($el->exists ()){
-                    ?>
-                    <p style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
-                   <?php echo $el->getResponse (); ?>
-                    </p>
-                   <?
-                }
-            ?>
-</div>
+					if ( !isset($_GET['sid']) ) {
+						echo '<p>Your allocated students have submitted '. $blog_count .' blog posts collectively.</p>';
+					} else {
+						echo '<p>'. $student[0]['student_first'] . ' ' . $student[0]['student_last'] . ' has submitted '. $blog_count .' blog posts.</p>';
+					}
+				}?>
+				<div class="row">
+					<!-- STUDENT FILTER FORM START -->
+					<form id="communication_filter" action="" method="GET">
+						<div class="col s12 m9">
+							<label for="communication_student_id_filter">Select a student</label>
+							<select name="sid" id="communication_student_id_filter">
+								<option value="" disabled="disabled" selected="selected">Choose...</option>
+								<?php foreach ($students as $stu) {
+									echo '<option value="' . $stu['student_username'] . '"' . (($_GET['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
+								} ?>
+							</select>
+						</div>
+						<div class="input-field col s12 m3">
+							<button type="submit"
+									class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+								Filter
+							</button>
+						</div>
+					</form>
+					<!-- STUDENT FILTER FORM END -->
+				</div>
 
-  <div class="row">
+					<?php if ($blog_count > 0) {
+						$count = 0;
+						foreach ($blogs as $b) {
+							++$count;
+					?>
+				<ul class="collection">
+					<li class="collection-item" <?php echo ($b['communication_from_id'] == $staff_username) ? 'style="background-color: #fafafa;"' : '' ?> >
 
+					<?php if ($b['communication_comment_id'] == 0){ ?>
+						<a onClick="toggleForm('#addComment<?php echo $count; ?>', '#newComment<?php echo $count; ?>');" class="c_right_align" id="newComment<?php echo $count; ?>">
+							<div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Write a comment
+							</div>
+						</a>
+					<?php } ?>
 
-        <div class="col s10 m12 offset-s1 card">
+				<form action="readfile.php" method="POST">
+					<div>
+						<span class="green-text">
+							<b>
+								<?php if ($b['communication_from_id'] == $staff_username) {
+									// Message is from current staff user
+									echo 'Me';
+								} else {
+									// Message is from student
+									echo $b['student_first'] . " " . $b['student_last'];
+								} ?>
+							</b>
+						</span>
+						&#8212;
+						<?php
+						// Pretty format the date
+						$date = strtotime($b['communication_date_added']);
+						$prettyDate = date('l j F Y', $date);
 
+						// Output date and time
+						echo $prettyDate . ', ' . substr($b['communication_time_added'], 0, -3); ?>
+					</div>
+					<div>
+						<?php echo $b['communication_body']; ?>
+					</div>
 
-            <div class="card-content">
-                <span class="card-title green-text">Student Blog History</span>
-                <?php if ($blog_count > 0) {
-                    // Get student name
-                    $ud = new UserDetails ();
-                    $ud->GetStudentDetails($_GET['sid']);
-                    $student = $ud->getResponse();
+					<?php
+					if ($b['communication_file_id'] > 0) { ?>
+						<hr/>
+						<p>
+							<input type="hidden" name="file_id"
+								   value="' . $b['communication_file_id'] . '"/>
+							<button
+								class="waves-effect waves-teal waves-light green btn-flat white-text"
+								style="margin-bottom: 0; margin-top: 15px;">
+								View File<i class="mdi-editor-attach-file right"></i></button>
+						</p>
+					<?php } ?>
+				</form>
 
-                    if ( !isset($_GET['sid']) ) {
-                        echo '<p>Your allocated students have submitted '. $blog_count .' blog posts collectively.</p>';
-                    } else {
+				<!-- BLOG SECTION START-->
+				<?php if ($b['communication_comment_id'] > 0){
+						$cmm1 = new Comment ();
+						$cmm1->getComment ($b['communication_comment_id']);
+						$comment = $cmm1->getResponse ();
+				?>
+				
+				<!--  COMMENT HTML START -->
+					<div class="grey lighten-3">
+						<b>
+							Comment from <?php echo $comment_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>
+							<?php
+							// Pretty format the date
+								$date = strtotime($comment['comment_date_added']);
+								$prettyDate = date('l j F Y', $date);
 
-                        echo '<p>'. $student[0]['student_first'] . ' ' . $student[0]['student_last'] . ' has submitted '. $blog_count .' blog posts.</p>';
-                    }
+								// Output date and time
+								echo $prettyDate . ', ' . substr($comment['comment_time_added'], 0, -3);
+							?>
+						 </b>
+					</div>
+					<div class="grey lighten-3">
+						<?php echo $comment['comment_body']; ?>
+					</div>
+					<!--  COMMENT HTML END -->
+					<?} else {?>
+					
+					<!-- NEW COMMENT SECTION START-->
+					<div class="row grey lighten-3" id="addComment<?php echo $count; ?>" style="display:none">
+						<div class="col s12">
+							<div class="card-content">
+								<form id="communication" method="POST" action="" enctype="multipart/form-data">
+									<input type='hidden' name='comment_action' value='newcomment'/>
+									<input type="hidden" name="comment_from_id" value="<?php echo $staff_username; ?>">
+									<input type='hidden' name='comment_student_id' value='<?php echo $_GET['sid']; ?>'/>
+									<input type='hidden' name='comment_communication_id' value='<?php echo $b['communication_id']; ?>'/>
+									
+									<div class="input-field col s12">
+									<i class="small mdi-content-clear c_right-align"
+								   onclick="toggleForm('#addComment<?php echo $count; ?>', '#newComment<?php echo $count; ?>');"></i>
+										<label for="comment_body">Your comment:</label>
+										<textarea class="materialize-textarea" name="comment_body" id="communication_body"></textarea>
+									</div>
 
-
-                } ?>
-
-                <div class="row">
-                    <!-- STUDENT FILTER FORM START -->
-                    <form id="communication_filter" action="" method="GET">
-                        <div class="col s12 m9">
-                            <label for="communication_student_id_filter">Select a student</label>
-                            <select name="sid" id="communication_student_id_filter">
-                                <option value="" disabled="disabled" selected="selected">Choose...</option>
-                                <?php foreach ($students as $stu) {
-                                    echo '<option value="' . $stu['student_username'] . '"' . (($_GET['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
-                                } ?>
-                            </select>
-                        </div>
-                        <div class="input-field col s12 m3">
-
-                            <button type="submit"
-                                    class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
-                                Filter
-                            </button>
-                        </div>
-                    </form>
-                    <!-- STUDENT FILTER FORM END -->
-                </div>
-
-                <?php if ($blog_count > 0) {
-                    $count = 0;
-                    foreach ($blogs as $b) {
-                    ++$count;
-                        ?>
-
-                        <ul class="collection">
-                            <li class="collection-item" <?php echo ($b['communication_from_id'] == $staff_username) ? 'style="background-color: #fafafa;"' : '' ?> >
-
-                            <?php if ($b['communication_comment_id'] == 0){ ?>
-                                <a onClick="toggleForm('#addComment<?php echo $count; ?>', '#newComment');" class="c_right_align" id="newComment<?php echo $count; ?>">
-                                    <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Write a comment
-                                    </div>
-                                </a>
-                                <?php } ?>
-
-                                <form action="readfile.php" method="POST">
-                                    <p>
-                                        <span class="green-text">
-                                            <b>
-                                                <?php if ($b['communication_from_id'] == $staff_username) {
-                                                    // Message is from current staff user
-                                                    echo 'Me';
-                                                } else {
-                                                    // Message is from student
-                                                    echo $b['student_first'] . " " . $b['student_last'];
-                                                } ?>
-                                            </b>
-                                        </span>
-                                        &#8212;
-
-                                        <?php
-                                        // Pretty format the date
-                                        $date = strtotime($b['communication_date_added']);
-                                        $prettyDate = date('l j F Y', $date);
-
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($b['communication_time_added'], 0, -3); ?>
-                                    </p>
-
-                                    <p>
-                                        <?php echo $b['communication_body']; ?>
-                                    </p>
-
-                                    <?php
-                                    if ($b['communication_file_id'] > 0) { ?>
-                                        <hr/>
-                                        <p>
-                                            <input type="hidden" name="file_id"
-                                                   value="' . $b['communication_file_id'] . '"/>
-                                            <button
-                                                class="waves-effect waves-teal waves-light green btn-flat white-text"
-                                                style="margin-bottom: 0; margin-top: 15px;">
-                                                View File<i class="mdi-editor-attach-file right"></i></button>
-                                        </p>
-                                    <?php } ?>
-                                </form>
-
-                                        <!-- MESSAGE SECTION START-->
-
-
-                            <?php if ($b['communication_comment_id'] > 0){
-
-                                $cmm1 = new Comment ();
-                                $cmm1->getComment ($b['communication_comment_id']);
-                                $comment = $cmm1->getResponse ();
-                            ?>
-
-                            <!--  COMMENT HTML START -->
-                            <p class="grey lighten-3">
-                            <b>
-                                Comment from <?php echo $comment_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>
-
-                                <?php
-                                // Pretty format the date
-                                    $date = strtotime($comment['comment_date_added']);
-                                    $prettyDate = date('l j F Y', $date);
-
-                                    // Output date and time
-                                    echo $prettyDate . ', ' . substr($comment['comment_time_added'], 0, -3);
-                                ?>
-                             </b>
-                             </p>
-
-                            <p class="grey lighten-3"><?php echo $comment['comment_body']; ?></p>
-
-                            <!--  COMMENT HTML END -->
-
-                            <?
-                            } else {
-
-                            ?>
-                                <!-- NEW COMMENT SECTION START-->
-                                <div class="row" id="addComment<?php echo $count; ?>">
-                                    <div class="col s12">
-                                            <i class="small mdi-content-clear c_right-align"
-                                               onclick="toggleForm('#addComment<?php echo $count; ?>', '#newComment<?php echo $count; ?>');"></i>
-
-                                            <div class="card-content">
-
-                                                <form id="communication" method="POST"
-                                                      action=""
-                                                      enctype="multipart/form-data">
-                                                    <input type='hidden' name='comment_action' value='newcomment'/>
-                                                    <input type="hidden" name="comment_from_id" value="<?php echo $staff_username; ?>">
-                                                    <input type='hidden' name='comment_student_id' value='<?php echo $_GET['sid']; ?>'/>
-                                                    <input type='hidden' name='comment_communication_id' value='<?php echo $b['communication_id']; ?>'/>
-
-
-                                                    <div class="input-field col s12">
-                                                        <label for="comment_body">Your comment:</label>
-                                                        <textarea class="materialize-textarea" name="comment_body"
-                                                                  id="communication_body"></textarea>
-                                                    </div>
-
-                                                    <div class="input-field col s12">
-                                                        <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
-                                                            Submit
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                </div>
-                                <!-- NEW COMMENT SECTION END-->
-
-
-
-                                <?
-                            }
-
-                            ?>
-
-
-
-
-
-                            </li>
-                        </ul>
-
-
-
-
-                    <?php }
-                } else if ($blog_count == 0) {
-                    // No messages found for current student
-                    echo '<ul class="collection"><li class="collection-item">No posts to display</li></ul>';
-                } ?>
-            </div>
-        </div>
-        <!--MESSAGING SECTION END-->
-    </div>
-
+									<div class="input-field col s12">
+										<button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+											Submit
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<!-- NEW COMMENT SECTION END-->
+					<? } ?>
+					</li>
+				</ul>
+				<?php }
+					} else if ($blog_count == 0) {
+						// No messages found for current student
+						echo '<ul class="collection"><li class="collection-item">No posts to display</li></ul>';
+					} ?>
+			</div>
+		</div>
+	</div>
+<!--BLOG SECTION END-->
 </div>
 <!-- end container -->
 </body>
