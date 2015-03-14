@@ -834,8 +834,8 @@ if ($_POST['sid']) {
                                 } else { echo "There are no uploads of this type"; }// End Is Array
                                 break;
                             case 6:
-                                if (is_array ($studentFiles['etchis']['files'])) {
-                                    foreach ($studentFiles['etchis']['files'] as $file) {
+                                if (is_array ($studentFiles['ethics']['files'])) {
+                                    foreach ($studentFiles['ethics']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
 
                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>

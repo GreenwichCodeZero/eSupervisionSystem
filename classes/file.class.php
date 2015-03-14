@@ -217,7 +217,7 @@ class File {
                     $type_id = 2;
                     break;
                 case "ethics":
-                    $type_id =6;
+                    $type_id = 6;
 
                     break;
                 case "initial":
