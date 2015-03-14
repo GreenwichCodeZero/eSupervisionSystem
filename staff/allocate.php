@@ -16,12 +16,6 @@ $currentStaff = $_SESSION['currentUser'];
 $staff_id = $currentStaff['staff_id'];
 $selectedStudents = $_POST['students'];
 
-
-$getStaffDetailsQ = new UserDetails ();
-$getStaffDetailsQ->isStaffAuthorised($staff_id);
-$getStaffDetails = $getStaffDetailsQ->getResponse();
-
-
 // Determine permissions of current user
 if ($currentStaff['user_type'] === 'student') {
     // Redirect to staff dashboard
@@ -388,7 +382,7 @@ if (isset($_POST['saveAllocate'])) {
             </li>
 
             <?php
-            if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
@@ -416,7 +410,7 @@ if (isset($_POST['saveAllocate'])) {
             </li>
 
             <?php
-            if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
 					<li><a href="viewDashboards.php">View dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';

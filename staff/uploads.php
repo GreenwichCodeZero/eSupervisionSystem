@@ -1,17 +1,11 @@
 <?php
 
+// Initialise session
 session_start();
 
+error_reporting(0);
+
 require '../login-check.php';
-
-// Redirect students
-if ($_SESSION['currentUser']['user_type'] == 'student') {
-    header ('location: ../student');
-}
-
-$currentUser = $_SESSION['currentUser'];
-$currentStaff = $_SESSION['currentUser'];
-
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
 include '../classes/comment.class.php';
@@ -19,11 +13,15 @@ include '../classes/userDetails.class.php';
 include '../classes/errorList.class.php';
 include '../classes/projectDetails.class.php';
 
+// Redirect students
+if ($_SESSION['currentUser']['user_type'] == 'student') {
+    header ('location: ../student');
+}
+
 // Globals
 $currentStaff = $_SESSION['currentUser'];
 $staff_id = $currentStaff['staff_id'];
 $staff_username = $currentStaff['staff_username'];
-
 
 $f = new File ();
 
@@ -75,17 +73,6 @@ if ($_POST['projectDetails_action']){
 $u = new UserDetails ();
 $u->GetAllocatedStudents($staff_username);
 $students = $u->getResponse();
-
-// print_r($students);
-// Is staff authorised
-$getStaffDetailsQ = new UserDetails ();
-$getStaffDetailsQ->isStaffAuthorised($staff_id);
-$getStaffDetails = $getStaffDetailsQ->getResponse();
-
-foreach($getStaffDetails as $staffDetail){
-    $staffAuthorsied = $staffDetail['staff_authorised'];
-}
-// End is staff authorised
 
 // Determine which messages to display
 if ($_POST['sid']) {
@@ -171,9 +158,6 @@ if ($_POST['sid']) {
     $filtered = -1;
 }
 
-
-
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -222,7 +206,7 @@ if ($_POST['sid']) {
             </li>
 
             <?php
-            if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
@@ -250,7 +234,7 @@ if ($_POST['sid']) {
             </li>
 
             <?php
-            if ($staffAuthorsied == 1) {
+            if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
 					<li><a href="viewDashboards.php">View dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';
