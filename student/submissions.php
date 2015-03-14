@@ -545,7 +545,7 @@ $projectTitle = $p->getResponse ();
                     <p>
                         Latest Upload:
                         <?php echo (
-                        $student_student_ethics[0]['file_id'] > 0 ?
+                        $student_ethics[0]['file_id'] > 0 ?
                             "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_ethics[0]['file_id']."'/><a>".$student_ethics[0]['file_name']."</a><button>download</button>
                             </form>"
                             : "no file uploaded yet"
