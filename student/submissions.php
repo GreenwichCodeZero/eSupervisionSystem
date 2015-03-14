@@ -310,7 +310,7 @@ $projectTitle = $p->getResponse ();
 
 
                             echo ' <li class="collection-item">
-                                    You have not uploaded anything
+                                    Your tutor has not uploaded anything
                                     </li> ';
 
                         }
@@ -364,7 +364,7 @@ $projectTitle = $p->getResponse ();
 
 
                             echo ' <li class="collection-item">
-                                    You have not uploaded anything
+                                    Your tutor has not uploaded anything
                                     </li> ';
 
                         }
@@ -419,7 +419,7 @@ $projectTitle = $p->getResponse ();
 
 
                             echo ' <li class="collection-item">
-                                    You have not uploaded anything
+                                    Your tutor has not uploaded anything
                                     </li> ';
 
                         }
@@ -472,7 +472,7 @@ $projectTitle = $p->getResponse ();
 
 
                             echo ' <li class="collection-item">
-                                    You have not uploaded anything
+                                    Your tutor has not uploaded anything
                                     </li> ';
 
                         }
@@ -527,7 +527,7 @@ $projectTitle = $p->getResponse ();
 
 
                             echo ' <li class="collection-item">
-                                    You have not uploaded anything
+                                    Your tutor has not uploaded anything
                                     </li> ';
 
                         }
@@ -580,7 +580,7 @@ $projectTitle = $p->getResponse ();
 
 
                             echo ' <li class="collection-item">
-                                    You have not uploaded anything
+                                    Your tutor has not uploaded anything
                                     </li> ';
 
                         }
