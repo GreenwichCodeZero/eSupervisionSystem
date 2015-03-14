@@ -27,6 +27,17 @@ $staff_username = $currentStaff['staff_username'];
 
 $f = new File ();
 
+if ($_POST['action'] == "filter"){ 
+    $el = new errorList ();
+
+    if (empty ($_POST['sid'])) {
+        $errorMessage = "Please select a student";
+        $el->newList()->type('error')->message($errorMessage)->go('uploads.php');
+        exit;
+    }
+
+}
+
 if ($_POST['file_action']){ 
     $el = new errorList ();
     $c = new Communication ();
@@ -35,11 +46,11 @@ if ($_POST['file_action']){
         $c->insert($staff_username, $_POST['file_type_id']);
     } catch (Exception $e) {
 
-        $el->newList()->type('error')->message($e->getMessage())->go('uploads.php?sid='.$_GET['sid']);
+        $el->newList()->type('error')->message($e->getMessage())->go('uploads.php?sid='.$_POST['sid']);
         exit;
     }
 
-    $el->newList()->type('success')->message($c->getResponse())->go('uploads.php?sid='.$_GET['sid']);
+    $el->newList()->type('success')->message($c->getResponse())->go('uploads.php?sid='.$_POST['sid']);
     exit;
 }
 
@@ -51,11 +62,11 @@ if ($_POST['projectDetails_action']){
     try { $p->newTitle ( $stu_user); }
     catch (Exception $e){
         
-        $el->newList()->type('error')->message ($e->getMessage ())->go('uploads.php?sid='.$_GET['sid']);
+        $el->newList()->type('error')->message ($e->getMessage ())->go('uploads.php?sid='.$_POST['sid']);
         exit;
     }
     
-    $el->newList()->type('success')->message ($p->getResponse ())->go('uploads.php?sid='.$_GET['sid']);
+    $el->newList()->type('success')->message ($p->getResponse ())->go('uploads.php?sid='.$_POST['sid']);
     exit;
 
 }
@@ -77,7 +88,7 @@ foreach($getStaffDetails as $staffDetail){
 // End is staff authorised
 
 // Determine which messages to display
-if ($_GET['sid']) {
+if ($_POST['sid']) {
 
     $f->fileTypes ();
     $fileTypes = $f->getResponse ();
@@ -89,107 +100,71 @@ if ($_GET['sid']) {
     $fileTypes = $f->getResponse ();
 
     // Get Student uploads by type
-    $f->get ($_GET['sid'], 'interim');
+    $f->get ($_POST['sid'], 'interim');
     $student_interim = $f->getResponse ();
 
-    $f->get ($_GET['sid'], 'initial');
+    $f->get ($_POST['sid'], 'initial');
     $student_initial = $f->getResponse ();
 
-    $f->get ($_GET['sid'], 'ethics');
+    $f->get ($_POST['sid'], 'ethics');
     $student_ethics = $f->getResponse ();
 
-    $f->get ($_GET['sid'], 'proposal');
+    $f->get ($_POST['sid'], 'proposal');
     $student_proposal = $f->getResponse ();
 
-    $f->get ($_GET['sid'], 'contextual');
+    $f->get ($_POST['sid'], 'contextual');
     $student_contextual = $f->getResponse ();
 
-    $f->get ($_GET['sid'], 'project');
+    $f->get ($_POST['sid'], 'project');
     $student_project = $f->getResponse ();
 
-    $p->studentProject($_GET['sid']);
+    $p->studentProject($_POST['sid']);
     $student_projectTitle = $p->getResponse ();
 
-
-
-
-$studentFiles = array 
-(    
-    "interim" => array 
-        ( 
-        "files" => $f->getAll($_GET['sid'], 'interim')->getResponse () ,
-        "count" => count ($f->getAll($_GET['sid'], 'interim')->getResponse ())
-        ),
-
-    "initial" => array (
-        "files" => $f->getAll($_GET['sid'], 'initial')->getResponse () ,
-        "count" => count ($f->getAll($_GET['sid'], 'initial')->getResponse ())
-        ), 
-    "ethics" => array (
-        "files" => $f->getAll($_GET['sid'], 'ethics')->getResponse () ,
-        "count" => count ($f->getAll($_GET['sid'], 'ethics')->getResponse ())
-        ),
-    "proposal" => array (
-        "files" => $f->getAll($_GET['sid'], 'proposal')->getResponse () ,
-        "count" => count ($f->getAll($_GET['sid'], 'proposal')->getResponse ())
-        ),
-    "project" => array (
-        "files" => $f->getAll($_GET['sid'], 'project')->getResponse () ,
-        "count" => count ($f->getAll($_GET['sid'], 'project')->getResponse ())
-        ),
-    "contextual" => array (
-        "files" => $f->getAll($_GET['sid'], 'contextual')->getResponse () ,
-        "count" => count ($f->getAll($_GET['sid'], 'contextual')->getResponse ())
-        ),
-    "feedback" => array (
-        "files" => $f->getAll($_GET['sid'], 'feedback')->getResponse () ,
-        "count" => count ($f->getAll($_GET['sid'], 'feedback')->getResponse ())
-        )
-);
 
 
 $superFiles = array 
 (    
     "interim" => array 
         ( 
-        "files" => $f->supervisorUploads ($staff_username, $_GET['sid'], 'interim')->getResponse () ,
-        "count" => count ($f->supervisorUploads ($staff_username, $_GET['sid'], 'interim')->getResponse ())
+        "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'interim')->getResponse () ,
+        "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'interim')->getResponse ())
         ),
 
     "initial" => array (
-        "files" => $f->supervisorUploads ($staff_username, $_GET['sid'], 'initial')->getResponse () ,
-        "count" => count ($f->supervisorUploads ($staff_username, $_GET['sid'], 'initial')->getResponse ())
+        "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'initial')->getResponse () ,
+        "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'initial')->getResponse ())
         ), 
     "ethics" => array (
-        "files" => $f->supervisorUploads ($staff_username, $_GET['sid'], 'ethics')->getResponse () ,
-        "count" => count ($f->supervisorUploads ($staff_username, $_GET['sid'], 'ethics')->getResponse ())
+        "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'ethics')->getResponse () ,
+        "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'ethics')->getResponse ())
         ),
     "proposal" => array (
-        "files" => $f->supervisorUploads ($staff_username, $_GET['sid'], 'proposal')->getResponse () ,
-        "count" => count ($f->supervisorUploads ($staff_username, $_GET['sid'], 'proposal')->getResponse ())
+        "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'proposal')->getResponse () ,
+        "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'proposal')->getResponse ())
         ),
     "project" => array (
-        "files" => $f->supervisorUploads ($staff_username, $_GET['sid'], 'project')->getResponse () ,
-        "count" => count ($f->supervisorUploads ($staff_username, $_GET['sid'], 'project')->getResponse ())
+        "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'project')->getResponse () ,
+        "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'project')->getResponse ())
         ),
     "contextual" => array (
-        "files" => $f->supervisorUploads ($staff_username, $_GET['sid'], 'contextual')->getResponse () ,
-        "count" => count ($f->supervisorUploads ($staff_username, $_GET['sid'], 'contextual')->getResponse ())
+        "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'contextual')->getResponse () ,
+        "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'contextual')->getResponse ())
         ),
     "feedback" => array (
-        "files" => $f->supervisorUploads ($staff_username, $_GET['sid'], 'feedback')->getResponse () ,
-        "count" => count ($f->supervisorUploads ($staff_username, $_GET['sid'], 'feedback')->getResponse ())
+        "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'feedback')->getResponse () ,
+        "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'feedback')->getResponse ())
         )
 );
 
 // Get Staff uploads by type
 // echo "<pre>";
-// print_r ($superFiles);
+// print_r ($studentFiles);
 // echo "</pre>";
 
 
     //  is this needed?
-    $f->getAll($_GET['sid']);
+    $f->getAll($_POST['sid']);
     $files = $f->getResponse();
     $file_count = count($files);
 } else {
@@ -268,7 +243,7 @@ $superFiles = array
 							$el = new errorList ();
 							if ($el->exists ()){
 								?>
-								<p class='<?php echo $el->getType (); ?>' style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+								<p class='<?php echo $el->getType (); ?>' >
 									<?php echo $el->getResponse (); ?>
 								</p>
 							   <?
@@ -282,14 +257,15 @@ $superFiles = array
              
 
 				<!-- STUDENT FILTER FORM START -->
-				<form id="communication_filter" action="" method="GET">
+				<form id="communication_filter" action="" method="POST">
 						<label for="communication_student_id_filter">Select a student</label>
 						<select name="sid" id="communication_student_id_filter">
 							<option value="" disabled="disabled" selected="selected">Choose...</option>
 							<?php foreach ($students as $stu) {
-								echo '<option value="' . $stu['student_username'] . '"' . (($_GET['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
+								echo '<option value="' . $stu['student_username'] . '"' . (($_POST['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
 							} ?>
 						</select>
+                        <input type='hidden' name='action' value='filter' />
 						<button type="submit" class="c_right-align waves-effect waves-teal waves-light blue btn-flat white-text">Filter</button>
 				</form>
                 <!-- STUDENT FILTER FORM END -->
@@ -317,7 +293,7 @@ $superFiles = array
 									<input type="hidden" name="communication_from_id" value="<?php echo $staff_username; ?>">
 									<input type='hidden' name='communication_type_id' value='2'/>
 									<div class="col s6">
-										<input type='hidden' name="communication_to_id" value='<?php echo $_GET['sid']; ?>'>
+										<input type='hidden' name="communication_to_id" value='<?php echo $_POST['sid']; ?>'>
 										<select name="file_type_id">
 										<?php foreach ($fileTypes as $ft) {
 												echo "<option value='".$ft['file_type_id']."'>".$ft['file_type_name']."</option>";
@@ -398,7 +374,10 @@ $superFiles = array
                             <div class="card">
                                 <div class="card-content">
 								<div class='c_right-align'>
-										<a href="uploads.php?sid=<?php echo $_GET['sid'];?>&type=3" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</a>
+										<form action="?type=3" method="POST">
+                                        <input type="hidden" name="sid" value="<?php echo $_POST['sid'];?>" />
+                                        <button type="submit" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</button>
+                                        </form>
 								</div>
 
 									<span class="card-title green-text">Project Proposal</span>
@@ -448,7 +427,10 @@ $superFiles = array
 							<div class="card">
 								<div class="card-content">
 								<div class='c_right-align'>
-										<a href="uploads.php?sid=<?php echo $_GET['sid'];?>&type=4" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</a>
+										<form action="?type=4" method="POST">
+                                        <input type="hidden" name="sid" value="<?php echo $_POST['sid'];?>" />
+                                        <button type="submit" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</button>
+                                        </form>
 								</div>
 									<span class="card-title green-text">Contextual Report</span>
 									<div>Latest Upload: 
@@ -494,7 +476,10 @@ $superFiles = array
                             <div class="card">
                                 <div class="card-content">
 								<div class='c_right-align'>
-										<a href="uploads.php?sid=<?php echo $_GET['sid'];?>&type=8" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</a>
+										<form action="?type=8" method="POST">
+                                        <input type="hidden" name="sid" value="<?php echo $_POST['sid'];?>" />
+                                        <button type="submit" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</button>
+                                        </form>
 								</div>
                                     <span class="card-title green-text">Inital Report</span>
                                     <div>Latest Upload: 
@@ -539,7 +524,10 @@ $superFiles = array
                             <div class="card">
                                 <div class="card-content">
 								<div class='c_right-align'>
-										<a href="uploads.php?sid=<?php echo $_GET['sid'];?>&type=5" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</a>
+										<form action="?type=5" method="POST">
+                                        <input type="hidden" name="sid" value="<?php echo $_POST['sid'];?>" />
+                                        <button type="submit" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</button>
+                                        </form>
 								</div>
                                     <span class="card-title green-text">Interim Report</span>
 
@@ -584,7 +572,10 @@ $superFiles = array
                             <div class="card">
                                 <div class="card-content">
 								<div class='c_right-align'>
-										<a href="uploads.php?sid=<?php echo $_GET['sid'];?>&type=2" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</a>
+										<form action="?type=2" method="POST">
+                                        <input type="hidden" name="sid" value="<?php echo $_POST['sid'];?>" />
+                                        <button type="submit" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</button>
+                                        </form>
 								</div>
                                     <span class="card-title green-text">Project Report</span>
 									<div>Latest Upload: 
@@ -629,7 +620,10 @@ $superFiles = array
                             <div class="card">
                                 <div class="card-content">
 								<div class='c_right-align'>
-										<a href="uploads.php?sid=<?php echo $_GET['sid'];?>&type=6" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</a>
+										<form action="?type=6" method="POST">
+                                        <input type="hidden" name="sid" value="<?php echo $_POST['sid'];?>" />
+                                        <button type="submit" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</button>
+                                        </form>
 								</div>
                                     <span class="card-title green-text">Research Ethics</span>
 									<div>Latest Upload: 
@@ -693,13 +687,54 @@ $superFiles = array
 
 
 
-                         <?php }  else { ?>
+                         <?php }  else { 
+
+                            $studentFiles = array 
+                            (    
+                                "interim" => array 
+                                    ( 
+                                    "files" => $f->getAll($_POST['sid'], 'interim')->getResponse () ,
+                                    "count" => count ($f->getAll($_POST['sid'], 'interim')->getResponse ())
+                                    ),
+
+                                "initial" => array (
+                                    "files" => $f->getAll($_POST['sid'], 'initial')->getResponse () ,
+                                    "count" => count ($f->getAll($_POST['sid'], 'initial')->getResponse ())
+                                    ), 
+                                "ethics" => array (
+                                    "files" => $f->getAll($_POST['sid'], 'ethics')->getResponse () ,
+                                    "count" => count ($f->getAll($_POST['sid'], 'ethics')->getResponse ())
+                                    ),
+                                "proposal" => array (
+                                    "files" => $f->getAll($_POST['sid'], 'proposal')->getResponse () ,
+                                    "count" => count ($f->getAll($_POST['sid'], 'proposal')->getResponse ())
+                                    ),
+                                "project" => array (
+                                    "files" => $f->getAll($_POST['sid'], 'project')->getResponse () ,
+                                    "count" => count ($f->getAll($_POST['sid'], 'project')->getResponse ())
+                                    ),
+                                "contextual" => array (
+                                    "files" => $f->getAll($_POST['sid'], 'contextual')->getResponse () ,
+                                    "count" => count ($f->getAll($_POST['sid'], 'contextual')->getResponse ())
+                                    ),
+                                "feedback" => array (
+                                    "files" => $f->getAll($_POST['sid'], 'feedback')->getResponse () ,
+                                    "count" => count ($f->getAll($_POST['sid'], 'feedback')->getResponse ())
+                                    )
+                            );
+
+                            ?>
                         <div class="row">
 							<div class="col s12"  style='background-color: #fafafa; margin-bottom: 10px; border: thin solid #ccc;'>
-                             <div class='c_right-align'><a href="uploads.php?sid=<?php echo $_GET['sid'];?>" class="waves-effect waves-teal waves-light blue lighten-1 btn-flat white-text">GO BACK</a></div>
+                             <div class='c_right-align'>
+                             <form action="uploads.php" method="post" >
+                             <input type="hidden" name="sid" value="<?php echo $_POST['sid'];?>" />
+                             <button type="submit" class="waves-effect waves-teal waves-light blue lighten-1 btn-flat white-text">GO BACK</button>
+</form>
+                             </div>
 
                              <ul class="collection">
-	                          <?php        
+	                          <?php       
 			                     foreach ($fileTypes as $ft) {
 
                                         // check file type exists
@@ -723,7 +758,7 @@ $superFiles = array
 
                                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                                             <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                             <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                                         //      
                                                         echo "</li>";
 
@@ -737,7 +772,7 @@ $superFiles = array
 
                                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                                             <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                             <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                                         //      
                                                         echo "</li></ul>";
 
@@ -751,7 +786,7 @@ $superFiles = array
 
                                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                                             <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                             <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                                         //      
                                                         echo "</li></ul>";
 
@@ -765,7 +800,7 @@ $superFiles = array
 
                                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                                             <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                             <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                                         //      
                                                         echo "</li></ul>";
 
@@ -779,7 +814,7 @@ $superFiles = array
 
                                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                                             <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                             <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                                         //      
                                                         echo "</li></ul>";
 
@@ -793,7 +828,21 @@ $superFiles = array
 
                                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                                             <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                             <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                        //      
+                                                        echo "</li></ul>";
+
+                                                    } // End Foreach
+                                                } else { echo "There are no uploads of this type"; }// End Is Array            
+                                    break;
+                                    case 8:
+                                                if (is_array ($studentFiles['initial']['files'])) {
+                                                    foreach ($studentFiles['initial']['files'] as $file) {
+                                                          echo '<ul class="collection"><li class="collection-item">';
+
+                                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>                    
+                                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                                             <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                                         //      
                                                         echo "</li></ul>";
 

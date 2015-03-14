@@ -95,14 +95,23 @@ class File {
 		    $fileName = addslashes($fileName);
 		}
 
-		$result = $this->con->prepare(
+			$result = $this->con->prepare(
 			"INSERT INTO 
 			`esuper_file`
-			(file_id, file_owner, file_name, file_size, file_type,  file_content, file_type_id ) 
+			(file_id, file_owner, file_name, file_size, file_type,  file_content, file_type_id, file_date_added, file_time_added) 
 			VALUES 
-			(null, '".$user."', '$fileName', '$fileSize', '$fileType', '$content', '$file_type_id')"
+			(null, '$user', '$fileName', '$fileSize', '$fileType', '$content', '$file_type_id', :date_added, :time_added)"
 			);
-        $result->execute();
+		
+        $result->bindValue(':date_added', date("Y-m-d"));
+        $result->bindValue(':time_added', date("H:i:s"));
+     	try { $result->execute(); }
+
+        catch (PDOException $e) {
+        	echo "ERROR:";
+        	echo "\n\n\r\r". $e->getMessage ();
+        	exit;
+        }
 
         $this->response ('File ['.$fileName.'] successfully submitted');
 
@@ -159,11 +168,13 @@ class File {
 		$result = $this->con->prepare(
 			"INSERT INTO 
 			`esuper_file`
-			(file_id, file_owner, file_name, file_size, file_type,  file_content, file_type_id ) 
+			(file_id, file_owner, file_name, file_size, file_type,  file_content, file_type_id, file_date_added, file_time_added) 
 			VALUES 
-			(null, '$user', '$fileName', '$fileSize', '$fileType', '$content', '$file_type_id')"
+			(null, '$user', '$fileName', '$fileSize', '$fileType', '$content', '$file_type_id', :date_added, :time_added)"
 			);
-
+		
+        $result->bindValue(':date_added', date("Y-m-d"));
+        $result->bindValue(':time_added', date("H:i:s"));
      	try { $result->execute(); }
 
         catch (PDOException $e) {
@@ -189,7 +200,9 @@ class File {
 
 			$sql = "SELECT  
 			file_id, 
-			file_name
+			file_name,
+			file_date_added,
+			file_time_added
 			FROM
 			esuper_file 
 			WHERE 
