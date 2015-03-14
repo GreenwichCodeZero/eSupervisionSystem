@@ -90,8 +90,7 @@ $supervisor = $u->getResponse();
 					<a href="../logout.php" title="Logout">Logout</a>
 				</li>
 			</ul>
-
-			<ul id="nav-mobile">
+			<ul id="nav-mobile" class="side-nav hide-on-large-only">
 				<li>
 					<a href="index.php">Dashboard</a>
 				</li>
