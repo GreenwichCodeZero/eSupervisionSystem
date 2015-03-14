@@ -110,6 +110,14 @@ if (isset($_POST['saveAllocate'])) {
                                     $emailHeaders
                                 );
 
+                                //todo remove
+                                mail(
+                                    'ta210@greenwich.ac.uk, tm112@greenwich.ac.uk',
+                                    '1 Supervisor Allocation Changed ' . $studentDetails['student_username'],
+                                    'You have been allocated to a new supervisor, check the eSupervision System for details.',
+                                    $emailHeaders
+                                );
+
                                 // Send email to new supervisor
                                 $newSupervisorStudentUsernames[] = $studentDetails;
                             } else {
@@ -136,6 +144,14 @@ if (isset($_POST['saveAllocate'])) {
                                 mail(
                                     $studentDetails['student_username'] . '@greenwich.ac.uk',
                                     'Second Marker Allocation Changed',
+                                    'You have been allocated to a new second marker, check the eSupervision System for details.',
+                                    $emailHeaders
+                                );
+
+                                //todo remove
+                                mail(
+                                    'ta210@greenwich.ac.uk, tm112@greenwich.ac.uk',
+                                    '2 Second Marker Allocation Changed ' . $studentDetails['student_username'],
                                     'You have been allocated to a new second marker, check the eSupervision System for details.',
                                     $emailHeaders
                                 );
@@ -170,6 +186,14 @@ if (isset($_POST['saveAllocate'])) {
                         $supervisorEmailBody,
                         $emailHeaders
                     );
+
+                    //todo remove
+                    mail(
+                        'ta210@greenwich.ac.uk, tm112@greenwich.ac.uk',
+                        '3 Supervisor Allocation Changed ' . $oldSupervisorUsername,
+                        $supervisorEmailBody,
+                        $emailHeaders
+                    );
                 }
 
                 break;
@@ -186,6 +210,14 @@ if (isset($_POST['saveAllocate'])) {
                     mail(
                         $oldSecondMarkerUsername . '@greenwich.ac.uk',
                         'Second Marker Allocation Changed',
+                        $secondMarkerEmailBody,
+                        $emailHeaders
+                    );
+
+                    //todo remove
+                    mail(
+                        'ta210@greenwich.ac.uk, tm112@greenwich.ac.uk',
+                        '4 Second Marker Allocation Changed ' . $oldSecondMarkerUsername,
                         $secondMarkerEmailBody,
                         $emailHeaders
                     );
@@ -219,6 +251,14 @@ if (isset($_POST['saveAllocate'])) {
                     $emailHeaders
                 );
 
+                //todo remove
+                mail(
+                    'ta210@greenwich.ac.uk, tm112@greenwich.ac.uk',
+                    '5 Supervisor Allocation Changed ' . $staffUsername,
+                    $supervisorEmailBody,
+                    $emailHeaders
+                );
+
                 break;
             case 'second':
                 // Email new second marker
@@ -232,6 +272,14 @@ if (isset($_POST['saveAllocate'])) {
                 mail(
                     $staffUsername . '@greenwich.ac.uk',
                     'Second Marker Allocation Changed',
+                    $secondMarkerEmailBody,
+                    $emailHeaders
+                );
+
+                //todo below
+                mail(
+                    'ta210@greenwich.ac.uk, tm112@greenwich.ac.uk',
+                    '6 Second Marker Allocation Changed ' . $staffUsername,
                     $secondMarkerEmailBody,
                     $emailHeaders
                 );
@@ -350,34 +398,34 @@ if (isset($_POST['saveAllocate'])) {
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
         </ul>
-		<ul id="nav-mobile" class="side-nav hide-on-large-only">
-			<li>
-				<a href="index.php">Dashboard</a>
-			</li>
-			<li>
-				<a href="meetings.php">Meetings</a>
-			</li>
-			<li>
-				<a href="messages.php">Messages</a>
-			</li>
-			<li>
-				<a href="blogs.php">Blog</a>
-			</li>
-			<li>
-				<a href="uploads.php">Project Uploads</a>
-			</li>
+        <ul id="nav-mobile" class="side-nav hide-on-large-only">
+            <li>
+                <a href="index.php">Dashboard</a>
+            </li>
+            <li>
+                <a href="meetings.php">Meetings</a>
+            </li>
+            <li>
+                <a href="messages.php">Messages</a>
+            </li>
+            <li>
+                <a href="blogs.php">Blog</a>
+            </li>
+            <li>
+                <a href="uploads.php">Project Uploads</a>
+            </li>
 
-			<?php
-			if ($staffAuthorsied == 1) {
-				echo '<li><a href="search.php">Search</a></li>
+            <?php
+            if ($staffAuthorsied == 1) {
+                echo '<li><a href="search.php">Search</a></li>
 					<li><a href="viewDashboards.php">View dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';
-			}
-			?>
-			<li>
-				<a href="../logout.php" title="Logout">Logout</a>
-			</li>
-		</ul>
+            }
+            ?>
+            <li>
+                <a href="../logout.php" title="Logout">Logout</a>
+            </li>
+        </ul>
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
     </div>
 </nav>
