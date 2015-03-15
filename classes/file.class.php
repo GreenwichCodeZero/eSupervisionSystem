@@ -320,6 +320,10 @@ class File {
                 $type_id = 4;
                 break;
 
+            case 'feedback':
+                $type_id = 1;
+                break;
+
             default:
                 $type_id = 1;
                 break;
