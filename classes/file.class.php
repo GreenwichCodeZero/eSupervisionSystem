@@ -241,7 +241,9 @@ class File {
                     break;
             } // End switch
 
-            $sql = "SELECT  file_id ,  file_name
+            $sql = "SELECT  file_id ,  file_name,
+            file_date_added,
+            file_time_added
 			FROM  esuper_file 
 			WHERE  file_owner =  '$user'
 			AND file_type_id = $type_id";

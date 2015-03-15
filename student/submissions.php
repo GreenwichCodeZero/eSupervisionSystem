@@ -279,7 +279,7 @@ $projectTitle = $p->getResponse ();
                         Latest Upload:
                         <?php echo (
                         $student_proposal[0]['file_id'] > 0 ?
-                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_proposal[0]['file_id']."'/><a>".$student_proposal[0]['file_name']."</a><button>download</button>
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_proposal[0]['file_id']."'/><a>".$student_proposal[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
                                             </form>"
                             : "no file uploaded yet"
                         );
@@ -303,7 +303,7 @@ $projectTitle = $p->getResponse ();
 
                                 echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
+                                            <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
 
                                 echo "</li>";
                             }
@@ -334,7 +334,7 @@ $projectTitle = $p->getResponse ();
                         Latest Upload:
                         <?php echo (
                         $student_contextual[0]['file_id'] > 0 ?
-                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_contextual[0]['file_id']."'/><a>".$student_contextual[0]['file_name']."</a><button>download</button>
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_contextual[0]['file_id']."'/><a>".$student_contextual[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
                             </form>"
                             : "no file uploaded yet"
                         );
@@ -357,7 +357,7 @@ $projectTitle = $p->getResponse ();
 
                                 echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
+                                            <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
 
                                 echo "</li>";
                             }
@@ -389,7 +389,7 @@ $projectTitle = $p->getResponse ();
                         Latest Upload:
                         <?php echo (
                         $student_initial[0]['file_id'] > 0 ?
-                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_initial[0]['file_id']."'/><a>".$student_initial[0]['file_name']."</a><button>download</button>
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_initial[0]['file_id']."'/><a>".$student_initial[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
                             </form>"
                             : "no file uploaded yet"
                         );
@@ -412,7 +412,7 @@ $projectTitle = $p->getResponse ();
 
                                 echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
+                                            <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
 
                                 echo "</li>";
                             }
@@ -442,7 +442,7 @@ $projectTitle = $p->getResponse ();
                         Latest Upload:
                         <?php echo (
                         $student_interim[0]['file_id'] > 0 ?
-                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_interim[0]['file_id']."'/><a>".$student_interim[0]['file_name']."</a><button>download</button>
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_interim[0]['file_id']."'/><a>".$student_interim[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
                             </form>"
                             : "no file uploaded yet"
                         );
@@ -465,7 +465,7 @@ $projectTitle = $p->getResponse ();
 
                                 echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
+                                            <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
 
                                 echo "</li>";
                             }
@@ -497,7 +497,7 @@ $projectTitle = $p->getResponse ();
                         Latest Upload:
                         <?php echo (
                         $student_project[0]['file_id'] > 0 ?
-                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_project[0]['file_id']."'/><a>".$student_project[0]['file_name']."</a><button>download</button>
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_project[0]['file_id']."'/><a>".$student_project[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
                             </form>"
                             : "no file uploaded yet"
                         );
@@ -520,7 +520,7 @@ $projectTitle = $p->getResponse ();
 
                                 echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
+                                            <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
 
                                 echo "</li>";
                             }
@@ -550,7 +550,7 @@ $projectTitle = $p->getResponse ();
                         Latest Upload:
                         <?php echo (
                         $student_ethics[0]['file_id'] > 0 ?
-                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_ethics[0]['file_id']."'/><a>".$student_ethics[0]['file_name']."</a><button>download</button>
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_ethics[0]['file_id']."'/><a>".$student_ethics[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
                             </form>"
                             : "no file uploaded yet"
                         );
@@ -573,7 +573,7 @@ $projectTitle = $p->getResponse ();
 
                                 echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
+                                            <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
 
                                 echo "</li>";
                             }
@@ -606,7 +606,7 @@ $projectTitle = $p->getResponse ();
                         Latest Upload:
                         <?php echo (
                         $student_feedback[0]['file_id'] > 0 ?
-                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_feedback[0]['file_id']."'/><a>".$student_feedback[0]['file_name']."</a><button>download</button>
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_feedback[0]['file_id']."'/><a>".$student_feedback[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
                             </form>"
                             : "no file uploaded yet"
                         );
@@ -629,7 +629,7 @@ $projectTitle = $p->getResponse ();
 
                                 echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                            <button>download</button></form>";
+                                            <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
 
                                 echo "</li>";
                             }
@@ -656,21 +656,21 @@ $projectTitle = $p->getResponse ();
             <div class="card-content">
                 <span class="card-title green-text">Supervisor Uploads</span>
                 <p class="green-text"><?php echo $supervisor[0]['staff_first']." ".$supervisor[0]['staff_last'];?> has uploaded
-                    <?php echo $super_count; ?> files</p>
+                    <?php echo count($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user)->getResponse ()); ?> files</p>
 
                 <ul class="collection">
                     <?php
-                    if ($super_count > 0) {
+                    if (count($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user)->getResponse ()) > 0) {
                     ?>
 
 
-                    <?php foreach ($superFiles as $sf) {
+                    <?php foreach ($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user)->getResponse () as $sf) {
                         if ($sf['file_type_id'] == 1) {
 
                             echo '<li class="collection-item">';
                             echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
                                     <input type='hidden' name='file_id' value='".$sf['file_id']."' />
-                                    <button>download</button></form>";
+                                    <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
 
                             echo "</li>";
                         } else {
@@ -704,4 +704,9 @@ $projectTitle = $p->getResponse ();
 
 </div> <!-- end container -->
 </body>
+<script>
+$('form').submit(function(){
+    $('button').remove ();
+});
+</script>
 </html>

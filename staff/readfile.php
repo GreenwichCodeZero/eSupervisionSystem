@@ -22,10 +22,10 @@ echo "<pre>";
 print_r ($file[0]['file_content']);
 echo "<pre>";
 
-header("Content-length: ".$file['file_size']);
-header("Content-type: image/jpeg");
+header("Content-length: ".$file[0]['file_size']);
+header("Content-type: ".$file[0]['file_type']);
 header("Content-Disposition: attachment; filename=eSupervision-".$file[0]['file_name']);
-echo( $file[0]['file_content']);
+echo( $file['file_content']);
 
 ob_end_flush();
 
