@@ -57,6 +57,7 @@ $supervisor = $u->getResponse();
 
 $f->fileTypes ();
 $fileTypes = $f->getResponse ();
+// print_r($fileTypes);
 
 // Get Student uploads by type
 $f->get ($stu_user, 'interim');
@@ -73,6 +74,9 @@ $student_proposal = $f->getResponse ();
 
 $f->get ($stu_user, 'contextual');
 $student_contextual = $f->getResponse ();
+
+$f->get ($stu_user, 'feedback');
+$student_feedback = $f->getResponse ();
 
 $f->get ($stu_user, 'project');
 $student_project = $f->getResponse ();
@@ -378,7 +382,7 @@ $projectTitle = $p->getResponse ();
         <div class="col s12 m12 l6">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">Inital Report</span>
+                    <span class="card-title green-text">Initial Report</span>
 
                     <p>
 
@@ -591,6 +595,60 @@ $projectTitle = $p->getResponse ();
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col s12 m12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Formative Feedback</span>
+
+                    <p>
+
+                        Latest Upload:
+                        <?php echo (
+                        $student_feedback[0]['file_id'] > 0 ?
+                            "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_feedback[0]['file_id']."'/><a>".$student_feedback[0]['file_name']."</a><button>download</button>
+                            </form>"
+                            : "no file uploaded yet"
+                        );
+                        ?>
+                    </p>
+                    <hr />
+                    <p>
+                        <?php
+
+                        if ($superFiles['feedback']['count'] > 0) {
+                            foreach ($superFiles['feedback']['files'] as $sf) {
+
+                                echo '<li class="collection-item">';
+
+                                $date = strtotime($sf['communication_date_added']);
+                                $prettyDate = date('l j F Y', $date);
+
+                                // Output date and time
+                                echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
+
+                                echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
+                                            <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                            <button>download</button></form>";
+
+                                echo "</li>";
+                            }
+
+
+
+                        } else {
+
+
+                            echo ' <li class="collection-item">
+                                    Your tutor has not uploaded anything
+                                    </li> ';
+
+                        }
+                        ?></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col s10 m12 offset-s1 card">
@@ -641,6 +699,7 @@ $projectTitle = $p->getResponse ();
                 </ul>
             </div>
         </div>
+         
     </div>
 
 </div> <!-- end container -->
