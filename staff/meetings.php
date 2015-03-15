@@ -480,7 +480,7 @@ if (count($errorList) > 0) {
                         <span class="card-title green-text">Record Meeting Details</span>
 
                         <p>
-                            <b>Title:</b> <?php echo $updatedmeeting[0]['meeting_title']; ?>
+                            <b>Subject:</b> <?php echo $updatedmeeting[0]['meeting_title']; ?>
                         </p>
 
                         <p>
@@ -549,21 +549,19 @@ if (count($errorList) > 0) {
     <div class="row" id="sendMessage">
         <div class="col s12">
             <div class="card">
-                <i class="small mdi-content-clear c_right-align"
-                   onclick="toggleForm('#sendMessage', '#newMessage');"></i>
-
                 <div class="card-content">
                     <span class="card-title green-text">Request Meeting</span>
-
+					<i class="small mdi-content-clear c_right-align"
+                   onclick="toggleForm('#sendMessage', '#newMessage');"></i>
                     <form name="meeting" method="post" action="meetings.php">
                         <div class="input-field col s6">
-                            <label for="title">Title</label>
+                            <label for="title">Subject</label>
                             <input id="title" name="title" type="text" onkeyup="ValidateTitle(this.value);"
                                    onblur="ValidateTitle(this.value);"/>
                             <span id="titleValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
 
-                        <div class="col s6">
+                        <div class="col s6 marginTopFix">
                             <label for="type">Type</label>
                             <select id="type" name="type">
                                 <option value="1">Virtual</option>
