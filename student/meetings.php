@@ -336,15 +336,14 @@ if (count($errorList) > 0) {
     <div class="row" id="sendMessage">
         <div class="col s12">
             <div class="card">
-                <i class="small mdi-content-clear c_right-align"
-                   onclick="toggleForm('#sendMessage', '#newMessage');"></i>
+                
 
                 <div class="card-content">
                     <span class="card-title green-text">Request a Meeting</span>
-
+					<i class="small mdi-content-clear c_right-align"
+                   onclick="toggleForm('#sendMessage', '#newMessage');"></i>
                     <p>Request a meeting
                         with <?php echo $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last']; ?>.</p>
-
                     <form name="meeting" method="post" action="meetings.php">
                         <div class="input-field col s6">
                             <label for="title">Subject</label>
@@ -353,7 +352,7 @@ if (count($errorList) > 0) {
                             <span id="titleValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
 
-                        <div class="col s6">
+                        <div class="col s6 marginTopFix">
                             <label for="type">Type</label>
                             <select id="type" name="type">
                                 <option value="1">Virtual</option>
