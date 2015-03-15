@@ -251,7 +251,7 @@ $students = $u->getResponse();
                                 </div>
                             </div>
                             <div class="input-field col s12">
-                                <button onclick="return ValidateForm();"
+                                <button  type="submit" onclick="return ValidateForm();"
                                         class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
                                     Send
                                 </button>
@@ -341,7 +341,7 @@ $students = $u->getResponse();
                                         <p>
                                             <input type="hidden" name="file_id"
                                                    value="' . $s['communication_file_id'] . '"/>
-                                            <button
+                                            <button 
                                                 class="waves-effect waves-teal waves-light green btn-flat white-text"
                                                 style="margin-bottom: 0; margin-top: 15px;">
                                                 View File<i class="mdi-editor-attach-file right"></i></button>
@@ -362,5 +362,9 @@ $students = $u->getResponse();
 </div>
 <!-- end container -->
 </body>
-
+<script>
+$('form').submit(function(){
+    $('button').remove ();
+});
+</script>
 </html>

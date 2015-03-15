@@ -14,6 +14,27 @@ class UserDetails {
         }
     }
 
+    public function singleStudent ( $username ) {
+      $result = $this->con->prepare(
+            'SELECT * FROM esuper_student
+            WHERE student_username = :username');
+      $result->bindValue (':username', $username);
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        $result = null;
+        $this->response($row);
+
+        return $this;
+    }
+
+
     // Get all students
     public function GetAllStudents() {
         $result = $this->con->prepare(
