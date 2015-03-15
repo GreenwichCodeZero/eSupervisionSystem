@@ -258,4 +258,9 @@ $received_count = count($received);
 </div>
 <!-- end container -->
 </body>
+<script>
+$('form').submit(function(){
+    $('button').remove ();
+});
+</script>
 </html>
