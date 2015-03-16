@@ -215,76 +215,61 @@ $projectTitle = $p->getResponse ();
             ?>
         </div>
     </div>
-
-    <div class="row">
-        <h5 class="center-align">Project Uploads</h5>
-    </div>
-
-
-    <div id="submitBlog" class="row">
-        <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
-        <form name="blogEntry" method="post" action='' enctype="multipart/form-data" class="col s10 m12 offset-s1">
-
-            <input type='hidden' name='file_owner' value='<?php echo $stu_user; ?>' />
-            <input type='hidden' name='file_action' value='submit' />
-
-            <select name="file_type_id">
-                <?php foreach ($fileTypes as $ft) {
-                    echo "<option value='".$ft['file_type_id']."'>".$ft['file_type_name']."</option>";
-                }
-                ?>
-            </select>
-
-            <input class="waves-effect waves-teal waves-light btn-flat" type="file" name="fileToUpload" id="fileToUpload">
-
-            <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
-        </form>
-    </div>
-
-
-    <div class="row">
-        <a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry" class="c_right-align">
-            <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit new file</div>
-        </a>
-    </div>
+ <div class="row">
+        <div class="col s10 m12 offset-s1 card">
+            <div class="card-content">
+				<span class="card-title green-text">Project Uploads</span>
+				
+				<div id="submitUpload" class="row">
+					<i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitUpload', '#newUpload');"></i>
+					<form name="uploadEntry" method="post" action='' enctype="multipart/form-data" class="col s10 m12 offset-s1">
+						<input type='hidden' name='file_owner' value='<?php echo $stu_user; ?>' />
+						<input type='hidden' name='file_action' value='submit' />
+						<select name="file_type_id">
+							<?php foreach ($fileTypes as $ft) {
+								echo "<option value='".$ft['file_type_id']."'>".$ft['file_type_name']."</option>";
+							}
+							?>
+						</select>
+						<input class="waves-effect waves-teal waves-light btn-flat" type="file" name="fileToUpload" id="fileToUpload">
+						<button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
+					</form>
+				</div>
+				
+				<a onClick="toggleForm('#submitUpload', '#newUpload');" id="newUpload" class="c_right-align">
+					<div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit new file</div>
+				</a>
+			</div>
 
 
 
     <div class="row">
-        <div class="card">
+        <div class="card col s12 m6">
             <form method = 'post'>
                 <div class="card-content">
                     <span class="card-title green-text">Project Title</span>
-
-                    <p>
+                    <div>
                         <input type='text' name ='title' placeholder='<?php echo ( $projectTitle ? $projectTitle[0]['project_title'] : 'Insert title ...' ); ?>' />
                         <input type='hidden' name='projectDetails_action' value = 'projectDetails_action' />
-                        <button>Update</button>
-                    </p>
+                        <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'>Update</button>
+                    </div>
                 </div>
             </form>
         </div>
-
-
-    </div>
-    <div class="row">
-        <div class="col s12 m12 l6">
+        <div class="col s12 m6">
             <div class="card">
                 <div class="card-content">
-                     <span class="card-title
-                                    green-text">Project Proposal</span>
-
-                    <p>
-
-                        Latest Upload:
+                     <span class="card-title green-text">Project Proposal</span>
+					 <div class='section'>
+					 Latest Upload:
                         <?php echo (
                         $student_proposal[0]['file_id'] > 0 ?
                             "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_proposal[0]['file_id']."'/><a>".$student_proposal[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
                                             </form>"
-                            : "no file uploaded yet"
+                            : "You have not uploaded anything yet"
                         );
                         ?>
-                    </p>
+                    </div>
 
                     <hr />
                     <p>
@@ -704,9 +689,4 @@ $projectTitle = $p->getResponse ();
 
 </div> <!-- end container -->
 </body>
-<script>
-$('form').submit(function(){
-    $('button').remove ();
-});
-</script>
 </html>

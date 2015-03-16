@@ -10,7 +10,7 @@
     float: left;
 }
 
-#sendMessage, #submitBlog, #requestMeeting {
+#sendMessage, #submitBlog, #requestMeeting ,#submitUpload{
     display: none;
 }
 
