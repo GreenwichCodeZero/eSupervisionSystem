@@ -322,7 +322,7 @@ if ($_POST['sid']) {
                     <div id="submitUpload">
                         <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitUpload', '#newUpload');"></i>
                         <!-- NEW FILE UPLOAD FORM START -->
-                        <form id="communication" method="POST" action="" enctype="multipart/form-data">
+                        <form id="FileUpload" method="POST" action="" enctype="multipart/form-data">
                             <input type='hidden' name='file_action' value='uploadfile'/>
                             <input type='hidden' name='communication_action' value='sendmessage' />
                             <input type="hidden" name="communication_from_id" value="<?php echo $staff_username; ?>">
@@ -399,7 +399,7 @@ if ($_POST['sid']) {
 
                         <span class="card-title green-text">Project Proposal</span>
 
-                        <div class='section'>Latest Uploads: &emsp; Total uploads <?php echo count ( $totaluploads ); ?>
+                        <div class='section'>Latest Uploads:
                             <ul class="collection">
                                 <?php
                                 echo "<li class='collection-item'>";
@@ -452,7 +452,7 @@ if ($_POST['sid']) {
                             </form>
                         </div>
                         <span class="card-title green-text">Contextual Report</span>
-                        <div>Latest Uploads: &emsp; Total uploads <?php echo count ( $totaluploads ); ?>
+                        <div>Latest Uploads:
                             <ul class="collection">
                                 <?php
                                 echo "<li class='collection-item'>";
@@ -504,7 +504,7 @@ if ($_POST['sid']) {
                             </form>
                         </div>
                         <span class="card-title green-text">Inital Report</span>
-                        <div>Latest Uploads: &emsp; Total uploads <?php echo count ( $totaluploads ); ?>
+                        <div>Latest Uploads:
                             <ul class="collection">
                                 <?php
                                 echo "<li class='collection-item'>";
@@ -556,7 +556,7 @@ if ($_POST['sid']) {
                         </div>
                         <span class="card-title green-text">Interim Report</span>
 
-                        <div>Latest Uploads: &emsp; Total uploads <?php echo count ( $totaluploads ); ?>
+                        <div>Latest Uploads:
                             <ul class="collection">
                                 <?php
                                 echo "<li class='collection-item'>";
@@ -607,7 +607,7 @@ if ($_POST['sid']) {
                         </div>
                         <span class="card-title green-text">Project Report</span>
 
-                        <div>Latest Uploads: &emsp; Total uploads <?php echo count ( $totaluploads ); ?>
+                        <div>Latest Uploads:
                             <ul class="collection">
                                 <?php
                                 echo "<li class='collection-item'>";
@@ -656,7 +656,7 @@ if ($_POST['sid']) {
                             </form>
                         </div>
                         <span class="card-title green-text">Research Ethics</span>
-                        <div>Latest Uploads: &emsp; Total uploads <?php echo count ( $totaluploads ); ?>
+                        <div>Latest Uploads:
                             <ul class="collection">
                                 <?php
                                 echo "<li class='collection-item'>";
@@ -697,13 +697,13 @@ if ($_POST['sid']) {
                 <div class="card">
                     <div class="card-content">
                         <div class='c_right-align'>
-                            <form action="?type=6" method="POST">
+                            <form action="?type=1" method="POST">
                                 <input type="hidden" name="sid" value="<?php echo $_POST['sid'];?>" />
                                 <button type="submit" class="waves-effect waves-teal waves-light orange lighten-2 btn-flat white-text">VIEW ALL</button>
                             </form>
                         </div>
                         <span class="card-title green-text">Formative Feedback</span>
-                        <div>Latest Uploads: &emsp; Total uploads <?php echo count ( $totaluploads ); ?>
+                        <div>Latest Uploads:
                             <ul class="collection">
                                 <?php
                                 echo "<li class='collection-item'>";
@@ -930,7 +930,7 @@ if ($_POST['sid']) {
 <!-- end container -->
 </body>
 <script>
-$('form').submit(function(){
+$('#FileUpload').submit(function(){
     $('button').remove ();
 });
 </script>
