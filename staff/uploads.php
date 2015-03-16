@@ -319,7 +319,6 @@ if ($_POST['sid']) {
                 <?php if (! isset ($_GET['type'])) {   ?>
 
                 <div class="col s12">
-
                     <div id="submitUpload">
                         <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitUpload', '#newUpload');"></i>
                         <!-- NEW FILE UPLOAD FORM START -->
@@ -371,7 +370,7 @@ if ($_POST['sid']) {
                     </a>
                 </div>
 
-                <p>You have uploaded <?php $f = new File(); count ($f->supervisorUploads ($staff_username, $_POST['sid'])->getResponse ()); ?> files with feedback</p>
+                <p class="green-text">You have uploaded <?php $f = new File(); count ($f->supervisorUploads ($staff_username, $_POST['sid'])->getResponse ()); ?> files with feedback</p>
                
 
             </div>
