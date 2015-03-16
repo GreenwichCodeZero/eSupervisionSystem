@@ -142,7 +142,7 @@ $getAllProjectStudents = $getAllProjectStudentsQ->getResponse();
 							?>
 							</select>
 						</div>
-						<button type="submit" id="staffSubmit" onclick="return validateStaffSearch();" name="staffSubmit" class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">View staff dashboard</button>
+						<button type="submit" id="staffSubmit" onclick="return validateStaffSearch();" name="staffSubmit" class="c_right-align waves-effect waves-teal waves-light blue btn-flat white-text">View staff dashboard</button>
 						</form>
 					</div>
 					<div class="row">
@@ -157,7 +157,7 @@ $getAllProjectStudents = $getAllProjectStudentsQ->getResponse();
 							?>
 							</select>
 						</div>
-						<button type="submit" id="studentSubmit" onclick="return validateStudentSearch();" name="studentSubmit" class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">View student dashboard</button>
+						<button type="submit" id="studentSubmit" onclick="return validateStudentSearch();" name="studentSubmit" class="c_right-align waves-effect waves-teal waves-light blue btn-flat white-text">View student dashboard</button>
 						</form>
 					</div>
 					<div id="validation"></div>
