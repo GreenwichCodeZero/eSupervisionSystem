@@ -207,7 +207,7 @@ $projectTitle = $p->getResponse ();
             $el = new errorList ();
             if ($el->exists ()){
                 ?>
-                <p class='<?php echo $el->getType (); ?>' style="border: thin #7CCD7C solid; padding: 10px; background:#E0EEE0;">
+                <p class='<?php echo $el->getType (); ?>' a>
                     <?php echo $el->getResponse (); ?>
                 </p>
             <?

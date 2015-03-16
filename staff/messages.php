@@ -339,8 +339,7 @@ $students = $u->getResponse();
                                     if ($s['communication_file_id'] > 0) { ?>
                                         <hr/>
                                         <p>
-                                            <input type="hidden" name="file_id"
-                                                   value="' . $s['communication_file_id'] . '"/>
+                                        <input type='hidden' name='file_id' value="<?php echo $s['communication_file_id']; ?>"/>
                                             <button 
                                                 class="waves-effect waves-teal waves-light green btn-flat white-text"
                                                 style="margin-bottom: 0; margin-top: 15px;">
@@ -363,7 +362,7 @@ $students = $u->getResponse();
 <!-- end container -->
 </body>
 <script>
-$('form').submit(function(){
+$('communication').submit(function(){
     $('button').remove ();
 });
 </script>

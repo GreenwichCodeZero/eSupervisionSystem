@@ -328,7 +328,7 @@ if (count($errorList) > 0) {
 <div class="container">
 
     <!-- Output message text -->
-    <div class="red-text text-light-3 validation-error">
+    <div class=" text-light-3 validation-error">
         <?php echo $outputText; ?><?php echo $errorListOutput; ?>
     </div>
 
