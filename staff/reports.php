@@ -110,7 +110,7 @@ foreach ($allStudents as $student) {
 
             <?php
             if ($currentStaff['staff_authorised'] == 1) {
-                echo '<li><a href="search.php">Search</a></li>
+                echo '<li><a href="search.php">Allocation Search</a></li>
                     <li><a href="viewDashboards.php">View dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
             }
@@ -119,7 +119,7 @@ foreach ($allStudents as $student) {
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
         </ul>
-        <ul id="nav-mobile" class="side-nav hide-on-large-only">
+        <ul id="nav-mobile" class="side-nav hide-on-large-only" style="overflow-y: scroll;">
             <li>
                 <a href="index.php">Dashboard</a>
             </li>
@@ -139,7 +139,7 @@ foreach ($allStudents as $student) {
             <?php
             if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Search</a></li>
-					<li><a href="viewDashboards.php">View dashboards</a></li>
+					<li><a href="viewDashboards.php">View Dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';
             }
             ?>
