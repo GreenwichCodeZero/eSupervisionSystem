@@ -288,10 +288,9 @@ $projectTitle = $p->getResponse ();
 										echo "</li>";
 									}
 								} else {
-									echo ' <li class="collection-item">
-										Your tutor has not uploaded anything yet
-										</li> ';
-
+									echo '<li class="collection-item grey lighten-3">
+									Your tutor has not uploaded anything yet
+									</li> ';
 								}
 								?>
 							</ul>
@@ -327,7 +326,7 @@ $projectTitle = $p->getResponse ();
 									echo "</li>";
 								}
 							} else {
-								echo ' <li class="collection-item">
+								echo ' <li class="collection-item grey lighten-3">
 										Your tutor has not uploaded anything yet
 										</li> ';
 									}
@@ -370,7 +369,7 @@ $projectTitle = $p->getResponse ();
 									echo "</li>";
 								}
 							} else {
-								echo ' <li class="collection-item">
+								echo ' <li class="collection-item grey lighten-3">
 										Your tutor has not uploaded anything yet
 										</li> ';
 							 }
@@ -411,7 +410,7 @@ $projectTitle = $p->getResponse ();
 										echo "</li>";
 									}
 								} else {
-									echo ' <li class="collection-item">
+									echo ' <li class="collection-item grey lighten-3">
 											Your tutor has not uploaded anything yet
 									</li> ';
 									}?>
@@ -451,7 +450,7 @@ $projectTitle = $p->getResponse ();
 									echo "</li>";
 								}
 							} else {
-							echo ' <li class="collection-item">
+							echo ' <li class="collection-item grey lighten-3">
 									Your tutor has not uploaded anything yet
 									</li> ';
 							}?>
@@ -491,7 +490,7 @@ $projectTitle = $p->getResponse ();
 									echo "</li>";
 								}
 							} else {
-								echo ' <li class="collection-item">
+								echo ' <li class="collection-item grey lighten-3">
 										Your tutor has not uploaded anything yet
 										</li> ';
 							}
@@ -533,7 +532,7 @@ $projectTitle = $p->getResponse ();
 									echo "</li>";
 								}
 							} else {
-								echo ' <li class="collection-item">
+								echo ' <li class="collection-item grey lighten-3">
 										Your tutor has not uploaded anything yet
 										</li> ';
 								}
@@ -568,7 +567,7 @@ $projectTitle = $p->getResponse ();
 						}
 					} else {
 					?>
-					<li class="collection-item">
+					<li class="collection-item grey lighten-3">
 						No files uploaded
 					</li>
 				<?php
