@@ -117,7 +117,7 @@ $received_count = count($received);
 				</li>
 			</ul>
 
-			<ul id="nav-mobile" class="side-nav hide-on-large-only">
+            <ul id="nav-mobile" class="side-nav hide-on-large-only" style="overflow-y: scroll;">
 				<li>
 					<a href="index.php">Dashboard</a>
 				</li>
