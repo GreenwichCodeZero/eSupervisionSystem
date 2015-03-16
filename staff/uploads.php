@@ -320,8 +320,8 @@ if ($_POST['sid']) {
 
                 <div class="col s12">
 
-                    <div id="submitBlog">
-                        <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
+                    <div id="submitUpload">
+                        <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitUpload', '#newUpload');"></i>
                         <!-- NEW FILE UPLOAD FORM START -->
                         <form id="communication" method="POST" action="" enctype="multipart/form-data">
                             <input type='hidden' name='file_action' value='uploadfile'/>
@@ -366,7 +366,7 @@ if ($_POST['sid']) {
             <div class="col s12" style="background-color: #fafafa; margin-bottom: 10px; border: thin solid #ccc;">
                 <span class="card-title green-text">Supervisor Uploads</span>
                 <div class='c_right-align'>
-                    <a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry">
+                    <a onClick="toggleForm('#submitUpload', '#newUpload');" id="newUpload">
                         <button class="waves-effect waves-teal waves-light green btn-flat white-text">Submit new file</button>
                     </a>
                 </div>
