@@ -106,7 +106,7 @@ $students = $u->getResponse();
             <?php
             if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Allocation Search</a></li>
-                    <li><a href="viewDashboards.php">View dashboards</a></li>
+					<li><a href="viewDashboards.php">View Dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
             }
             ?>
@@ -133,7 +133,7 @@ $students = $u->getResponse();
 
 			<?php
             if ($currentStaff['staff_authorised'] == 1) {
-				echo '<li><a href="search.php">Search</a></li>
+                echo '<li><a href="search.php">Allocation Search</a></li>
 					<li><a href="viewDashboards.php">View Dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';
 			}

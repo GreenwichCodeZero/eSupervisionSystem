@@ -35,6 +35,9 @@ $noSecondMarkers = $userDetails->getResponse();
 $reports->StaffOver70PercentMeetingsDeclined();
 $staffMeetingsDeclined = $reports->getResponse();
 
+$reports->StudentsNoMeetingsPast2Weeks();
+$studentsNoRecentMeetings = $reports->getResponse();
+
 $reports->notLoggedIn7Days();
 $notLoggedIn7Days = $reports->getResponse();
 
@@ -111,7 +114,7 @@ foreach ($allStudents as $student) {
             <?php
             if ($currentStaff['staff_authorised'] == 1) {
                 echo '<li><a href="search.php">Allocation Search</a></li>
-                    <li><a href="viewDashboards.php">View dashboards</a></li>
+					<li><a href="viewDashboards.php">View Dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
             }
             ?>
@@ -138,7 +141,7 @@ foreach ($allStudents as $student) {
 
             <?php
             if ($currentStaff['staff_authorised'] == 1) {
-                echo '<li><a href="search.php">Search</a></li>
+                echo '<li><a href="search.php">Allocation Search</a></li>
 					<li><a href="viewDashboards.php">View Dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';
             }
@@ -195,9 +198,10 @@ foreach ($allStudents as $student) {
                 <div class="card-content">
                     <span class="card-title green-text">Students with no meeting requests within 2 weeks</span>
 
-                    <div class="collection">
-                        Display info here
-                    </div>
+                    <?php foreach ($studentsNoRecentMeetings as $student) {
+                        echo '<br>' . $student['student_first'] . ' ' . $student['student_last'];
+                    } ?>
+
                 </div>
             </div>
         </div>
