@@ -263,7 +263,7 @@ $projectTitle = $p->getResponse ();
 				<div class="card">
 					<div class="card-content">
 						<span class="card-title green-text">Project Proposal</span>
-						<div class='section'>Latest Upload:
+						<div class='section'>Latest Uploads:
 							<ul class="collection">
 								<?php
 								$date = strtotime($student_proposal[0]['file_date_added']);

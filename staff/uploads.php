@@ -407,7 +407,8 @@ if ($_POST['sid']) {
                                     <input type='hidden' name='file_id' value='".$student_proposal[0]['file_id']."'/>
                                     <a>".$student_proposal[0]['file_name']."</a>
 												<button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
-												</form>"
+
+                                    <p><b>File uploaded on ".$prettyDate . " at " . substr($student_proposal[0]['file_time_added'], 0, -3)." </b></p></form>"
                                     : $currentStudent['student_first']." has not uploaded anything yet" );
                                 echo "</li>";
 
@@ -419,12 +420,14 @@ if ($_POST['sid']) {
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
 
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
+                                       
 
                                         echo ' <form action="readfile.php" method="POST">', "<div>{$sf['communication_body']}</div><a> {$sf[ 'file_name']}</a>
 															<input type='hidden' name='file_id' value='".$sf['file_id']."' />
 															<button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+                                                            
+                                    echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";
+
 
                                         echo "</li>";
                                     }
@@ -459,7 +462,8 @@ if ($_POST['sid']) {
                                     "<form action='readfile.php' method='post'>
                                     <input type='hidden' name='file_id' value='".$student_contextual[0]['file_id']."'/>
                                     <a>".$student_contextual[0]['file_name']."</a> <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
-													</form>"
+
+                                    <p><b>File uploaded on ".$prettyDate . " at " . substr($student_contextual[0]['file_time_added'], 0, -3)." </b></p></form>"
                                    : $currentStudent['student_first']." has not uploaded anything yet"
                                 );
 
@@ -471,14 +475,15 @@ if ($_POST['sid']) {
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
 
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
 
                                         echo ' <form action="readfile.php" method="POST">', 
                                         "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
 															<input type='hidden' name='file_id' value='".$sf['file_id']."' />
 															<button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
 															</form>";
+
+                                    echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";
+
                                         echo "</li>";
                                     }
                                 } else {
@@ -512,7 +517,8 @@ if ($_POST['sid']) {
                                     <input type='hidden' name='file_id' value='".$student_initial[0]['file_id']."'/>
                                     <a>".$student_initial[0]['file_name']."</a>
 												 <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
-												</form>"
+
+                                    <p><b>File uploaded on ".$prettyDate . " at " . substr($student_initial[0]['file_time_added'], 0, -3)." </b></p></form>"
                                     : $currentStudent['student_first']." has not uploaded anything yet"
                                 );
                                 if ($superFiles['initial']['count'] > 0) {
@@ -523,14 +529,16 @@ if ($_POST['sid']) {
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
 
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
 
                                         echo ' <form action="readfile.php" method="POST">', 
                                         "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
 															<input type='hidden' name='file_id' value='".$sf['file_id']."' />
 															 <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+
+                                    echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";
+
                                         echo "</li>";
+
                                     }
                                 } else {
                                     echo ' <li class="f-staff collection-item">
@@ -563,7 +571,8 @@ if ($_POST['sid']) {
                                     "<form action='readfile.php' method='post'>
                                     <input type='hidden' name='file_id' value='".$student_interim[0]['file_id']."'/>
                                     <a>".$student_interim[0]['file_name']."</a> <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
-												</form>"
+
+                                    <p><b>File uploaded on ".$prettyDate . " at " . substr($student_interim[0]['file_time_added'], 0, -3)." </b></p></form>"
                                     : $currentStudent['student_first']." has not uploaded anything yet"
                                 );
 
@@ -576,12 +585,15 @@ if ($_POST['sid']) {
                                         $prettyDate = date('l j F Y', $date);
 
                                         // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
+                                       
 
                                         echo ' <form action="readfile.php" method="POST">', 
                                         "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
 														<input type='hidden' name='file_id' value='".$sf['file_id']."' />
 														<button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+
+                                    echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";
+
                                         echo "</li>";
                                     }
                                 } else {
@@ -614,7 +626,8 @@ if ($_POST['sid']) {
                                     "<form action='readfile.php' method='post'>
                                     <input type='hidden' name='file_id' value='".$student_project[0]['file_id']."'/>
                                     <a>".$student_project[0]['file_name']."</a> <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
-                                                </form>"
+
+                                    <p><b>File uploaded on ".$prettyDate . " at " . substr($student_project[0]['file_time_added'], 0, -3)." </b></p></form>"
                                     : $currentStudent['student_first']." has not uploaded anything yet"
                                 );
 
@@ -628,10 +641,12 @@ if ($_POST['sid']) {
 
                                         // Output date and time
                                         echo ' <form action="readfile.php" method="POST">'
-                                        , "<p>", $prettyDate , ",", substr(($sf['communication_time_added']), 0, -3),
-                                         "</p><a> {$sf[ 'file_name']}</a>
+                                        , "<a> {$sf[ 'file_name']}</a>
                                                         <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                         <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+
+                                    echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";
+
                                         echo "</li>";
                                     }
                                 } else {
@@ -664,7 +679,8 @@ if ($_POST['sid']) {
                                     <input type='hidden' name='file_id' value='".$student_ethics[0]['file_id']."'/>
                                     <a>".$student_ethics[0]['file_name']."</a>
                                                  <button class='c_right-align waves-effect m-7 m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
-                                                </form>"
+
+                                    <p><b>File uploaded on ".$prettyDate . " at " . substr($student_ethics[0]['file_time_added'], 0, -3)." </b></p></form>"
                                     : $currentStudent['student_first']." has not uploaded anything yet</li>");
 
                                 if ($superFiles['ethics']['count'] > 0) {
@@ -711,8 +727,9 @@ if ($_POST['sid']) {
                                     "<form action='readfile.php' method='post'>
                                     <input type='hidden' name='file_id' value='".$student_feedback[0]['file_id']."'/>
                                     <a>".$student_feedback[0]['file_name']."</a>
-                                                 <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
-                                                </form>"
+                                                 <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></button>
+
+                                    <p><b>File uploaded on ".$prettyDate . " at " . substr($student_feedback[0]['file_time_added'], 0, -3)." </b></p></form>"
                                     : $currentStudent['student_first']." has not uploaded anything yet</li>");
                                 if ($superFiles['feedback']['count'] > 0) {
                                     foreach ($superFiles['feedback']['files'] as $sf) {
@@ -727,6 +744,8 @@ if ($_POST['sid']) {
                             echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
                                     <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                     <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+
+                                    echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";
 
                             echo "</li>";
                                     }
@@ -758,6 +777,10 @@ if ($_POST['sid']) {
                                                 echo ' <form action="readfile.php" method="POST">', "<a> {$sf[ 'file_name']}</a>
                                                         <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                         <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button></form>";
+
+                                    $date = strtotime($sf['communication_date_added']);
+                                    $prettyDate = date('l j F Y', $date);
+                                    echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";
                                                 echo "</li>";
                                                 echo '</ul>';
                                             // }
