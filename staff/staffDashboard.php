@@ -103,8 +103,8 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
 
             <?php
             if ($currentStaff['staff_authorised'] == 1) {
-                echo '<li><a href="search.php">Search</a></li>
-                    <li><a href="viewDashboards.php">View dashboards</a></li>
+                echo '<li><a href="search.php">Allocation Search</a></li>
+					<li><a href="viewDashboards.php">View Dashboards</a></li>
                     <li><a href="reports.php">Reports</a></li>';
             }
             ?>
@@ -112,34 +112,34 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
                 <a href="../logout.php" title="Logout">Logout</a>
             </li>
         </ul>
-		<ul id="nav-mobile" class="side-nav hide-on-large-only">
-			<li>
-				<a href="index.php">Dashboard</a>
-			</li>
-			<li>
-				<a href="meetings.php">Meetings</a>
-			</li>
-			<li>
-				<a href="messages.php">Messages</a>
-			</li>
-			<li>
-				<a href="blogs.php">Blog</a>
-			</li>
-			<li>
-				<a href="uploads.php">Project Uploads</a>
-			</li>
+        <ul id="nav-mobile" class="side-nav hide-on-large-only" style="overflow-y: scroll;">
+            <li>
+                <a href="index.php">Dashboard</a>
+            </li>
+            <li>
+                <a href="meetings.php">Meetings</a>
+            </li>
+            <li>
+                <a href="messages.php">Messages</a>
+            </li>
+            <li>
+                <a href="blogs.php">Blog</a>
+            </li>
+            <li>
+                <a href="uploads.php">Project Uploads</a>
+            </li>
 
-			<?php
+            <?php
             if ($currentStaff['staff_authorised'] == 1) {
-				echo '<li><a href="search.php">Search</a></li>
-					<li><a href="viewDashboards.php">View dashboards</a></li>
+                echo '<li><a href="search.php">Allocation Search</a></li>
+					<li><a href="viewDashboards.php">View Dashboards</a></li>
 					<li><a href="reports.php">Reports</a></li>';
-			}
-			?>
-			<li>
-				<a href="../logout.php" title="Logout">Logout</a>
-			</li>
-		</ul>
+            }
+            ?>
+            <li>
+                <a href="../logout.php" title="Logout">Logout</a>
+            </li>
+        </ul>
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
     </div>
 </nav>
