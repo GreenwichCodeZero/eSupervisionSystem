@@ -545,27 +545,28 @@ $projectTitle = $p->getResponse ();
 				<span class="card-title green-text">Supervisor Uploads</span>
 				<p class="green-text"><?php echo $supervisor[0]['staff_first']." ".$supervisor[0]['staff_last'];?> has uploaded <?php echo count($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user)->getResponse ()); ?> files</p>
 
-				<ul class="collection">
+				
 					<?php
 					if (count($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user)->getResponse ()) > 0) {
 					
 						foreach ($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user)->getResponse () as $sf) {
-							if ($sf['file_type_id'] == 1) {
-
-								echo '<li class="collection-item">';
-								echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
+							// if ($sf['file_type_id'] == 1) {
+								echo '<ul class="collection">';
+								echo '<li class="collection-item ">';
+								echo ' <form action="readfile.php" method="POST">', "<a> {$sf[ 'file_name']}</a>
 										<input type='hidden' name='file_id' value='".$sf['file_id']."' />
 										<button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button></form>";
 								echo "</li>";
-							} else {
-								echo "Your supervisor has not uploaded anything yet";
-							}
+								echo '</ul>';
+							// }
 						}
 					} else {
 					?>
+					<ul class="collection">
 					<li class="collection-item grey lighten-3">
-						No files uploaded
+						No files have been uploaded by your supervisor
 					</li>
+					</ul>
 				<?php
 				}
 				?>
