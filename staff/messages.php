@@ -127,6 +127,33 @@ $students = $u->getResponse();
             document.getElementById('messageValidation').innerHTML = output;
             return output;
         }
+
+        // Client-side form validation
+        // Function to display any error messages on form submit
+        /**
+         * @return {boolean}
+         */
+        function ValidateRequestForm() {
+            var isValid = true;
+
+            // Validate the selected student
+            if (ValidateStudentReq(document.getElementById('communication_student_id_filter').value) != '') isValid = false;
+
+            return isValid;
+        }
+
+        // Function to validate the selected student
+        function ValidateStudentReq(student) {
+            var output;
+            if (/^\s*$/.test(student)) {
+                output = 'You must choose a student';
+            } else {
+                output = '';
+            }
+
+            document.getElementById('studentValidationReq').innerHTML = output;
+            return output;
+        }
     </script>
 </head>
 <body>
@@ -285,16 +312,18 @@ $students = $u->getResponse();
                     <form id="communication_filter" action="" method="GET">
                         <div class="col s12 m9">
                             <label for="communication_student_id_filter">Select a student</label>
-                            <select name="sid" id="communication_student_id_filter">
+                            <select name="sid" id="communication_student_id_filter" onkeyup="ValidateStudentReq(this.value);"
+                                    onblur="ValidateStudentReq(this.value);">
                                 <option value="" disabled="disabled" selected="selected">Choose...</option>
                                 <?php foreach ($students as $stu) {
                                     echo '<option value="' . $stu['student_username'] . '"' . (($_GET['sid'] == $stu['student_username']) ? 'selected="selected"' : '') . '>' . $stu['student_first'] . ' ' . $stu['student_last'] . ' (' . $stu['student_username'] . ') </option>';
                                 } ?>
                             </select>
+                            <span id="studentValidationReq" class="red-text text-light-3 validation-error"></span>
                         </div>
                         <div class="input-field col s12 m3">
 
-                            <button type="submit"
+                            <button type="submit" onclick="return ValidateRequestForm();"
                                     class="c_right-align waves-effect waves-teal waves-light blue btn-flat white-text">
                                 Filter
                             </button>
