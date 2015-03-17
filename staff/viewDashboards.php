@@ -153,7 +153,7 @@ $getAllProjectStudents = $getAllProjectStudentsQ->getResponse();
 							<option value="0">Please select a student</option>
 							<?php
 							foreach($getAllProjectStudents as $getAllProjectStudent){
-								echo '<option value="' . $getAllProjectStudent['student_id'] . '">' . $getAllProjectStudent['student_first'] . " " . $getAllUnauthorisedStaff['student_last'] . "</option>";
+								echo '<option value="' . $getAllProjectStudent['student_id'] . '">' . $getAllProjectStudent['student_first'] . " " . $getAllProjectStudent['student_last'] . "</option>";
 							}
 							?>
 							</select>
