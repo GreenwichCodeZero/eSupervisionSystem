@@ -381,7 +381,7 @@ if ($_POST['sid']) {
                     <div class="card-content">
                         <span class="card-title green-text">Project Title</span>
                         <div>
-                            <h5><?php echo ( $student_projectTitle ? ucfirst ($student_projectTitle[0]['project_title']) : 'A title has not yet been submitted for this project'); ?></h5>
+                            <span><?php echo ( $student_projectTitle ? ucfirst ($student_projectTitle[0]['project_title']) : 'A title has not yet been submitted for this project'); ?></span>
 
                         </div>
                     </div>
