@@ -273,7 +273,7 @@ $projectTitle = $p->getResponse ();
 								echo ($student_proposal[0]['file_id'] > 0 ?
 									"<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_proposal[0]['file_id']."'/><a>".$student_proposal[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
 
-									<p><b>File uploaded on ".$prettyDate . " at " . substr($student_contextual[0]['file_time_added'], 0, -3)." </b></p></form>"
+									<p><b>File uploaded on ".$prettyDate . " at " . substr($student_proposal[0]['file_time_added'], 0, -3)." </b></p></form>"
 									: "You have not uploaded anything yet"
 								);
 								echo "</li>";
@@ -507,7 +507,7 @@ $projectTitle = $p->getResponse ();
 								echo ($student_feedback[0]['file_id'] > 0 ?
 								"<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_feedback[0]['file_id']."'/><a>".$student_feedback[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
 
-									<p><b>File uploaded on ".$prettyDate . " at " . substr($student_project[0]['file_time_added'], 0, -3)."</b></p>"
+									<p><b>File uploaded on ".$prettyDate . " at " . substr($student_feedback[0]['file_time_added'], 0, -3)."</b></p>"
 								: "You have not uploaded anything yet"
 							);
 							if ($superFiles['feedback']['count'] > 0) {
