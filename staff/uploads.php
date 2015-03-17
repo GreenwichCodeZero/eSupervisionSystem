@@ -121,32 +121,32 @@ if ($_POST['sid']) {
     (
         "interim" => array
         (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'interim')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'interim', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'interim')->getResponse ())
         ),
 
         "initial" => array (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'initial')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'initial', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'initial')->getResponse ())
         ),
         "ethics" => array (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'ethics')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'ethics', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'ethics')->getResponse ())
         ),
         "proposal" => array (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'proposal')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'proposal', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'proposal')->getResponse ())
         ),
         "project" => array (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'project')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'project', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'project')->getResponse ())
         ),
         "contextual" => array (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'contextual')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'contextual', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'contextual')->getResponse ())
         ),
         "feedback" => array (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'feedback')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'feedback', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'feedback')->getResponse ())
         )
     );
@@ -666,6 +666,7 @@ if ($_POST['sid']) {
                                                  <button class='c_right-align waves-effect m-7 m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
                                                 </form>"
                                     : $currentStudent['student_first']." has not uploaded anything yet</li>");
+
                                 if ($superFiles['ethics']['count'] > 0) {
                                     foreach ($superFiles['ethics']['files'] as $sf) {
 
@@ -851,14 +852,14 @@ if ($_POST['sid']) {
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         
-                                        echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
+                                        echo "<p><b>File uploaded by ".$currentStudent['student_first'], ' ',$currentStudent['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
                                         echo "</li></ul>";
 
                                     } // End Foreach
                                 } 
 
                              if (!$studentFiles['feedback']['count'])
-                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
+                                echo "<ul class='collection'><li class='collection-item'>",$currentStudent['student_first'], ' ',$currentStudent['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 2:
                                 if (is_array ($studentFiles['project']['files'])) {
@@ -869,14 +870,14 @@ if ($_POST['sid']) {
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         
-                                        echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
+                                        echo "<p><b>File uploaded by ".$currentStudent['student_first'], ' ',$currentStudent['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
                                         echo "</li></ul>";
 
                                     } // End Foreach
                                 } 
 
                              if (!$studentFiles['project']['count'])
-                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
+                                echo "<ul class='collection'><li class='collection-item'>",$currentStudent['student_first'], ' ',$currentStudent['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 3:
                                 if (is_array ($studentFiles['proposal']['files'])) {
@@ -887,14 +888,14 @@ if ($_POST['sid']) {
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         
-                                        echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
+                                        echo "<p><b>File uploaded by ".$currentStudent['student_first'], ' ',$currentStudent['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
                                         echo "</li></ul>";
 
                                     } // End Foreach
                                 } 
 
                              if (!$studentFiles['proposal']['count'])
-                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
+                                echo "<ul class='collection'><li class='collection-item'>",$currentStudent['student_first'], ' ',$currentStudent['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 4:
                                 if (is_array ($studentFiles['contextual']['files'])) {
@@ -905,14 +906,14 @@ if ($_POST['sid']) {
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         
-                                        echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
+                                        echo "<p><b>File uploaded by ".$currentStudent['student_first'], ' ',$currentStudent['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
                                         echo "</li></ul>";
 
                                     } // End Foreach
                                 } 
 
                              if (!$studentFiles['contextual']['count'])
-                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
+                                echo "<ul class='collection'><li class='collection-item'>",$currentStudent['student_first'], ' ',$currentStudent['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 5:
                                 if (is_array ($studentFiles['interim']['files'])) {
@@ -923,14 +924,14 @@ if ($_POST['sid']) {
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         
-                                        echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
+                                        echo "<p><b>File uploaded by ".$currentStudent['student_first'], ' ',$currentStudent['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
                                         echo "</li></ul>";
 
                                     } // End Foreach
                                 } 
 
                              if (!$studentFiles['interim']['count'])
-                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
+                                echo "<ul class='collection'><li class='collection-item'>",$currentStudent['student_first'], ' ',$currentStudent['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 6:
                                 if (is_array ($studentFiles['ethics']['files'])) {
@@ -941,14 +942,14 @@ if ($_POST['sid']) {
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         
-                                        echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
+                                        echo "<p><b>File uploaded by ".$currentStudent['student_first'], ' ',$currentStudent['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
                                         echo "</li></ul>";
 
                                     } // End Foreach
                                 } 
 
                              if (!$studentFiles['ethics']['count'])
-                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
+                                echo "<ul class='collection'><li class='collection-item'>",$currentStudent['student_first'], ' ',$currentStudent['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 8:
                                 if (is_array ($studentFiles['initial']['files'])) {
@@ -959,14 +960,14 @@ if ($_POST['sid']) {
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         //
-                                                             echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";
+                                                             echo "<p><b>File uploaded by ".$currentStudent['student_first'], ' ',$currentStudent['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";
                                         echo "</li></ul>";
 
                                     } // End Foreach
                                 } 
 
                              if (!$studentFiles['initial']['count'])
-                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
+                                echo "<ul class='collection'><li class='collection-item'>",$currentStudent['student_first'], ' ',$currentStudent['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
 
                         }

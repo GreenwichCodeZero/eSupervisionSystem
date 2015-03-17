@@ -91,31 +91,31 @@ $superFiles = array
 (
     "interim" => array
     (
-        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'interim')->getResponse () ,
+        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'interim', ' limit 1')->getResponse () ,
         "count" => count ($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'interim')->getResponse ())
     ),
     "initial" => array (
-        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'initial')->getResponse () ,
+        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'initial', ' limit 1')->getResponse () ,
         "count" => count ($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'initial')->getResponse ())
     ),
     "ethics" => array (
-        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'ethics')->getResponse () ,
+        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'ethics', ' limit 1')->getResponse () ,
         "count" => count ($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'ethics')->getResponse ())
     ),
     "proposal" => array (
-        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'proposal')->getResponse () ,
+        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'proposal', ' limit 1')->getResponse () ,
         "count" => count ($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'proposal')->getResponse ())
     ),
     "project" => array (
-        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'project')->getResponse () ,
+        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'project', ' limit 1')->getResponse () ,
         "count" => count ($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'project')->getResponse ())
     ),
     "contextual" => array (
-        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'contextual')->getResponse () ,
+        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'contextual', ' limit 1')->getResponse () ,
         "count" => count ($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'contextual')->getResponse ())
     ),
     "feedback" => array (
-        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'feedback')->getResponse () ,
+        "files" => $f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'feedback', ' limit 1')->getResponse () ,
         "count" => count ($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user, 'feedback')->getResponse ())
     )
 );
