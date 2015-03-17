@@ -4,6 +4,8 @@
 // Initialise session
 session_start();
 
+error_reporting(0);
+
 require '../login-check.php';
 
 $currentStudent = $_SESSION['currentUser'];
