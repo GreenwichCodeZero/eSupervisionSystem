@@ -403,7 +403,7 @@ if ($_POST['sid']) {
                                 echo "<li class='collection-item'>";
                                 echo (
                                 $student_proposal[0]['file_id'] > 0 ?
-                                    "<form action='readfile.php' method='post'>
+                                    "<form action='readfile.php' method='post' style='min-height: 35px;'>
                                     <input type='hidden' name='file_id' value='".$student_proposal[0]['file_id']."'/>
                                     <a>".$student_proposal[0]['file_name']."</a>
 												<button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
@@ -422,7 +422,7 @@ if ($_POST['sid']) {
                                         // Output date and time
                                         echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
 
-                                        echo ' <form action="readfile.php" method="POST">', "<div>{$sf['communication_body']}</div><a> {$sf[ 'file_name']}</a>
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<div>{$sf['communication_body']}</div><a> {$sf[ 'file_name']}</a>
 															<input type='hidden' name='file_id' value='".$sf['file_id']."' />
 															<button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
 
@@ -456,7 +456,7 @@ if ($_POST['sid']) {
                                 echo "<li class='collection-item'>";
                                 echo (
                                 $student_contextual[0]['file_id'] > 0 ?
-                                    "<form action='readfile.php' method='post'>
+                                    "<form action='readfile.php' method='post' style='min-height: 35px;'>
                                     <input type='hidden' name='file_id' value='".$student_contextual[0]['file_id']."'/>
                                     <a>".$student_contextual[0]['file_name']."</a> <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
 													</form>"
@@ -474,7 +474,7 @@ if ($_POST['sid']) {
                                         // Output date and time
                                         echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
 
-                                        echo ' <form action="readfile.php" method="POST">', 
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">',
                                         "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
 															<input type='hidden' name='file_id' value='".$sf['file_id']."' />
 															<button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
@@ -508,7 +508,7 @@ if ($_POST['sid']) {
                                 echo "<li class='collection-item'>";
                                 echo (
                                 $student_initial[0]['file_id'] > 0 ?
-                                    "<form action='readfile.php' method='post'>
+                                    "<form action='readfile.php' method='post' style='min-height: 35px;'>
                                     <input type='hidden' name='file_id' value='".$student_initial[0]['file_id']."'/>
                                     <a>".$student_initial[0]['file_name']."</a>
 												 <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
@@ -526,7 +526,7 @@ if ($_POST['sid']) {
                                         // Output date and time
                                         echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
 
-                                        echo ' <form action="readfile.php" method="POST">', 
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">',
                                         "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
 															<input type='hidden' name='file_id' value='".$sf['file_id']."' />
 															 <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
@@ -560,7 +560,7 @@ if ($_POST['sid']) {
                                 echo "<li class='collection-item'>";
                                 echo (
                                 $student_interim[0]['file_id'] > 0 ?
-                                    "<form action='readfile.php' method='post'>
+                                    "<form action='readfile.php' method='post' style='min-height: 35px;'>
                                     <input type='hidden' name='file_id' value='".$student_interim[0]['file_id']."'/>
                                     <a>".$student_interim[0]['file_name']."</a> <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
 												</form>"
@@ -578,7 +578,7 @@ if ($_POST['sid']) {
                                         // Output date and time
                                         echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
 
-                                        echo ' <form action="readfile.php" method="POST">', 
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">',
                                         "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
 														<input type='hidden' name='file_id' value='".$sf['file_id']."' />
 														<button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
@@ -611,7 +611,7 @@ if ($_POST['sid']) {
                                 echo "<li class='collection-item'>";
                                 echo (
                                 $student_project[0]['file_id'] > 0 ?
-                                    "<form action='readfile.php' method='post'>
+                                    "<form action='readfile.php' method='post' style='min-height: 35px;'>
                                     <input type='hidden' name='file_id' value='".$student_project[0]['file_id']."'/>
                                     <a>".$student_project[0]['file_name']."</a> <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
                                                 </form>"
@@ -627,7 +627,7 @@ if ($_POST['sid']) {
                                         $prettyDate = date('l j F Y', $date);
 
                                         // Output date and time
-                                        echo ' <form action="readfile.php" method="POST">'
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">'
                                         , "<p>", $prettyDate , ",", substr(($sf['communication_time_added']), 0, -3),
                                          "</p><a> {$sf[ 'file_name']}</a>
                                                         <input type='hidden' name='file_id' value='".$sf['file_id']."' />
@@ -660,7 +660,7 @@ if ($_POST['sid']) {
                                 echo "<li class='collection-item'>";
                                 echo (
                                 $student_ethics[0]['file_id'] > 0 ?
-                                    "<form class='action='readfile.php' method='post'>
+                                    "<form class='action='readfile.php' method='post' style='min-height: 35px;'>
                                     <input type='hidden' name='file_id' value='".$student_ethics[0]['file_id']."'/>
                                     <a>".$student_ethics[0]['file_name']."</a>
                                                  <button class='c_right-align waves-effect m-7 m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
@@ -676,7 +676,7 @@ if ($_POST['sid']) {
                                         // Output date and time
                                         echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
 
-                                        echo ' <form action="readfile.php" method="POST">', 
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">',
                                         "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class='waves-effect waves-teal waves-light  green btn-flat white-text' ><i class='mdi-file-file-download'></i></button></form>";
@@ -707,7 +707,7 @@ if ($_POST['sid']) {
                                 echo "<li class='collection-item'>";
                                 echo (
                                 $student_feedback[0]['file_id'] > 0 ?
-                                    "<form action='readfile.php' method='post'>
+                                    "<form action='readfile.php' method='post' style='min-height: 35px;'>
                                     <input type='hidden' name='file_id' value='".$student_feedback[0]['file_id']."'/>
                                     <a>".$student_feedback[0]['file_name']."</a>
                                                  <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
@@ -723,7 +723,7 @@ if ($_POST['sid']) {
                                         // Output date and time
                                         echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
 
-                            echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
+                            echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
                                     <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                     <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
 
@@ -754,7 +754,7 @@ if ($_POST['sid']) {
                                             // if ($sf['file_type_id'] == 1) {
                                                 echo '<ul class="collection">';
                                                 echo '<li class="collection-item ">';
-                                                echo ' <form action="readfile.php" method="POST">', "<a> {$sf[ 'file_name']}</a>
+                                                echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<a> {$sf[ 'file_name']}</a>
                                                         <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                         <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button></form>";
                                                 echo "</li>";
@@ -847,7 +847,7 @@ if ($_POST['sid']) {
                                     foreach ($studentFiles['feedback']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
                                         
-                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         
@@ -865,7 +865,7 @@ if ($_POST['sid']) {
                                     foreach ($studentFiles['project']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item" >';
                                         
-                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         
@@ -883,7 +883,7 @@ if ($_POST['sid']) {
                                     foreach ($studentFiles['proposal']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
                                         
-                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         
@@ -901,7 +901,7 @@ if ($_POST['sid']) {
                                     foreach ($studentFiles['contextual']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
                                         
-                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         
@@ -919,7 +919,7 @@ if ($_POST['sid']) {
                                     foreach ($studentFiles['interim']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
                                         
-                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         
@@ -937,7 +937,7 @@ if ($_POST['sid']) {
                                     foreach ($studentFiles['ethics']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
                                         
-                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         
@@ -955,7 +955,7 @@ if ($_POST['sid']) {
                                     foreach ($studentFiles['initial']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
                                                                                 
-                                        echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
+                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         //
