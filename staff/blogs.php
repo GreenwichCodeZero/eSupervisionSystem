@@ -189,7 +189,7 @@ $students = $u->getResponse();
 						</div>
 						<div class="input-field col s12 m3">
 							<button type="submit"
-									class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+									class="c_right-align waves-effect waves-teal waves-light blue btn-flat white-text">
 								Filter
 							</button>
 						</div>

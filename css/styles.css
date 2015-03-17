@@ -10,7 +10,7 @@
     float: left;
 }
 
-#sendMessage, #submitBlog, #requestMeeting {
+#sendMessage, #submitBlog, #requestMeeting ,#submitUpload{
     display: none;
 }
 
@@ -34,6 +34,9 @@
     margin-bottom: 0px;
 }
 
+.icon{
+padding:0 1em!important;
+}
 .marginTopFix {
     margin-top: -20px;
 }
