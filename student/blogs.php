@@ -184,7 +184,9 @@ $supervisor = $u->getResponse();
                              <!--  COMMENT HTML START -->
 							<p class="grey lighten-3">
 								<b>
-									Comment from <?php echo $comment_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $comment['comment_staff_id']; ?>
+                                <?php $staff =  $u->singleStaff ($comment['comment_staff_id'])->getResponse (); ?>
+
+									Comment from <?php echo $comment_staff = ($comment['comment_staff_id'] == $staff_username) ? "me" :  $staff['staff_first'], ' ', $staff['staff_last']; ?>
 
 									<?php
 									// Pretty format the date
