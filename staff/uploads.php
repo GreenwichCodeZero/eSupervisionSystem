@@ -279,7 +279,7 @@ if ($_POST['sid']) {
         ?>
     </div>
     <div class="row">
-        <div class="col s10 m12 offset-s1 card">
+        <div class="col s10 offset-s1 card">
             <div class="card-content">
                 <span class="card-title green-text">Student Upload History</span>
 
@@ -739,6 +739,42 @@ if ($_POST['sid']) {
                         </div>
                     </div>
                 </div>
+
+
+                <div class="col s10 m12 offset-s1 card">
+                            <div class="card-content">
+                                <span class="card-title green-text">Supervisor Uploads</span>
+                                <p class="green-text">You have uploaded <?php echo count($f->supervisorUploads ($staff_username, $_POST['sid'])->getResponse ()); ?> files</p>
+
+                                
+                                    <?php
+                                    if (count($f->supervisorUploads ($staff_username, $_POST['sid'])->getResponse ()) > 0) {
+                                    
+                                        foreach ($f->supervisorUploads ($staff_username, $_POST['sid'])->getResponse () as $sf) {
+                                            // if ($sf['file_type_id'] == 1) {
+                                                echo '<ul class="collection">';
+                                                echo '<li class="collection-item ">';
+                                                echo ' <form action="readfile.php" method="POST">', "<a> {$sf[ 'file_name']}</a>
+                                                        <input type='hidden' name='file_id' value='".$sf['file_id']."' />
+                                                        <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button></form>";
+                                                echo "</li>";
+                                                echo '</ul>';
+                                            // }
+                                        }
+                                    } else {
+                                    ?>
+                                    <ul class="collection">
+                                    <li class="collection-item grey lighten-3">
+                                        You have uploaded no files
+                                    </li>
+                                    </ul>
+                                <?php
+                                }
+                                ?>
+                                </ul>
+                            </div>
+                        </div>
+
             </div>
 
 
@@ -810,99 +846,127 @@ if ($_POST['sid']) {
                                 if (is_array ($studentFiles['feedback']['files'])) {
                                     foreach ($studentFiles['feedback']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
-                                        echo "<p>".$file['date_added']. " - " . $file['time_added']."</p>";
+                                        
                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
-                                        //
+                                        
+                                        echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
                                         echo "</li></ul>";
 
                                     } // End Foreach
-                                } else { echo "There are no uploads of this type"; }// End Is Array
+                                } 
+
+                             if (!$studentFiles['feedback']['count'])
+                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 2:
                                 if (is_array ($studentFiles['project']['files'])) {
                                     foreach ($studentFiles['project']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item" >';
-                                        echo "<p>".$file['date_added']. " - " . $file['time_added']."</p>";
+                                        
                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
-                                        //
+                                        
+                                        echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
                                         echo "</li></ul>";
 
                                     } // End Foreach
-                                } else { echo "There are no uploads of this type"; }// End Is Array
+                                } 
+
+                             if (!$studentFiles['project']['count'])
+                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 3:
                                 if (is_array ($studentFiles['proposal']['files'])) {
                                     foreach ($studentFiles['proposal']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
-                                        echo "<p>".$file['date_added']. " - " . $file['time_added']."</p>";
+                                        
                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
-                                        //
+                                        
+                                        echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
                                         echo "</li></ul>";
 
                                     } // End Foreach
-                                } else { echo "There are no uploads of this type"; }// End Is Array
+                                } 
+
+                             if (!$studentFiles['proposal']['count'])
+                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 4:
                                 if (is_array ($studentFiles['contextual']['files'])) {
                                     foreach ($studentFiles['contextual']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
-                                        echo "<p>".$file['date_added']. " - " . $file['time_added']."</p>";
+                                        
                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
-                                        //
+                                        
+                                        echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
                                         echo "</li></ul>";
 
                                     } // End Foreach
-                                } else { echo "There are no uploads of this type"; }// End Is Array
+                                } 
+
+                             if (!$studentFiles['contextual']['count'])
+                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 5:
                                 if (is_array ($studentFiles['interim']['files'])) {
                                     foreach ($studentFiles['interim']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
-                                        echo "<p>".$file['date_added']. " - " . $file['time_added']."</p>";
+                                        
                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
-                                        //
+                                        
+                                        echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
                                         echo "</li></ul>";
 
                                     } // End Foreach
-                                } else { echo "There are no uploads of this type"; }// End Is Array
+                                } 
+
+                             if (!$studentFiles['interim']['count'])
+                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 6:
                                 if (is_array ($studentFiles['ethics']['files'])) {
                                     foreach ($studentFiles['ethics']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
-                                        echo "<p>".$file['date_added']. " - " . $file['time_added']."</p>";
+                                        
                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
-                                        //
+                                        
+                                        echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";//
                                         echo "</li></ul>";
 
                                     } // End Foreach
-                                } else { echo "There are no uploads of this type"; }// End Is Array
+                                } 
+
+                             if (!$studentFiles['ethics']['count'])
+                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 8:
                                 if (is_array ($studentFiles['initial']['files'])) {
                                     foreach ($studentFiles['initial']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
-                                                                                echo "<p>".$file['date_added']. " - " . $file['time_added']."</p>";
+                                                                                
                                         echo ' <form action="readfile.php" method="POST">', "<p><a> {$file[ 'file_name']}</a>
                                                             <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                              <button class=' waves-effect waves-teal waves-light  green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
                                         //
+                                                             echo "<p><b>File uploaded by ".$stu['student_first'], ' ',$stu['student_last']." on ".$file['file_date_added']. " - " . $file['file_time_added']."</b></p>";
                                         echo "</li></ul>";
 
                                     } // End Foreach
-                                } else { echo "There are no uploads of this type"; }// End Is Array
+                                } 
+
+                             if (!$studentFiles['initial']['count'])
+                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
 
                         }
