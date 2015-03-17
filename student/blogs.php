@@ -161,6 +161,14 @@ $supervisor = $u->getResponse();
                 <ul class="collection">
                     <?php foreach ($blogs as $b) {
                         echo '<li class="collection-item">';
+
+
+                     // Pretty format the date
+                         $date = strtotime($b['communication_date_added']);
+                         $prettyDate = date('l j F Y', $date);
+
+                         // Output date and time
+                         echo "<b> Posted on: ",$prettyDate . ', ' . substr($b['communication_time_added'], 0, -3), "</b><br>"; 
                         echo $b['communication_body'];
 
                           if ($b['communication_comment_id'] > 0){

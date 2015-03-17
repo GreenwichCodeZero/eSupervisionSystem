@@ -196,7 +196,7 @@ if (isset($_GET['name'])) {
                     </div>
                     <div class="input-field col s12 m3">
                         <button type="submit" id="searchSubmit" onclick="return ValidateNameForm();"
-                                class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+                                class="c_right-align waves-effect waves-teal waves-light blue btn-flat white-text">
                             Search
                         </button>
                     </div>
@@ -231,7 +231,7 @@ if (isset($_GET['name'])) {
                     </div>
                     <div class="input-field col s12 m3">
                         <button type="submit" id="searchProgrammeSubmit" onclick="return ValidateProgrammeForm();"
-                                class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">
+						class="c_right-align waves-effect waves-teal waves-light blue btn-flat white-text">
                             Search
                         </button>
                     </div>

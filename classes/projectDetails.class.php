@@ -31,7 +31,7 @@ class projectDetails {
 
 		foreach($this->postVars as $key => $value) {
  			if (empty ($value)) {
- 				throw new Exception ('Please complete all fields: '.$key.' was empty');
+ 				throw new Exception ('Project title was not updated as '.$key.' was empty');
  				exit;
  			}
 		}
