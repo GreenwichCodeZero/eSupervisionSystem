@@ -111,6 +111,45 @@ class Reports {
         $this->response($row);
     }
 
+    public function StudentsNoMeetingsPast2Weeks() {
+        $result = $this->con->prepare(
+            "SELECT
+               s.student_id,
+               s.student_first,
+               s.student_last,
+               s.student_username
+             FROM
+               esuper_student s
+             WHERE
+               s.student_id
+             NOT IN
+               (
+                 SELECT
+                   s.student_id
+                 FROM
+                   esuper_meeting m
+                 JOIN
+                   esuper_student s ON m.meeting_student_id = s.student_username
+                 WHERE
+                   STR_TO_DATE(m.meeting_date,'%Y-%m-%d') > DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+               )
+             ORDER BY
+               s.student_last ASC, s.student_first ASC");
+
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetchAll();
+        $result = null;
+        $this->response($row);
+    }
+
+
     public function getResponse() {
         return $this->response;
     }

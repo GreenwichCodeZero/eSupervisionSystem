@@ -95,7 +95,7 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
 				</li>
 			</ul>
 
-			<ul id="nav-mobile" class="side-nav hide-on-large-only">
+            <ul id="nav-mobile" class="side-nav hide-on-large-only" style="overflow-y: scroll;">
 				<li>
 					<a href="index.php">Dashboard</a>
 				</li>
