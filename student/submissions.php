@@ -245,7 +245,7 @@ $projectTitle = $p->getResponse ();
 					</form>
 				</div>
 			</div>
-			<div class="col s12 m6">
+			<div class="col s12">
 				<div class="card">
 					<form method = 'post'>
 						<div class="card-content">
@@ -259,7 +259,7 @@ $projectTitle = $p->getResponse ();
 					</form>
 				</div>
 			</div>
-			<div class="col s12 m6">
+			<div class="col s12">
 				<div class="card">
 					<div class="card-content">
 						<span class="card-title green-text">Project Proposal</span>
@@ -300,8 +300,7 @@ $projectTitle = $p->getResponse ();
 					</div>
 				</div>
 			</div>
-
-			<div class="col s12 m6">
+			<div class="col s12">
 				<div class="card">
 					<div class="card-content">
 						<span class="card-title green-text">Contextual Report</span>
@@ -338,8 +337,7 @@ $projectTitle = $p->getResponse ();
 					</div>
 				</div>
 			</div>
-			
-			<div class="col s12 m6">
+			<div class="col s12">
 				<div class="card">
 					<div class="card-content">
 						<span class="card-title green-text">Initial Report</span>
@@ -381,8 +379,7 @@ $projectTitle = $p->getResponse ();
 					</div>
 				</div>
 			</div>
-		
-			<div class="col s12 m6">
+			<div class="col s12">
 				<div class="card">
 					<div class="card-content">
 						<span class="card-title green-text">Interim Report</span>
@@ -421,8 +418,7 @@ $projectTitle = $p->getResponse ();
 					</div>
 				</div>
 			</div>
-			
-			<div class="col s12 m6">
+			<div class="col s12">
 				<div class="card">
 					<div class="card-content">
 						<span class="card-title green-text">Project Report</span>
@@ -461,8 +457,7 @@ $projectTitle = $p->getResponse ();
 					</div>
 				</div>
 			</div>
-			
-			<div class="col s12 m6">
+			<div class="col s12">
 				<div class="card">
 					<div class="card-content">
 						<span class="card-title green-text">Formative Feedback</span>
@@ -502,8 +497,7 @@ $projectTitle = $p->getResponse ();
 					</div>
 				</div>
 			</div>
-			
-			<div class="col s12 m6">
+			<div class="col s12">
 				<div class="card">
 					<div class="card-content">
 						<span class="card-title green-text">Research Ethics</span>
