@@ -371,12 +371,10 @@ if ($_POST['sid']) {
                 </div>
 
                 <p class="green-text">You have uploaded <?php $f = new File(); count ($f->supervisorUploads ($staff_username, $_POST['sid'])->getResponse ()); ?> files with feedback</p>
-               
-
             </div>
 
 
-            <div class="col s12 m6">
+            <div class="col s12">
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title green-text">Project Title</span>
@@ -387,7 +385,7 @@ if ($_POST['sid']) {
                     </div>
                 </div>
             </div>
-            <div class="col s12 m6">
+            <div class="col s12">
                 <div class="card">
                     <div class="card-content">
                         <div class='c_right-align'>
@@ -442,7 +440,7 @@ if ($_POST['sid']) {
                 </div>
             </div>
 
-            <div class="col s12 m6">
+            <div class="col s12">
                 <div class="card">
                     <div class="card-content">
                         <div class='c_right-align'>
@@ -494,7 +492,7 @@ if ($_POST['sid']) {
                 </div>
             </div>
 
-            <div class="col s12 m6">
+            <div class="col s12">
                 <div class="card">
                     <div class="card-content">
                         <div class='c_right-align'>
@@ -545,7 +543,7 @@ if ($_POST['sid']) {
                     </div>
                 </div>
             </div>
-            <div class="col s12 m6">
+            <div class="col s12">
                 <div class="card">
                     <div class="card-content">
                         <div class='c_right-align'>
@@ -596,7 +594,7 @@ if ($_POST['sid']) {
                     </div>
                 </div>
             </div>
-            <div class="col s12 m6">
+            <div class="col s12">
                <div class="card">
                     <div class="card-content">
                         <div class='c_right-align'>
@@ -646,7 +644,7 @@ if ($_POST['sid']) {
                     </div>
                 </div>
             </div>
-            <div class="col s12 m6">
+            <div class="col s12">
                 <div class="card">
                     <div class="card-content">
                         <div class='c_right-align'>
