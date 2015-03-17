@@ -3,6 +3,8 @@
 // Initialise session
 session_start();
 
+error_reporting(0);
+
 require '../database-connection.php';
 require '../validation.php';
 require '../login-check.php';

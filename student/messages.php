@@ -2,6 +2,8 @@
 
 session_start();
 
+error_reporting(0);
+
 require '../login-check.php';
 include '../classes/security.class.php';
 include '../classes/communication.class.php';

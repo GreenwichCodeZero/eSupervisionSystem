@@ -156,143 +156,141 @@ foreach ($allStudents as $student) {
 
 <div class="container">
 
-    <h1>Reports</h1>
+    <h4 class="green-text">Reports</h4>
 
     <div class="row">
         <!-- Students without a supervisor starts here -->
-        <div class="col s12 l6">
+        <div class="col s12">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">Students without a supervisor</span>
+                    <div class="row" style="margin-left: 0; margin-right: 0;">
+                        <span class="card-title green-text">Students without a supervisor</span>
+                    </div>
 
-                    <?php
-                    foreach ($noSupervisors as $noSupervisor) {
-                        echo "<br>" . $noSupervisor['student_first'] . " " . $noSupervisor['student_last'];
-                    }
-                    ?>
+                    <div class="row">
+                        <?php foreach ($noSupervisors as $noSupervisor) {
+                            echo '<div class="col s12 m6 l4">' . $noSupervisor['student_first'] . ' ' . $noSupervisor['student_last'] . '</div>';
+                        } ?>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- Students without a supervisor ends here -->
 
         <!-- Students without a second marker starts here -->
-        <div class="col s12 l6">
+        <div class="col s12">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">Students without a second marker</span>
-                    <?php
-                    foreach ($noSecondMarkers as $noSecondMarker) {
-                        echo "<br>" . $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'];
-                    }
-                    ?>
+                    <div class="row" style="margin-left: 0; margin-right: 0;">
+                        <span class="card-title green-text">Students without a second marker</span>
+                    </div>
+
+                    <div class="row">
+                        <?php foreach ($noSecondMarkers as $noSecondMarker) {
+                            echo '<div class="col s12 m6 l4">' . $noSecondMarker['student_first'] . ' ' . $noSecondMarker['student_last'] . '</div>';
+                        } ?>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- Students without a second marker ends here -->
-    </div>
 
-    <div class="row">
         <!-- Students with no meeting requests within 2 weeks starts here -->
-        <div class="col s12 l6">
+        <div class="col s12">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">Students with no meeting requests within 2 weeks</span>
+                    <div class="row" style="margin-left: 0; margin-right: 0;">
+                        <span class="card-title green-text">Students with no meeting requests within 2 weeks</span>
+                    </div>
 
-                    <?php foreach ($studentsNoRecentMeetings as $student) {
-                        echo '<br>' . $student['student_first'] . ' ' . $student['student_last'];
-                    } ?>
-
+                    <div class="row">
+                        <?php foreach ($studentsNoRecentMeetings as $student) {
+                            echo '<div class="col s12 m6 l4">' . $student['student_first'] . ' ' . $student['student_last'] . '</div>';
+                        } ?>
+                    </div>
                 </div>
             </div>
         </div>
         <!--  Students with no meeting requests within 2 weeks ends here -->
 
         <!-- Students with the same supervisor and second marker starts here -->
-        <div class="col s12 l6">
+        <div class="col s12">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">Students with the same supervisor and second marker</span>
-                    <?php
-                    $stuDetailsQ = new UserDetails();
+                    <div class="row" style="margin-left: 0; margin-right: 0;">
+                        <span class="card-title green-text">Students with the same supervisor and second marker</span>
+                    </div>
 
-                    foreach ($test as $id) {
-                        $stuDetailsQ->GetStudentDetails($id);
-                        $stuDetails = $stuDetailsQ->getResponse();
+                    <div class="row">
+                        <?php foreach ($test as $id) {
+                            $userDetails->GetStudentDetails($id);
+                            $stuDetails = $userDetails->getResponse();
 
-                        foreach ($stuDetails as $stu) {
-                            echo "<br>" . $stu['student_first'] . " " . $stu['student_last'];
-                        }
-                    }
-                    ?>
+                            foreach ($stuDetails as $stu) {
+                                echo '<div class="col s12 m6 l4">' . $stu['student_first'] . ' ' . $stu['student_last'] . '</div>';
+                            }
+                        } ?>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- Students with the same supervisor and second marker ends here -->
-    </div>
 
-    <div class="row">
         <!-- Students who haven't logged in for the past 7 days starts here -->
-        <div class="col s12 l6">
+        <div class="col s12">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">Students who haven't logged in for the past 7 days</span>
-                    <?php
-                    foreach ($notLoggedIn7Days as $notLoggedIn) {
-                        echo '<br>' . $notLoggedIn['student_first'] . " " . $notLoggedIn['student_last'];
-                    }
-                    ?>
+                    <div class="row" style="margin-left: 0; margin-right: 0;">
+                        <span class="card-title green-text">Students who haven't logged in for the past 7 days</span>
+                    </div>
+
+                    <div class="row">
+                        <?php foreach ($notLoggedIn7Days as $notLoggedIn) {
+                            echo '<div class="col s12 m6 l4">' . $notLoggedIn['student_first'] . ' ' . $notLoggedIn['student_last'] . '</div>';
+                        } ?>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- Students who haven't logged in for the past 7 days ends here -->
 
         <!-- Staff who have declined more than 70% of meeting requests starts here -->
-        <div class="col s12 l6">
+        <div class="col s12">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">Staff who have declined more than 70% of meeting requests</span>
+                    <div class="row" style="margin-left: 0; margin-right: 0;">
+                        <span
+                            class="card-title green-text">Staff who have declined more than 70% of meeting requests</span>
+                    </div>
 
-                    <?php foreach ($staffMeetingsDeclined as $staff) {
-                        echo '<br>' . $staff['staff_first'] . ' ' . $staff['staff_last'];
-                    } ?>
-
+                    <div class="row">
+                        <?php foreach ($staffMeetingsDeclined as $staff) {
+                            echo '<div class="col s12 m6 l4">' . $staff['staff_first'] . ' ' . $staff['staff_last'] . '</div>';
+                        } ?>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- Staff who have declined more than 70% of meeting requests ends here -->
-    </div>
 
-    <div class="row">
         <!-- Inactive students assigned to a supervisor starts here -->
-        <div class="col s12 l6">
+        <div class="col s12">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title green-text">Inactive students assigned to a supervisor</span>
+                    <div class="row" style="margin-left: 0; margin-right: 0;">
+                        <span class="card-title green-text">Inactive students assigned to a supervisor</span>
+                    </div>
 
-                    <?php
-                    foreach ($notActiveButAssignedToASupervisors as $inactiveStudent) {
-                        echo "<br>" . $inactiveStudent['student_first'] . " " . $inactiveStudent['student_last'];
-                    }
-
-                    ?>
+                    <div class="row">
+                        <?php foreach ($notActiveButAssignedToASupervisors as $inactiveStudent) {
+                            echo '<div class="col s12 m6 l4">' . $inactiveStudent['student_first'] . ' ' . $inactiveStudent['student_last'] . '</div>';
+                        } ?>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- Inactive students assigned to a supervisor ends here -->
 
-        <!-- *** starts here -->
-        <div class="col s12 l6">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title green-text">New report here</span>
-
-                    <div class="collection">
-                        Display info here
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- *** ends here -->
     </div>
 
 </div>
