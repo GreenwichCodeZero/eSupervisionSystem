@@ -33,6 +33,26 @@ class UserDetails {
 
         return $this;
     }
+    
+    public function singleStaff ( $username ) {
+      $result = $this->con->prepare(
+            'SELECT * FROM esuper_staff
+            WHERE staff_username = :username');
+      $result->bindValue (':username', $username);
+        try {
+            $result->execute();
+        } catch (PDOException $e) {
+            echo "ERROR:";
+            echo "\n\n\r\r" . $e->getMessage();
+            exit;
+        }
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        $result = null;
+        $this->response($row);
+
+        return $this;
+    }
 
 
     // Get all students
