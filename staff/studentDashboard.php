@@ -146,11 +146,11 @@ $secondMarker = $u2->getResponse();
     </div>
 </nav>
 <div class="container">
-    <h5 class="center-align">You are viewing student: <?php echo $newCurrentStudent[0]['student_first'] . " " . $newCurrentStudent[0]['student_last'] . "s "; ?> eSupervision Dashboard</h5>
-    <h6 class="center-align"><a href="viewDashboards.php">Go back to view dashboards</a></h6>
+    <h5 class="center-align">Viewing student: <?php echo $newCurrentStudent[0]['student_first'] . " " . $newCurrentStudent[0]['student_last'] . "'s "; ?> eSupervision Dashboard</h5>
+    <h6 class="center-align"><a href="viewDashboards.php">Back to Selection</a></h6>
 
 	<div class="row">
-		<div class="left-align col s4">
+		<div class="left-align col s6">
 			<p>
 				<?php echo $studentDetails; ?> 
 			</p>
@@ -158,12 +158,7 @@ $secondMarker = $u2->getResponse();
 				<?php echo $studentBannerId; ?> 
 			</p>
 		</div>
-		<div class="center-align col s4">
-			<p>
-				<?php echo $studentName; ?>
-			</p>
-		</div>
-		<div class="right-align col s4">
+		<div class="right-align col s6">
 			<p>
 				Supervisor: <?php echo "<a href=" . '"' . $supervisor[0]['staff_profile_link'] . '" target="_blank">' . $supervisor[0]['staff_first'] . ' ' . $supervisor[0]['staff_last'] . "</a>"; ?>
 			</p>
@@ -180,18 +175,18 @@ $secondMarker = $u2->getResponse();
                     <p>You have submitted <?php echo $meeting_count; ?> meeting records.</p>
                 </div>
                 <div class="card-action">
-                    <a href="meetings.php" title="View all meetings">View All or Request</a>
+                    <a href="#" title="View all meetings">View All or Request</a>
                 </div>
             </div>
         </div>
-		<div class="col s12 m6">
+        <div class="col s12 m6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Blog Summary</span>
                     <p>You have submitted <?php echo $blog_count; ?> blog posts.</p>
                 </div>
                 <div class="card-action">
-                    <a href="blogs.php" title="View all blogs">View All or Add New</a>
+                    <a href="#" title="View all blogs">View All or Add New</a>
                 </div>
             </div>
         </div>
@@ -203,52 +198,12 @@ $secondMarker = $u2->getResponse();
                     <p>You have received <?php echo $received_count; ?> messages.</p>
                 </div>
                 <div class="card-action">
-                    <a href="messages.php" title="View all messages">View All or Submit New</a>
+                    <a href="#" title="View all messages">View All or Submit New</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Start New Message Modal -->
-<div id="newMessageModal" class="modal modal-fixed-footer">
-    <form method="post" action="messages.php">
-        <div class="modal-content">
-            <h4>Send a message to supervisor</h4>
-
-            <textarea name="communication_body"></textarea>
-            <input type="hidden" name="communication_action" value="sendmessage"/>
-            <input type="hidden" name="communication_from_id" value="<?php echo $currentStudent['student_username']; ?>"
-                   ?>
-            <input type="hidden" name="communication_to_id" value="<?php echo $supervisor[0]['staff_username']; ?>"/>
-        </div>
-        <div class="modal-footer">
-
-            <button class="waves-effect waves-green btn-flat ">Submit</button>
-        </div>
-    </form>
-</div>
-<!-- End New Message Modal -->
-
-
-<!-- Start New Message Modal -->
-<div id="newBlogModal" class="modal modal-fixed-footer">
-    <form method="post" action="blogs.php">
-        <div class="modal-content">
-            <h4>New blog post</h4>
-
-            <textarea name="communication_body"></textarea>
-            <input type="hidden" name="communication_action" value="posttoblog"/>
-            <input type="hidden" name="communication_from_id" value="<?php echo $currentStudent['student_username']; ?>"
-                   ?>
-            <input type="hidden" name="communication_to_id" value="blog"/>
-        </div>
-        <div class="modal-footer">
-
-            <button class="waves-effect waves-green btn-flat ">Submit</button>
-        </div>
-    </form>
-</div>
-<!-- End New Message Modal -->
 </body>
 </html>
