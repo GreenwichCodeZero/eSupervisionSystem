@@ -145,15 +145,18 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
 </nav>
 <div class="container">
     <div class="row">
-        <h5 class="center-align">Viewing
-            staff: <?php echo $newCurrentStaff[0]['staff_first'] . " " . $newCurrentStaff[0]['staff_last'] . "'s "; ?>
+        <h5 class="center-align">You are viewing
+            staff: <?php echo $newCurrentStaff[0]['staff_first'] . " " . $newCurrentStaff[0]['staff_last'] . "s "; ?>
             eSupervision Dashboard</h5>
-        <h6 class="center-align"><a href="viewDashboards.php">Back to Selection</a></h6>
+        <h6 class="center-align"><a href="viewDashboards.php">Go back to view dashboards</a></h6>
     </div>
     <div class="row">
         <div class="col s10 offset-s1 m8 offset-m2 l6 offset-l3 center-align">
             <div>
                 <?php echo $staffDetails; ?>
+            </div>
+            <div>
+                <?php echo $staffName; ?>
             </div>
         </div>
     </div>
@@ -166,43 +169,113 @@ $noSecondMarkers = $noSecondMarkerQ->getResponse();
                     <p>You have submitted <?php echo $meeting_count; ?> meeting records.</p>
                 </div>
                 <div class="card-action">
-                    <a href="#" title="View all meetings">View or Request</a>
+                    <a href="#" title="View all meetings">View All</a>
+                    <a href="#" title="Request new meeting">Request</a>
                 </div>
             </div>
         </div>
-
         <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title green-text">Message Summary</span>
 
-                    <p>You have submitted <?php echo $message_count; ?> and received <?php echo $received_count; ?>
-                        messages.</p>
+                    <p>You have submitted <?php echo $message_count; ?> messages.</p>
+
+                    <p>You have received <?php echo $received_count; ?> messages.</p>
                 </div>
                 <div class="card-action">
-                    <a href="#" title="View all messages">View or Send</a>
+                    <a href="#" title="View all messages">View All</a>
+                    <div style="display: inline-block;">
+                        <a href="#newMessageModal" title="Write new message">Message Project Students</a>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
+    <div class="row">
         <!--  Project students starts here -->
-        <div class="col s12">
+        <div class="col s12 l6">
             <div class="card">
                 <div class="card-content">
-                    <div class="row" style="margin-left: 0; margin-right: 0;">
-                        <span class="card-title green-text">Your Project Students</span>
-                    </div>
+                    <span class="card-title green-text">List of project students</span>
 
-                    <div class="row">
-                        <?php foreach ($students as $student) {
-                            echo '<div class="col s12 m6 l4">' . $student['student_first'] . ' ' . $student['student_last'] . '</div>';
-                        } ?>
+                    <div class="collection">
+                        <?php
+                        foreach ($students as $student) {
+                            echo "<a class='collection-item' href='#'>" . $student['student_first'] . " " . $student['student_last'] . "</a>";
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
         </div>
         <!--  Project students ends here -->
+
+        <!--  Students without supervisor starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Students without a supervisor</span>
+
+                    <div class="collection">
+                        <?php
+                        foreach ($noSupervisors as $noSupervisor) {
+                            echo "<a class='collection-item' href='#'>" . $noSupervisor['student_first'] . " " . $noSupervisor['student_last'] . "</a>";
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without supervisor ends here -->
     </div>
+
+    <div class="row">
+        <!--  Students without second marker starts here -->
+        <div class="col s12 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title green-text">Students without a second marker</span>
+
+                    <div class="collection">
+                        <?php
+                        foreach ($noSecondMarkers as $noSecondMarker) {
+                            echo "<a class='collection-item' href='#'>" . $noSecondMarker['student_first'] . " " . $noSecondMarker['student_last'] . "</a>";
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students without second marker ends here -->
+    </div>
+
+    <!-- Start New Message Modal -->
+    <div id="newMessageModal" class="modal modal-fixed-footer">
+        <form method="post" action="messages.php">
+            <div class="modal-content">
+                <h4>Send a message to supervisor</h4>
+
+                <textarea name="communication_body"></textarea>
+                <input type="hidden" name="communication_action" value="sendmessage"/>
+                <input type="hidden" name="communication_from_id"
+                       value="<?php echo $newCurrentStaff[0]['student_username']; ?>" ?>
+                <input type="hidden" name="communication_to_id"
+                       value="<?php echo $supervisor[0]['staff_username']; ?>"/>
+            </div>
+            <div class="modal-footer">
+
+                <button class="waves-effect waves-green btn-flat">Submit</button>
+            </div>
+        </form>
+    </div>
+    <!-- End New Message Modal -->
+    <script>
+        $(document).ready(function () {
+            $('.modal-trigger').leanModal();
+        });
+    </script>
 </body>
 
 </html>

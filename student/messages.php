@@ -2,8 +2,6 @@
 
 session_start();
 
-error_reporting(0);
-
 require '../login-check.php';
 include '../classes/security.class.php';
 include '../classes/communication.class.php';
@@ -119,7 +117,7 @@ $received_count = count($received);
 				</li>
 			</ul>
 
-            <ul id="nav-mobile" class="side-nav hide-on-large-only" style="overflow-y: scroll;">
+			<ul id="nav-mobile" class="side-nav hide-on-large-only">
 				<li>
 					<a href="index.php">Dashboard</a>
 				</li>

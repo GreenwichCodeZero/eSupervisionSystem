@@ -6,6 +6,11 @@ include '../classes/security.class.php';
 include '../classes/file.class.php';
 
 $f = new File ();
+if (empty ($_POST['file_id'])) {
+	header ('location : ../');
+}
+
+
 $f->readFile ( $_POST['file_id'] );
 
 $file = $f->getResponse ();
