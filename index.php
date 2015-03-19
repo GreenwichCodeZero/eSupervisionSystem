@@ -174,13 +174,13 @@ function RedirectToDashboard($userType) {
                     <span class="card-title green-text">Login</span>
 
                     <div class="input-field">
-                        <label for="username">Username</label>
+                        <label for="username">User ID:</label>
                         <input id="username" value="<?php echo $username; ?>" name="username" type="text" size="30"
                                maxlength="30" onkeyup="ValidateUsername(this.value);"/>
                         <span id="usernameValidation" class="red-text text-light-3 validation-error"></span>
                     </div>
                     <div class="input-field">
-                        <label for="password">Password</label>
+                        <label for="password">Password:</label>
                         <input id="password" name="password" type="password" size="30" maxlength="30"
                                onkeyup="ValidatePassword(this.value);"/>
                         <span id="passwordValidation" class="red-text text-light-3 validation-error"></span>

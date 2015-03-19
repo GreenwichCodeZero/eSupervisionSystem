@@ -4,8 +4,6 @@
 // Initialise session
 session_start();
 
-error_reporting(0);
-
 require '../login-check.php';
 
 $currentStudent = $_SESSION['currentUser'];
@@ -105,7 +103,7 @@ $secondMarker = $u2->getResponse();
 				</li>
 			</ul>
 
-            <ul id="nav-mobile" class="side-nav hide-on-large-only" style="overflow-y: scroll;">
+			<ul id="nav-mobile" class="side-nav hide-on-large-only">
 				<li>
 					<a href="index.php">Dashboard</a>
 				</li>

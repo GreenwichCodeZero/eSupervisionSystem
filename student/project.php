@@ -2,8 +2,6 @@
 
 session_start();
 
-error_reporting(0);
-
 require '../login-check.php';
 
 $currentUser = $_SESSION['currentUser'];
@@ -97,7 +95,7 @@ $stu_user = $currentUser['student_username']; // (1) = demo student id
 				</li>
 			</ul>
 
-            <ul id="nav-mobile" class="side-nav hide-on-large-only" style="overflow-y: scroll;">
+			<ul id="nav-mobile" class="side-nav hide-on-large-only">
 				<li>
 					<a href="index.php">Dashboard</a>
 				</li>

@@ -3,8 +3,6 @@
 // Initialise session
 session_start();
 
-error_reporting(0);
-
 require '../database-connection.php';
 require '../validation.php';
 require '../login-check.php';
@@ -304,7 +302,7 @@ if (count($errorList) > 0) {
 				</li>
 			</ul>
 
-            <ul id="nav-mobile" class="side-nav hide-on-large-only" style="overflow-y: scroll;">
+			<ul id="nav-mobile" class="side-nav hide-on-large-only">
 				<li>
 					<a href="index.php">Dashboard</a>
 				</li>
