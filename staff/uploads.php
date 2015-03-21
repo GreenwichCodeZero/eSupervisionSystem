@@ -420,12 +420,12 @@ if ($_POST['sid']) {
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
 
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
 
                                         echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<div>{$sf['communication_body']}</div><a> {$sf[ 'file_name']}</a>
 															<input type='hidden' name='file_id' value='".$sf['file_id']."' />
 															<button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button></form>";
+
+                                        echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";
 
                                         echo "</li>";
                                     }
@@ -460,8 +460,9 @@ if ($_POST['sid']) {
                                     "<form action='readfile.php' method='post' style='min-height: 35px;'>
                                     <input type='hidden' name='file_id' value='".$student_contextual[0]['file_id']."'/>
                                     <a>".$student_contextual[0]['file_name']."</a> <button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
-													</form>"
-                                   : $currentStudent['student_first']." has not uploaded anything yet"
+
+                                    <p><b>File uploaded on ".$prettyDate . " at " . substr($student_contextual[0]['file_time_added'], 0, -3)." </b></p></form>"
+                                    : $currentStudent['student_first']." has not uploaded anything yet"
                                 );
 
                                 if ($superFiles['contextual']['count'] > 0) {
@@ -472,8 +473,6 @@ if ($_POST['sid']) {
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
 
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
 
                                         echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">',
                                         "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
