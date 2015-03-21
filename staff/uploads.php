@@ -121,32 +121,32 @@ if ($_POST['sid']) {
     (
         "interim" => array
         (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'interim')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'interim', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'interim')->getResponse ())
         ),
 
         "initial" => array (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'initial')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'initial', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'initial')->getResponse ())
         ),
         "ethics" => array (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'ethics')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'ethics', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'ethics')->getResponse ())
         ),
         "proposal" => array (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'proposal')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'proposal', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'proposal')->getResponse ())
         ),
         "project" => array (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'project')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'project', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'project')->getResponse ())
         ),
         "contextual" => array (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'contextual')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'contextual', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'contextual')->getResponse ())
         ),
         "feedback" => array (
-            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'feedback')->getResponse () ,
+            "files" => $f->supervisorUploads ($staff_username, $_POST['sid'], 'feedback', ' limit 1')->getResponse () ,
             "count" => count ($f->supervisorUploads ($staff_username, $_POST['sid'], 'feedback')->getResponse ())
         )
     );
@@ -407,7 +407,8 @@ if ($_POST['sid']) {
                                     <input type='hidden' name='file_id' value='".$student_proposal[0]['file_id']."'/>
                                     <a>".$student_proposal[0]['file_name']."</a>
 												<button class='c_right-align waves-effect m-7 waves-teal waves-light green btn-flat white-text'><i class='mdi-file-file-download'></i></button>
-												</form>"
+
+                                    <p><b>File uploaded on ".$prettyDate . " at " . substr($student_proposal[0]['file_time_added'], 0, -3)." </b></p></form>"
                                     : $currentStudent['student_first']." has not uploaded anything yet" );
                                 echo "</li>";
 
