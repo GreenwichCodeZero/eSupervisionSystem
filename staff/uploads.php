@@ -772,6 +772,10 @@ if ($_POST['sid']) {
                                                 echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<a> {$sf[ 'file_name']}</a>
                                                         <input type='hidden' name='file_id' value='".$sf['file_id']."' />
                                                         <button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button></form>";
+
+                                $date = strtotime($sf['communication_date_added']);
+                                $prettyDate = date('l j F Y', $date);
+                                echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";
                                                 echo "</li>";
                                                 echo '</ul>';
                                             // }
