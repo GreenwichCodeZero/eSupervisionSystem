@@ -263,12 +263,17 @@ $projectTitle = $p->getResponse ();
 				<div class="card">
 					<div class="card-content">
 						<span class="card-title green-text">Project Proposal</span>
-						<div class='section'>Latest Upload:
+						<div class='section'>Latest Uploads:
 							<ul class="collection">
 								<?php
+								$date = strtotime($student_proposal[0]['file_date_added']);
+									$prettyDate = date('l j F Y', $date);
+
 								echo "<li class='collection-item'>";
 								echo ($student_proposal[0]['file_id'] > 0 ?
-									"<form action='readfile.php' method='post' style='min-height: 35px;'><input type='hidden' name='file_id' value='".$student_proposal[0]['file_id']."'/><a>".$student_proposal[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button></form>"
+									"<form action='readfile.php' method='post' style='min-height: 35px;'><input type='hidden' name='file_id' value='".$student_proposal[0]['file_id']."'/><a>".$student_proposal[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
+
+									<p><b>File uploaded on ".$prettyDate . " at " . substr($student_proposal[0]['file_time_added'], 0, -3)." </b></p></form>"
 									: "You have not uploaded anything yet"
 								);
 								echo "</li>";
@@ -280,8 +285,6 @@ $projectTitle = $p->getResponse ();
 										$date = strtotime($sf['communication_date_added']);
 										$prettyDate = date('l j F Y', $date);
 
-										// Output date and time
-										echo $prettyDate . ', ' . substr($sf['communication_time_added'], 0, -3);
 
 										echo '<form action="readfile.php" method="POST" style="min-height: 35px;">', "<p>{$sf['communication_body']}</p><a>{$sf[ 'file_name']}</a>
 										<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
