@@ -931,7 +931,7 @@ if ($_POST['sid']) {
                                 } 
 
                              if (!$studentFiles['contextual']['count'])
-                                echo "<ul class='collection'><li class='collection-item'>",$stu['student_first'], ' ',$stu['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
+                                echo "<ul class='collection'><li class='collection-item'>",$currentStudent['student_first'], ' ',$currentStudent['student_last']," has not submitted any files of this type.</li></ul>"; // End Is Array
                                 break;
                             case 5:
                                 if (is_array ($studentFiles['interim']['files'])) {
