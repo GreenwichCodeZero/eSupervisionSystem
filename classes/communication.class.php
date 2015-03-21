@@ -149,9 +149,9 @@ class Communication {
 
         if (mail( $this->from . '@greenwich.ac.uk',
             'New Message Received', 'A new message was submitted and is waiting for you on the eSupervision System.', $headers)) {
-            $this->response('Your content was commited successfully and your tutor has been notified .');
+            $this->response('Your content was commited successfully and a notification email has been sent .');
         } else {
-            $this->response('Your content was commited successfully but your tutor could not be notified.');
+            $this->response('Your content was commited successfully but a notification email could not be sent.');
         }
     }
 
