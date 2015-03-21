@@ -337,7 +337,9 @@ class File {
 			`file_id`, 
 			`file_name`,
 			`file_type`,
-			`file_size`
+			`file_size`,
+            `file_date_added`,
+            `file_time_added`
 			FROM
 			`esuper_file` 
 			WHERE 
