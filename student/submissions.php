@@ -281,7 +281,7 @@ $projectTitle = $p->getResponse ();
 								if ($superFiles['proposal']['count'] > 0) {
 									foreach ($superFiles['proposal']['files'] as $sf) {
 
-										echo '<li class="collection-item">';
+										echo '<li class="collection-item grey lighten-4">';
 										$date = strtotime($sf['communication_date_added']);
 										$prettyDate = date('l j F Y', $date);
 
@@ -295,7 +295,7 @@ $projectTitle = $p->getResponse ();
                                         echo "</li>";
                                     }
                                 } else {
-                                    echo '<li class="collection-item grey lighten-3">
+                                    echo '<li class="collection-item grey lighten-4">
 									Your tutor has not uploaded anything yet
 									</li> ';
                                 }
@@ -327,7 +327,7 @@ $projectTitle = $p->getResponse ();
                                 );
                                 if ($superFiles['contextual']['count'] > 0) {
                                     foreach ($superFiles['contextual']['files'] as $sf) {
-                                        echo '<li class="collection-item">';
+                                        echo '<li class="collection-item grey lighten-4">';
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
 
@@ -340,7 +340,7 @@ $projectTitle = $p->getResponse ();
                                         echo "</li>";
                                     }
                                 } else {
-                                    echo ' <li class="collection-item grey lighten-3">
+                                    echo ' <li class="collection-item grey lighten-4">
 										Your tutor has not uploaded anything yet
 										</li> ';
                                 }
@@ -373,7 +373,7 @@ $projectTitle = $p->getResponse ();
                                 if ($superFiles['initial']['count'] > 0) {
                                     foreach ($superFiles['initial']['files'] as $sf) {
 
-                                        echo '<li class="collection-item">';
+                                        echo '<li class="collection-item grey lighten-4">';
 
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
@@ -390,7 +390,7 @@ $projectTitle = $p->getResponse ();
                                         echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";		echo "</li>";
                                     }
                                 } else {
-                                    echo ' <li class="collection-item grey lighten-3">
+                                    echo ' <li class="collection-item grey lighten-4">
 										Your tutor has not uploaded anything yet
 										</li> ';
                                 }
@@ -418,10 +418,11 @@ $projectTitle = $p->getResponse ();
 								</form>"
                                     : "You have not uploaded anything yet"
                                 );
+								echo "</li>";
                                 if ($superFiles['interim']['count'] > 0) {
                                     foreach ($superFiles['interim']['files'] as $sf) {
 
-                                        echo '<li class="collection-item">';
+                                        echo '<li class="collection-item grey lighten-4">';
 
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
@@ -435,7 +436,7 @@ $projectTitle = $p->getResponse ();
                                         echo "</li>";
                                     }
                                 } else {
-                                    echo ' <li class="collection-item grey lighten-3">
+                                    echo ' <li class="collection-item grey lighten-4">
 											Your tutor has not uploaded anything yet
 									</li> ';
                                 }?>
@@ -451,8 +452,6 @@ $projectTitle = $p->getResponse ();
                         <div>Latest Uploads:
                             <ul class="collection">
                                 <?php
-
-
                                 $date = strtotime($student_project[0]['file_date_added']);
                                 $prettyDate = date('l j F Y', $date);
                                 echo "<li class='collection-item'>";
@@ -464,10 +463,11 @@ $projectTitle = $p->getResponse ();
 								</form>"
                                     : "You have not uploaded anything yet"
                                 );
+								echo "</li>";
                                 if ($superFiles['project']['count'] > 0) {
                                     foreach ($superFiles['project']['files'] as $sf) {
 
-                                        echo '<li class="collection-item">';
+                                        echo '<li class="collection-item grey lighten-4">';
 
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
@@ -476,15 +476,14 @@ $projectTitle = $p->getResponse ();
 
                                         echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
 												<input type='hidden' name='file_id' value='".$sf['file_id']."' />
-												<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download icon'></i></button>
-
+												<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
 												</form>";
                                         echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";
-                                        echo "</li>";
+                                      echo "</li>";
                                     }
                                 } else {
-                                    echo ' <li class="collection-item grey lighten-3">
-									Your tutor has not uploaded anything yet
+                                    echo ' <li class="collection-item grey lighten-4">
+											Your tutor has not uploaded anything yet
 									</li> ';
                                 }?>
                             </ul>
@@ -505,15 +504,16 @@ $projectTitle = $p->getResponse ();
 
                                 echo "<li class='collection-item'>";
                                 echo ($student_feedback[0]['file_id'] > 0 ?
-                                    "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_feedback[0]['file_id']."'/><a>".$student_feedback[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
+                                    "<form action='readfile.php' method='post'><input type='hidden' name='file_id' value='".$student_feedback[0]['file_id']."'/><a>".$student_feedback[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
 
 									<p><b>File uploaded on ".$prettyDate . " at " . substr($student_feedback[0]['file_time_added'], 0, -3)."</b></p>"
                                     : "You have not uploaded anything yet"
                                 );
+								echo "</li>";
                                 if ($superFiles['feedback']['count'] > 0) {
                                     foreach ($superFiles['feedback']['files'] as $sf) {
 
-                                        echo '<li class="collection-item">';
+                                        echo '<li class="collection-item grey lighten-4">';
 
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
@@ -522,18 +522,15 @@ $projectTitle = $p->getResponse ();
 
                                         echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
 												<input type='hidden' name='file_id' value='".$sf['file_id']."' />
-												<button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button></form>";
-
-
-
-                                        echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";	echo "</li>";
+												<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button></form>";
+                                        echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";
+										echo "</li>";
                                     }
                                 } else {
-                                    echo ' <li class="collection-item grey lighten-3">
-										Your tutor has not uploaded anything yet
-										</li> ';
-                                }
-                                ?>
+                                    echo ' <li class="collection-item grey lighten-4">
+											Your tutor has not uploaded anything yet
+									</li> ';
+                                }?>
                             </ul>
                         </div>
                     </div>
@@ -557,11 +554,12 @@ $projectTitle = $p->getResponse ();
 								</form>"
                                     : "You have not uploaded anything yet"
                                 );
+								echo "</li>";
 
                                 if ($superFiles['ethics']['count'] > 0) {
                                     foreach ($superFiles['ethics']['files'] as $sf) {
 
-                                        echo '<li class="collection-item">';
+                                        echo '<li class="collection-item grey lighten-4">';
 
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
@@ -570,14 +568,14 @@ $projectTitle = $p->getResponse ();
 
                                         echo ' <form action="readfile.php" method="POST">', "<p>{$sf['communication_body']}</p><a> {$sf[ 'file_name']}</a>
 												<input type='hidden' name='file_id' value='".$sf['file_id']."' />
-												<button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button></form>";
+												<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button></form>";
 
 
 
                                         echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";	echo "</li>";
                                     }
                                 } else {
-                                    echo ' <li class="collection-item grey lighten-3">
+                                    echo ' <li class="collection-item grey lighten-4">
 										Your tutor has not uploaded anything yet
 										</li> ';
                                 }
@@ -597,27 +595,29 @@ $projectTitle = $p->getResponse ();
 
                 <?php
                 if (count($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user)->getResponse ()) > 0) {
-
-                    foreach ($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user)->getResponse () as $sf) {
+					echo '<ul class="collection">';
+					
+					foreach ($f->supervisorUploads ($supervisor[0]['staff_username'], $stu_user)->getResponse () as $sf) {
 
                         $date = strtotime($sf['communication_date_added']);
                         $prettyDate = date('l j F Y', $date);
                         // if ($sf['file_type_id'] == 1) {
-                        echo '<ul class="collection">';
-                        echo '<li class="collection-item ">';
+                       
+                        echo '<li class="collection-item grey lighten-4">';
                         echo ' <form action="readfile.php" method="POST">', "<a> {$sf[ 'file_name']}</a>
 										<input type='hidden' name='file_id' value='".$sf['file_id']."' />
-										<button class='c_right-align waves-effect waves-teal waves-light  green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button></form>";
+										<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button></form>";
 
                         echo "<p><b>File uploaded on ".$prettyDate . ' at ' . substr($sf['communication_time_added'], 0, -3), "</b></p>";
                         echo "</li>";
-                        echo '</ul>';
+                       
                         // }
                     }
+					echo '</ul>';
                 } else {
                     ?>
                     <ul class="collection">
-                        <li class="collection-item grey lighten-3">
+                        <li class="collection-item grey lighten-4">
                             No files have been uploaded by your supervisor
                         </li>
                     </ul>
