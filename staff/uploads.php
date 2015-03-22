@@ -189,6 +189,10 @@ if ($_POST['sid']) {
             $('select').material_select();
             $(".button-collapse").sideNav();
         });
+		
+		$('#FileUpload').submit(function(){
+			$('button').remove ();
+		});
     </script>
 </head>
 <body>
@@ -340,7 +344,6 @@ if ($_POST['sid']) {
 							</div>
 							<br>
                             <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Upload</button>
-                           
                         </form>
                     </div>
                 </div>
@@ -359,8 +362,6 @@ if ($_POST['sid']) {
 					<div class="card-content">
 						<span class="card-title green-text">Supervisor Uploads</span>
 						<p class="green-text">You have uploaded <?php echo count($f->supervisorUploads ($staff_username, $_POST['sid'])->getResponse ()); ?> files</p>
-
-						
 							<?php
 							if (count($f->supervisorUploads ($staff_username, $_POST['sid'])->getResponse ()) > 0) {
 							echo '<ul class="collection">';
@@ -401,7 +402,6 @@ if ($_POST['sid']) {
                         <span class="card-title green-text">Project Title</span>
                         <div>
                             <span><?php echo ( $student_projectTitle ? ucfirst ($student_projectTitle[0]['project_title']) : 'A title has not yet been submitted for this project'); ?></span>
-
                         </div>
                     </div>
                 </div>
@@ -816,7 +816,7 @@ if ($_POST['sid']) {
 
             ?>
             <div class="row">
-                <div class="col s12"  style='background-color: #fafafa; margin-bottom: 10px; border: thin solid #ccc;'>
+                <div class="col s10 offset-s1"  style='background-color: #fafafa; margin-bottom: 10px; border: thin solid #ccc;'>
                     <div class='c_right-align'>
                         <form action="uploads.php" method="post" >
                             <input type="hidden" name="sid" value="<?php echo $_POST['sid'];?>" />
@@ -846,7 +846,7 @@ if ($_POST['sid']) {
                                     foreach ($studentFiles['feedback']['files'] as $file) {
                                         echo '<ul class="collection"><li class="collection-item">';
                                         
-                                        echo ' <form action="readfile.php" method="POST" style="min-height: 35px;">', "<p><a> {$file[ 'file_name']}</a>
+                                        echo '<form action="readfile.php" method="POST" style="min-height: 35px;">', "<p><a> {$file[ 'file_name']}</a>
 											<input type='hidden' name='file_id' value='".$sf['file_id']."' />
 											 <button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
 										</form>";
@@ -988,9 +988,4 @@ if ($_POST['sid']) {
 </div>
 <!-- end container -->
 </body>
-<script>
-$('#FileUpload').submit(function(){
-    $('button').remove ();
-});
-</script>
 </html>
