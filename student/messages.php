@@ -177,8 +177,12 @@ $received_count = count($received);
                                   onkeyup="ValidateMessage(this.value);"></textarea>
                         <span id="messageValidation" class="red-text text-light-3 validation-error"></span>
                     </div>
-                    <input class="waves-effect waves-teal waves-light btn-flat" type="file" name="fileToUpload"
-                           id="fileToUpload">
+					<div class="file-field input-field col s12">
+						<div class="waves-effect waves-teal waves-light green btn-flat white-text">
+							<span>File</span>
+							<input type="file" name="fileToUpload" id="fileToUpload"/>
+						</div>
+					</div>
                     <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text"
                             onclick="return ValidateForm()">Submit
                     </button>
@@ -202,7 +206,7 @@ $received_count = count($received);
 
                     if ($message_count > 0) {
                         foreach ($sent as $s) { ?>
-                            <li class="collection-item" <?php echo ($s['communication_from_id'] == $stu_user) ? 'style="background-color: #fafafa;"' : '' ?> >
+                            <li class="collection-item <?php echo ($s['communication_from_id'] == $stu_user) ? '' : 'grey lighten-4'; ?>" >
                                 <form action="readfile.php" method="POST">
                                     <p>
                                         <span class="green-text">
