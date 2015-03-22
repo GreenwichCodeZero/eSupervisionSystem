@@ -236,12 +236,18 @@ $projectTitle = $p->getResponse ();
 							}
 							?>
 						</select>
-						<div class="waves-effect waves-teal waves-light green btn-flat white-text">
-							<span>File</span>
-							<input type="file" name="fileToUpload" id="fileToUpload"/>
+						<div class="file-field input-field col s12">
+							<div class="waves-effect waves-teal waves-light green btn-flat white-text">
+								<span>File</span>
+								<input type="file" name="fileToUpload" id="fileToUpload"/>
+							</div>
 						</div>
-						<p><strong>Uploads are restricted to PDF and a maximum of 40MB</strong></p>
-						<button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Submit</button>
+						<br>
+						<div>
+							<strong>Uploads are restricted to PDF and a maximum of 40MB</strong>
+						</div>
+						<br>
+						<button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Upload</button>
 					</form>
 				</div>
 			</div>
