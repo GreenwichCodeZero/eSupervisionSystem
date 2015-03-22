@@ -195,25 +195,7 @@ foreach ($allStudents as $student) {
         </div>
         <!-- Students without a second marker ends here -->
 
-        <!-- Students with no meeting requests within 2 weeks starts here -->
-        <div class="col s12">
-            <div class="card">
-                <div class="card-content">
-                    <div class="row" style="margin-left: 0; margin-right: 0;">
-                        <span class="card-title green-text">Students with no meeting requests within 2 weeks</span>
-                    </div>
-
-                    <div class="row">
-                        <?php foreach ($studentsNoRecentMeetings as $student) {
-                            echo '<div class="col s12 m6 l4">' . $student['student_first'] . ' ' . $student['student_last'] . '</div>';
-                        } ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--  Students with no meeting requests within 2 weeks ends here -->
-
-        <!-- Students with the same supervisor and second marker starts here -->
+		<!-- Students with the same supervisor and second marker starts here -->
         <div class="col s12">
             <div class="card">
                 <div class="card-content">
@@ -235,6 +217,42 @@ foreach ($allStudents as $student) {
             </div>
         </div>
         <!-- Students with the same supervisor and second marker ends here -->
+		
+		<!-- Inactive students assigned to a supervisor starts here -->
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content">
+                    <div class="row" style="margin-left: 0; margin-right: 0;">
+                        <span class="card-title green-text">Inactive students assigned to a supervisor</span>
+                    </div>
+
+                    <div class="row">
+                        <?php foreach ($notActiveButAssignedToASupervisors as $inactiveStudent) {
+                            echo '<div class="col s12 m6 l4">' . $inactiveStudent['student_first'] . ' ' . $inactiveStudent['student_last'] . '</div>';
+                        } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Inactive students assigned to a supervisor ends here -->
+
+        <!-- Students with no meeting requests within 2 weeks starts here -->
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content">
+                    <div class="row" style="margin-left: 0; margin-right: 0;">
+                        <span class="card-title green-text">Students with no meeting requests within 2 weeks</span>
+                    </div>
+
+                    <div class="row">
+                        <?php foreach ($studentsNoRecentMeetings as $student) {
+                            echo '<div class="col s12 m6 l4">' . $student['student_first'] . ' ' . $student['student_last'] . '</div>';
+                        } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Students with no meeting requests within 2 weeks ends here -->
 
         <!-- Students who haven't logged in for the past 7 days starts here -->
         <div class="col s12">
@@ -273,24 +291,7 @@ foreach ($allStudents as $student) {
         </div>
         <!-- Staff who have declined more than 70% of meeting requests ends here -->
 
-        <!-- Inactive students assigned to a supervisor starts here -->
-        <div class="col s12">
-            <div class="card">
-                <div class="card-content">
-                    <div class="row" style="margin-left: 0; margin-right: 0;">
-                        <span class="card-title green-text">Inactive students assigned to a supervisor</span>
-                    </div>
-
-                    <div class="row">
-                        <?php foreach ($notActiveButAssignedToASupervisors as $inactiveStudent) {
-                            echo '<div class="col s12 m6 l4">' . $inactiveStudent['student_first'] . ' ' . $inactiveStudent['student_last'] . '</div>';
-                        } ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Inactive students assigned to a supervisor ends here -->
-
+        
     </div>
 
 </div>

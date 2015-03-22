@@ -183,23 +183,13 @@ if ($_POST['sid']) {
         function toggleForm(elemID, newButtonID) {
             $(elemID).toggle();
             $(newButtonID).toggle();
-        }
-        ;
+        };
 
         $(document).ready(function () {
             $('select').material_select();
             $(".button-collapse").sideNav();
         });
     </script>
-    <style>
-        .m-7 {
-            margin-top: -7px;
-        }
-
-        .f-staff {
-            background: #fafafa !important;
-        }
-    </style>
 </head>
 <body>
 <nav>
@@ -344,16 +334,13 @@ if ($_POST['sid']) {
                                     <span>File</span>
                                     <input type="file" name="fileToUpload" id="fileToUpload"/>
                                 </div>
-
-                            <p><strong>Uploads are restricted to PDF and a maximum of 40MB</strong></p>
-                            </div>
-
+								<br>
                             <div>
-                            </div>
-
-                            <div class="input-field">
-                                <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Upload</button>
-                            </div>
+								<strong>Uploads are restricted to PDF and a maximum of 40MB</strong>
+							</div>
+							<br>
+                            <button class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">Upload</button>
+                           
                         </form>
                     </div>
                 </div>
@@ -443,13 +430,13 @@ if ($_POST['sid']) {
 												<button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
 
                                     <p><b>File uploaded on ".$prettyDate . " at " . substr($student_proposal[0]['file_time_added'], 0, -3)." </b></p></form>"
-                                    : $currentStudent['student_first']." has not uploaded anything yet" );
+                                    : $currentStudent['student_first']." has not uploaded anything yet");
                                 echo "</li>";
 
                                 if ($superFiles['proposal']['count'] > 0) {
                                     foreach ($superFiles['proposal']['files'] as $sf) {
 
-                                        echo '<li class="collection-item">';
+                                        echo '<li class="collection-item grey lighten-4">';
 
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
@@ -496,13 +483,13 @@ if ($_POST['sid']) {
                                     <a>".$student_contextual[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
 
                                     <p><b>File uploaded on ".$prettyDate . " at " . substr($student_contextual[0]['file_time_added'], 0, -3)." </b></p></form>"
-                                    : $currentStudent['student_first']." has not uploaded anything yet"
-                                );
+                                    : $currentStudent['student_first']." has not uploaded anything yet");
+								echo "</li>";
 
                                 if ($superFiles['contextual']['count'] > 0) {
                                     foreach ($superFiles['contextual']['files'] as $sf) {
 
-                                        echo '<li class="f-staff collection-item">';
+                                        echo '<li class="collection-item grey lighten-4">';
 
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
@@ -551,12 +538,13 @@ if ($_POST['sid']) {
 												 <button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
 
                                     <p><b>File uploaded on ".$prettyDate . " at " . substr($student_initial[0]['file_time_added'], 0, -3)." </b></p></form>"
-                                    : $currentStudent['student_first']." has not uploaded anything yet"
-                                );
+                                    : $currentStudent['student_first']." has not uploaded anything yet");
+								echo "</li>";
+								
                                 if ($superFiles['initial']['count'] > 0) {
                                     foreach ($superFiles['initial']['files'] as $sf) {
 
-                                        echo '<li class=" f-staff collection-item">';
+                                        echo '<li class="collection-item grey lighten-4">';
 
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
@@ -604,13 +592,13 @@ if ($_POST['sid']) {
                                     <a>".$student_interim[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
 
                                     <p><b>File uploaded on ".$prettyDate . " at " . substr($student_interim[0]['file_time_added'], 0, -3)." </b></p></form>"
-                                    : $currentStudent['student_first']." has not uploaded anything yet"
-                                );
+                                    : $currentStudent['student_first']." has not uploaded anything yet");
+								echo "</li>";
 
                                 if ($superFiles['interim']['count'] > 0) {
                                     foreach ($superFiles['interim']['files'] as $sf) {
 
-                                        echo '<li class="f-staff collection-item">';
+                                        echo '<li class="collection-item grey lighten-4">';
 
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
@@ -658,13 +646,13 @@ if ($_POST['sid']) {
                                     <a>".$student_project[0]['file_name']."</a><button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
 
                                     <p><b>File uploaded on ".$prettyDate . " at " . substr($student_project[0]['file_time_added'], 0, -3)." </b></p></form>"
-                                    : $currentStudent['student_first']." has not uploaded anything yet"
-                                );
+                                    : $currentStudent['student_first']." has not uploaded anything yet");
+								echo "</li>";
 
                                 if ($superFiles['project']['count'] > 0) {
                                     foreach ($superFiles['project']['files'] as $sf) {
 
-                                        echo '<li class="f-staff collection-item">';
+                                        echo '<li class="collection-item grey lighten-4">';
 
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
@@ -711,11 +699,13 @@ if ($_POST['sid']) {
                                                 <button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
 
                                     <p><b>File uploaded on ".$prettyDate . " at " . substr($student_ethics[0]['file_time_added'], 0, -3)." </b></p></form>"
-                                    : $currentStudent['student_first']." has not uploaded anything yet</li>");
+                                    : $currentStudent['student_first']." has not uploaded anything yet");
+								echo "</li>";
+									
                                 if ($superFiles['ethics']['count'] > 0) {
                                     foreach ($superFiles['ethics']['files'] as $sf) {
 
-                                        echo '<li class="f-staff collection-item">';
+                                        echo '<li class="collection-item grey lighten-4">';
                                         $date = strtotime($sf['communication_date_added']);
                                         $prettyDate = date('l j F Y', $date);
 
@@ -759,7 +749,9 @@ if ($_POST['sid']) {
                                                  <button class='c_right-align waves-effect waves-teal waves-light green btn-flat white-text icon'><i class='mdi-file-file-download'></i></button>
 
                                     <p><b>File uploaded on ".$prettyDate . " at " . substr($student_feedback[0]['file_time_added'], 0, -3)." </b></p></form>"
-                                    : $currentStudent['student_first']." has not uploaded anything yet</li>");
+                                    : $currentStudent['student_first']." has not uploaded anything yet");
+								echo "</li>";
+									
                                 if ($superFiles['feedback']['count'] > 0) {
                                     foreach ($superFiles['feedback']['files'] as $sf) {
                                         echo '<li class="collection-item grey lighten-4">';
