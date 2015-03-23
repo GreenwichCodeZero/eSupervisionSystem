@@ -16,10 +16,16 @@ class Reports {
 
     public function notActiveButAssignedToASupervisor() {
         $result = $this->con->prepare(
-            'SELECT * FROM esuper_student s, esuper_user_allocation ua
-            WHERE s.student_id = ua.student_id
-            AND s.student_active = 0
-               ');
+            'SELECT
+               *
+             FROM
+               esuper_student s,
+               esuper_user_allocation ua
+             WHERE
+               s.student_id = ua.student_id
+             AND
+               s.student_active = 0'
+        );
 
         try {
             $result->execute();
@@ -41,8 +47,7 @@ class Reports {
              FROM
                esuper_student
              WHERE
-               last_login_date < 7
-               ');
+               last_login_date < 7');
 
         try {
             $result->execute();
@@ -96,7 +101,8 @@ class Reports {
              JOIN
                esuper_staff s ON staff.meeting_staff_id = s.staff_username
              ORDER BY
-               s.staff_last ASC, s.staff_first ASC');
+               s.staff_last ASC, s.staff_first ASC'
+        );
 
         try {
             $result->execute();
@@ -148,7 +154,6 @@ class Reports {
         $result = null;
         $this->response($row);
     }
-
 
     public function getResponse() {
         return $this->response;
