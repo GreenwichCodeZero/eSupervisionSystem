@@ -326,12 +326,12 @@ class Communication {
 					   c.communication_time_added,
 					   c.communication_file_id,
 					   s.student_first,
-					   s.student_last,
+					   s.student_last
 					 FROM
 					   esuper_communication c,
 					   esuper_student s
                      WHERE
-					   c.communication_type_id =' . $this->type_id . '
+					   c.communication_type_id = ' . $this->type_id . '
 					 AND
 					   c.communication_to_id = "' . $user . '"
 					 AND
@@ -353,7 +353,7 @@ class Communication {
 					   esuper_communication c,
 					   esuper_staff s
 					 WHERE
-					   c.communication_type_id =' . $this->type_id . '
+					   c.communication_type_id = ' . $this->type_id . '
 					 AND
 					   c.communication_to_id = "' . $user . '"
 					 AND
