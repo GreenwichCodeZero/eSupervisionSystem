@@ -50,7 +50,7 @@ class Meeting {
              OR
                meeting_staff_id = :username
              ORDER BY
-               m.meeting_id DESC'
+               m.meeting_date DESC, mt.timeslot_time DESC'
         );
         $result->bindValue(':username', $username);
 
