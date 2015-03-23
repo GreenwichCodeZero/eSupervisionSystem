@@ -14,10 +14,9 @@ class Search {
         }
     }
 
-        public function searchProgrammes() {
+    public function searchProgrammes() {
         $result = $this->con->prepare("SELECT * FROM esuper_programme ORDER BY programme_title");
 
-       // $result->bindValue(':student_first', $student_first);
         try {
             $result->execute();
         } catch (PDOException $e) {
@@ -31,11 +30,12 @@ class Search {
         $this->response($row);
     }
 
-        public function getResponse() {
+    public function getResponse() {
         return $this->response;
     }
 
     private function response($var) {
         return $this->response = $var;
     }
+
 }
