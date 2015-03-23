@@ -24,7 +24,9 @@ class Reports {
              WHERE
                s.student_id = ua.student_id
              AND
-               s.student_active = 0'
+               s.student_active = 0
+             ORDER BY
+               s.student_last ASC, s.student_first ASC'
         );
 
         try {
@@ -47,7 +49,10 @@ class Reports {
              FROM
                esuper_student
              WHERE
-               last_login_date < 7');
+               last_login_date < 7
+             ORDER BY
+               student_last ASC, student_first ASC'
+        );
 
         try {
             $result->execute();
