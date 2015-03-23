@@ -69,7 +69,12 @@ class UserDetails {
     // Get all students
     public function GetAllStudents() {
         $result = $this->con->prepare(
-            'SELECT * FROM esuper_student'
+            'SELECT
+               *
+             FROM
+               esuper_student
+             ORDER BY
+               student_last ASC, student_first ASC'
         );
 
         try {
@@ -304,7 +309,10 @@ class UserDetails {
              WHERE
                s.staff_active = 1
              AND
-               s.staff_id = :staff_id');
+               s.staff_id = :staff_id
+             ORDER BY
+               s.staff_last ASC, s.staff_first ASC'
+        );
         $result->bindValue(':staff_id', $staff_id);
 
         try {
@@ -372,7 +380,9 @@ class UserDetails {
                    esuper_user_allocation ua
                  WHERE
                    ua.supervisor_id IS NOT NULL
-               )'
+               )
+             ORDER BY
+               s.student_last ASC, s.student_first ASC'
         );
 
         try {
@@ -404,7 +414,9 @@ class UserDetails {
                    esuper_user_allocation ua
                  WHERE
                    ua.second_id IS NOT NULL
-               )'
+               )
+             ORDER BY
+               s.student_last ASC, s.student_first ASC'
         );
 
         try {
@@ -613,7 +625,9 @@ class UserDetails {
              FROM
                esuper_staff
              WHERE
-               staff_authorised = 0'
+               staff_authorised = 0
+             ORDER BY
+               staff_last ASC, staff_first ASC'
         );
 
         try {
@@ -638,7 +652,8 @@ class UserDetails {
                esuper_staff
              WHERE
                staff_id = :staff_id
-             '
+             ORDER BY
+               staff_last ASC, staff_first ASC'
         );
         $result->bindValue(':staff_id', $staff_id);
 
@@ -664,7 +679,8 @@ class UserDetails {
                esuper_student
              WHERE
                student_id = :student_id
-             '
+             ORDER BY
+               student_last ASC, student_first ASC'
         );
         $result->bindValue(':student_id', $student_id);
 
