@@ -16,8 +16,9 @@ class Reports {
 
     public function notActiveButAssignedToASupervisor() {
         $result = $this->con->prepare(
-            'SELECT
-               *
+            'SELECT DISTINCT
+               s.student_first,
+               s.student_last
              FROM
                esuper_student s,
                esuper_user_allocation ua
