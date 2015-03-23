@@ -5,25 +5,20 @@ require_once 'file.class.php'; // include file class
 
 class Communication {
 
-// This is the description for the class: Communication (eSupervision).
-// * 
-// * @class 	 	Communication
-// * @description 	Use to handle all database requests for communications
-// * @package    	eSupervision
-// * @authors       Dwayne Brown & Mark Tickner 
-// * @version    	1.1
+    // This is the description for the class: Communication (eSupervision).
+    // *
+    // * @class 	 	Communication
+    // * @description 	Use to handle all database requests for communications
+    // * @package    	eSupervision
+    // * @authors       Dwayne Brown & Mark Tickner
+    // * @version    	1.1
 
     private $action;
     private $response;
     private $con;
-
-    private $communication_id;
     private $from;
     private $to;
-    private $date_addded = '';
-    private $time_addded = '';
     private $body;
-    private $communication_type;
 
     // Load variables from POST into object
     public function __construct() {
@@ -48,17 +43,14 @@ class Communication {
         }
 
         $this->from = $from_user;
-
         $this->action = (isset ($_POST['communication_action'])) ? $_POST['communication_action'] : null;
 
         switch ($this->action) {
             case 'sendmessage':
-                // echo "message:";
                 $this->add('message', $file_type_id);
                 break;
 
             case 'posttoblog':
-                // echo "Blog Post: id1";
                 $this->add('blog', $file_type_id);
                 break;
 
@@ -105,15 +97,13 @@ class Communication {
 
             $f = new File ();
             try {
-                $f->add($this->from, $type_id = ( $file_type_id > 0 ) ? $file_type_id : 1);
-                // $f->add($this->from, 1);
+                $f->add($this->from, $type_id = ($file_type_id > 0) ? $file_type_id : 1);
             } catch (Exception $e) {
                 throw new Exception ($e->getMessage());
                 exit;
             }
 
             $this->file_id = $f->getResponse();
-
             $this->response('file uploaded: ' . $this->file_id);
         }
 
@@ -122,9 +112,26 @@ class Communication {
         $this->body = strip_tags($_POST ['communication_body']);
 
         $result = $this->con->prepare(
-            "INSERT INTO `esuper_communication` (communication_from_id,communication_to_id, communication_date_added, communication_time_added, communication_type_id, communication_body, communication_file_id)
-			VALUES (:from_id,:to_id,:date_added,:time_added,:type_id ,:comm_body, :comm_file_id);");
-
+            "INSERT INTO
+               esuper_communication (
+                 communication_from_id,
+                 communication_to_id,
+                 communication_date_added,
+                 communication_time_added,
+                 communication_type_id,
+                 communication_body,
+                 communication_file_id
+               )
+			VALUES (
+			  :from_id,
+			  :to_id,
+			  :date_added,
+			  :time_added,
+			  :type_id,
+			  :comm_body,
+			  :comm_file_id
+			)"
+        );
         $result->bindValue(':from_id', $this->from);
         $result->bindValue(':to_id', $this->to);
         $result->bindValue(':date_added', date("Y-m-d"));
@@ -132,6 +139,7 @@ class Communication {
         $result->bindValue(':type_id', $this->type);
         $result->bindValue(':comm_body', $this->body);
         $result->bindValue(':comm_file_id', $this->file_id);
+
         try {
             $result->execute();
         } catch (PDOException $e) {
@@ -139,7 +147,6 @@ class Communication {
             exit;
         }
 
-        // $row = $result->fetch(PDO::FETCH_ASSOC);
         $result = null;
 
         $headers = 'From: eSupervision System <esupervision@greenwich.ac.uk>' . "\r\n" .
@@ -147,7 +154,7 @@ class Communication {
             'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
             'X-Mailer: PHP/' . phpversion();
 
-        if (mail( $this->from . '@greenwich.ac.uk',
+        if (mail($this->from . '@greenwich.ac.uk',
             'New Message Received', 'A new message was submitted and is waiting for you on the eSupervision System.', $headers)) {
             $this->response('Your content was commited successfully and a notification email has been sent .');
         } else {
@@ -157,12 +164,8 @@ class Communication {
 
     // Find a comment by comment id, type, who posted etc.
     public function getAll($type, $user, $user_type = null, $filter_username = null) {
-
         switch ($type) {
             case 'blog':
-
-                $type_id = 1;
-                
                 switch ($user_type) {
                     case 'staff';
                         $sql = 'SELECT
@@ -186,43 +189,40 @@ class Communication {
 
                         // Add filter if necessary
                         if ($filter_username != null) {
-                            $sql .= ' AND
-                                        c.communication_from_id = :student_username';
+                            $sql .= ' AND c.communication_from_id = :student_username';
                         }
 
                         $sql .= ' ORDER BY c.communication_date_added DESC, c.communication_time_added DESC';
 
                         $result = $this->con->prepare($sql);
-                        // $result->bindValue(':staff_username', $user);
                         $result->bindValue(':student_username', $filter_username);
 
                         break;
-
                     case 'student':
                         $result = $this->con->prepare(
                             'SELECT
-                        `esuper_communication`.`communication_id`
-                        , `esuper_communication`.`communication_body`
-                        , `esuper_communication`.`communication_date_added`
-                        , `esuper_communication`.`communication_time_added`
-                        , `esuper_communication`.`communication_file_id`
-                        , `esuper_communication`.`communication_comment_id`
+                               communication_id,
+                               communication_body,
+                               communication_date_added,
+                               communication_time_added,
+                               communication_file_id,
+                               communication_comment_id
+                             FROM
+                              esuper_communication
+                             WHERE
+                               communication_type_id = 1
+                             AND
+                               communication_from_id = :user
+                             ORDER BY
+                               communication_date_added DESC, communication_time_added DESC'
+                        );
 
-                        FROM
-                        `esuper_communication`
-                         WHERE
-                        `esuper_communication`.`communication_type_id` = 1
-                        AND
-                        `esuper_communication`.`communication_from_id` = :user
-                        
-                        ORDER BY `esuper_communication`.communication_date_added DESC, `esuper_communication`.communication_time_added DESC');
-                        
                         $result->bindValue(':user', $user);
 
                         break;
                 }
 
-            break;
+                break;
             case 'message':
                 switch ($user_type) {
                     case 'staff';
@@ -320,44 +320,44 @@ class Communication {
             case 'staff';
                 $this->result = $this->con->prepare(
                     'SELECT
-						`esuper_communication`.`communication_id`
-						, `esuper_communication`.`communication_body`
-						, `esuper_communication`.`communication_date_added`
-						, `esuper_communication`.`communication_time_added`
-						, `esuper_communication`.`communication_file_id` 
-						, `esuper_student`.`student_first`
-						, `esuper_student`.`student_last`
-						FROM
-						`esuper_communication`,
-						`esuper_student`
-						 WHERE 
-						`esuper_communication`.`communication_type_id` =' . $this->type_id . '
-						AND 
-						`esuper_communication`.`communication_to_id` = "' . $user . '"
-						AND 
-						`esuper_student`.`student_username` = `esuper_communication`.`communication_from_id`'
+					   c.communication_id,
+					   c.communication_body,
+					   c.communication_date_added,
+					   c.communication_time_added,
+					   c.communication_file_id,
+					   s.student_first,
+					   s.student_last
+					 FROM
+					   esuper_communication c,
+					   esuper_student s
+                     WHERE
+					   c.communication_type_id = ' . $this->type_id . '
+					 AND
+					   c.communication_to_id = "' . $user . '"
+					 AND
+					   s.student_username = c.communication_from_id'
                 );
                 break;
 
             case 'student':
                 $this->result = $this->con->prepare(
                     'SELECT
-						`esuper_communication`.`communication_id`
-						, `esuper_communication`.`communication_body`
-						, `esuper_communication`.`communication_date_added`
-						, `esuper_communication`.`communication_time_added`
-						, `esuper_communication`.`communication_file_id` 
-						, `esuper_staff`.`staff_first`
-						, `esuper_staff`.`staff_last`
-						FROM
-						`esuper_communication`,
-						`esuper_staff`
-						 WHERE 
-						`esuper_communication`.`communication_type_id` =' . $this->type_id . '
-						AND 
-						`esuper_communication`.`communication_to_id` = "' . $user . '"
-						AND 
-						`esuper_staff`.`staff_username` = `esuper_communication`.`communication_from_id`'
+					   c.communication_id,
+					   c.communication_body,
+					   c.communication_date_added,
+					   c.communication_time_added,
+					   c.communication_file_id,
+					   s.staff_first,
+					   s.staff_last
+					 FROM
+					   esuper_communication c,
+					   esuper_staff s
+					 WHERE
+					   c.communication_type_id = ' . $this->type_id . '
+					 AND
+					   c.communication_to_id = "' . $user . '"
+					 AND
+					   s.staff_username = c.communication_from_id'
                 );
                 break;
         }
@@ -374,17 +374,15 @@ class Communication {
         $this->response($row);
     }
 
-    public function addComment ( $comment_id, $communication_id) {
-
-        $result = $this->con->prepare (
-            'update esuper_communication
-            SET
-            communication_comment_id = :comment_id
-            WHERE
-            communication_id = :communication_id
-            '
-            );
-
+    public function addComment($comment_id, $communication_id) {
+        $result = $this->con->prepare(
+            'UPDATE
+               esuper_communication
+             SET
+               communication_comment_id = :comment_id
+             WHERE
+               communication_id = :communication_id'
+        );
         $result->bindValue(':communication_id', strip_tags($communication_id));
         $result->bindValue(':comment_id', strip_tags($comment_id));
 
@@ -397,7 +395,6 @@ class Communication {
 
         $result = null;
         return true;
-
     }
 
     // Remove a communication from the database
@@ -413,6 +410,7 @@ class Communication {
     public function getResponse() {
         return $this->response;
     }
+
 }
 
 ?>

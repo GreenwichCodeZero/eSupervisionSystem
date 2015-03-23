@@ -557,7 +557,7 @@ if (count($errorList) > 0) {
                         <div class="input-field col s6">
                             <label for="title">Subject</label>
                             <input id="title" name="title" type="text" onkeyup="ValidateTitle(this.value);"
-                                   onblur="ValidateTitle(this.value);"/>
+                                   onblur="ValidateTitle(this.value);" style="padding-top: 2px;"/>
                             <span id="titleValidation" class="red-text text-light-3 validation-error"></span>
                         </div>
 

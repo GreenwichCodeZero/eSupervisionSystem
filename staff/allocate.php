@@ -104,9 +104,9 @@ if (isset($_POST['saveAllocate'])) {
                                     $emailHeaders
                                 );
 
-                                //todo remove
+                                //todo debug
                                 mail(
-                                    'ta210@greenwich.ac.uk, tm112@greenwich.ac.uk',
+                                    'ta210@greenwich.ac.uk',
                                     '1 Supervisor Allocation Changed ' . $studentDetails['student_username'],
                                     'You have been allocated to a new supervisor, check the eSupervision System for details.',
                                     $emailHeaders
@@ -142,9 +142,9 @@ if (isset($_POST['saveAllocate'])) {
                                     $emailHeaders
                                 );
 
-                                //todo remove
+                                //todo debug
                                 mail(
-                                    'ta210@greenwich.ac.uk, tm112@greenwich.ac.uk',
+                                    'ta210@greenwich.ac.uk',
                                     '2 Second Marker Allocation Changed ' . $studentDetails['student_username'],
                                     'You have been allocated to a new second marker, check the eSupervision System for details.',
                                     $emailHeaders
@@ -181,9 +181,9 @@ if (isset($_POST['saveAllocate'])) {
                         $emailHeaders
                     );
 
-                    //todo remove
+                    //todo debug
                     mail(
-                        'ta210@greenwich.ac.uk, tm112@greenwich.ac.uk',
+                        'ta210@greenwich.ac.uk',
                         '3 Supervisor Allocation Changed ' . $oldSupervisorUsername,
                         $supervisorEmailBody,
                         $emailHeaders
@@ -208,9 +208,9 @@ if (isset($_POST['saveAllocate'])) {
                         $emailHeaders
                     );
 
-                    //todo remove
+                    //todo debug
                     mail(
-                        'ta210@greenwich.ac.uk, tm112@greenwich.ac.uk',
+                        'ta210@greenwich.ac.uk',
                         '4 Second Marker Allocation Changed ' . $oldSecondMarkerUsername,
                         $secondMarkerEmailBody,
                         $emailHeaders
@@ -245,9 +245,9 @@ if (isset($_POST['saveAllocate'])) {
                     $emailHeaders
                 );
 
-                //todo remove
+                //todo debug
                 mail(
-                    'ta210@greenwich.ac.uk, tm112@greenwich.ac.uk',
+                    'ta210@greenwich.ac.uk',
                     '5 Supervisor Allocation Changed ' . $staffUsername,
                     $supervisorEmailBody,
                     $emailHeaders
@@ -270,9 +270,9 @@ if (isset($_POST['saveAllocate'])) {
                     $emailHeaders
                 );
 
-                //todo below
+                //todo debug
                 mail(
-                    'ta210@greenwich.ac.uk, tm112@greenwich.ac.uk',
+                    'ta210@greenwich.ac.uk',
                     '6 Second Marker Allocation Changed ' . $staffUsername,
                     $secondMarkerEmailBody,
                     $emailHeaders
