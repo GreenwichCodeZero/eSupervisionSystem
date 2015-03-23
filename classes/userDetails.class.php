@@ -157,49 +157,50 @@ class UserDetails {
     // Function that returns the allocated students of the specified member of staff
     public function GetAllocatedStudents($staff_username) {
         $result = $this->con->prepare(
-            '(
-               SELECT
-                 s.student_id,
-                 s.student_first,
-                 s.student_last,
-                 s.student_username
-               FROM
-                 esuper_student s,
-                 esuper_staff spv,
-                 (
-                   SELECT * FROM (SELECT us3.* FROM esuper_user_allocation us3 WHERE us3.supervisor_id IS NOT NULL ORDER BY us3.last_updated DESC) us2 GROUP BY us2.student_id
-                 ) spva
-               WHERE
-                 spva.student_id = s.student_id
-               AND
-                 spva.supervisor_id = spv.staff_id
-               AND
-                 spv.staff_username = :staff_username
-               ORDER BY
-                 s.student_last ASC, s.student_first ASC
-             )
-               UNION
-             (
-               SELECT
-                 s.student_id,
-                 s.student_first,
-                 s.student_last,
-                 s.student_username
-               FROM
-                 esuper_student s,
-                 esuper_staff snd,
-                 (
-                   SELECT * FROM (SELECT us3.* FROM esuper_user_allocation us3 WHERE us3.second_id IS NOT NULL ORDER BY us3.last_updated DESC) us2 GROUP BY us2.student_id
-                 ) snda
+            'SELECT * FROM (
+               (
+                 SELECT
+                   s.student_id,
+                   s.student_first,
+                   s.student_last,
+                   s.student_username
+                 FROM
+                   esuper_student s,
+                   esuper_staff spv,
+                   (
+                     SELECT * FROM (SELECT us3.* FROM esuper_user_allocation us3 WHERE us3.supervisor_id IS NOT NULL ORDER BY us3.last_updated DESC) us2 GROUP BY us2.student_id
+                   ) spva
                  WHERE
-                   snda.student_id = s.student_id
+                   spva.student_id = s.student_id
                  AND
-                   snda.second_id = snd.staff_id
+                   spva.supervisor_id = spv.staff_id
                  AND
-                   snd.staff_username = :staff_username
-                 ORDER BY
-                   s.student_last ASC, s.student_first ASC
-                 )');
+                   spv.staff_username = :staff_username
+               )
+                 UNION
+               (
+                 SELECT
+                   s.student_id,
+                   s.student_first,
+                   s.student_last,
+                   s.student_username
+                 FROM
+                   esuper_student s,
+                   esuper_staff snd,
+                   (
+                     SELECT * FROM (SELECT us3.* FROM esuper_user_allocation us3 WHERE us3.second_id IS NOT NULL ORDER BY us3.last_updated DESC) us2 GROUP BY us2.student_id
+                   ) snda
+                   WHERE
+                     snda.student_id = s.student_id
+                   AND
+                     snda.second_id = snd.staff_id
+                   AND
+                     snd.staff_username = :staff_username
+               )
+             ) stu
+             ORDER BY
+               stu.student_last ASC, stu.student_first ASC'
+        );
         $result->bindValue(':staff_username', $staff_username);
 
         try {
