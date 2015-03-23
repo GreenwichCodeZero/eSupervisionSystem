@@ -337,21 +337,19 @@ if (isset($_GET['name'])) {
         }
     } else if (isset($_GET['allocation'])) {
         // Allocation confirmation
-        if ($_GET['allocation'] == 'supervisor') {
-            echo '<p class="success">Successfully allocated students\' supervisors.</p>';
-        } else if ($_GET['allocation'] == 'second') {
-            echo '<p class="success">Successfully allocated students\' second markers.</p>';
-        }
-
-        // Check for student clash errors
         if (isset($_GET['clashes'])) {
-            echo '<div class="error"><p>The following students were not allocated as the selected member of staff is already allocated:</p><ul>';
+            // Student clash errors
+            echo '<div class="error"><p>The following students were ignored as the selected member of staff is already allocated:</p><ul>';
 
             foreach ($_SESSION['clashes'] as $clash) {
                 echo '<li>' . $clash . '</li>';
             }
 
-            echo '</ul></div>';
+            echo '</ul><div class="success">Other allocations were successful.</div></div>';
+        } else if ($_GET['allocation'] == 'supervisor') {
+            echo '<p class="success">Successfully allocated students\' supervisors.</p>';
+        } else if ($_GET['allocation'] == 'second') {
+            echo '<p class="success">Successfully allocated students\' second markers.</p>';
         }
     } ?>
     <!-- Results end -->
