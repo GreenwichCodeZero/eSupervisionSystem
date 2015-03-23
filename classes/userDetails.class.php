@@ -14,11 +14,17 @@ class UserDetails {
         }
     }
 
-    public function singleStudent ( $username ) {
-      $result = $this->con->prepare(
-            'SELECT * FROM esuper_student
-            WHERE student_username = :username');
-      $result->bindValue (':username', $username);
+    public function singleStudent($username) {
+        $result = $this->con->prepare(
+            'SELECT
+               *
+             FROM
+               esuper_student
+             WHERE
+               student_username = :username'
+        );
+        $result->bindValue(':username', $username);
+
         try {
             $result->execute();
         } catch (PDOException $e) {
@@ -33,12 +39,18 @@ class UserDetails {
 
         return $this;
     }
-    
-    public function singleStaff ( $username ) {
-      $result = $this->con->prepare(
-            'SELECT * FROM esuper_staff
-            WHERE staff_username = :username');
-      $result->bindValue (':username', $username);
+
+    public function singleStaff($username) {
+        $result = $this->con->prepare(
+            'SELECT
+               *
+             FROM
+               esuper_staff
+             WHERE
+               staff_username = :username'
+        );
+        $result->bindValue(':username', $username);
+
         try {
             $result->execute();
         } catch (PDOException $e) {
@@ -53,12 +65,13 @@ class UserDetails {
 
         return $this;
     }
-
 
     // Get all students
     public function GetAllStudents() {
         $result = $this->con->prepare(
-            'SELECT * FROM esuper_student');
+            'SELECT * FROM esuper_student'
+        );
+
         try {
             $result->execute();
         } catch (PDOException $e) {
@@ -75,13 +88,13 @@ class UserDetails {
     //update students last login date
     public function updateLoggedInDate($user_name) {
         $result = $this->con->prepare(
-            'Update
-              esuper_student
-            Set 
-              last_login_date = "' . date("Y-m-d H:i:s") . '"
-            WHERE
-              student_username = :user_name
-         ');
+            'UPDATE
+               esuper_student
+             SET
+               last_login_date = "' . date("Y-m-d H:i:s") . '"
+             WHERE
+               student_username = :user_name'
+        );
         $result->bindValue(':user_name', $user_name);
 
         try {
@@ -359,7 +372,8 @@ class UserDetails {
                    esuper_user_allocation ua
                  WHERE
                    ua.supervisor_id IS NOT NULL
-               )');
+               )'
+        );
 
         try {
             $result->execute();
@@ -390,7 +404,8 @@ class UserDetails {
                    esuper_user_allocation ua
                  WHERE
                    ua.second_id IS NOT NULL
-               )');
+               )'
+        );
 
         try {
             $result->execute();
@@ -406,9 +421,16 @@ class UserDetails {
     }
 
     public function isStaffAuthorised($staff_id) {
-        $result = $this->con->prepare("SELECT staff_authorised FROM esuper_staff WHERE staff_id = " . '"' . $staff_id . '"');
-
+        $result = $this->con->prepare(
+            "SELECT
+               staff_authorised
+             FROM
+               esuper_staff
+             WHERE
+               staff_id = " . '"' . $staff_id . '"'
+        );
         $result->bindValue(':staff_id', $staff_id);
+
         try {
             $result->execute();
         } catch (PDOException $e) {
@@ -566,7 +588,8 @@ class UserDetails {
                t.staff_id = a.second_id
              ORDER BY
                a.last_updated DESC
-             LIMIT 1');
+             LIMIT 1'
+        );
         $result->bindValue(':student_id', $student_id);
 
         try {
@@ -590,9 +613,8 @@ class UserDetails {
              FROM
                esuper_staff
              WHERE
-               staff_authorised = 0
-             ');
-        //$result->bindValue(':student_id', $student_id);
+               staff_authorised = 0'
+        );
 
         try {
             $result->execute();
@@ -616,7 +638,8 @@ class UserDetails {
                esuper_staff
              WHERE
                staff_id = :staff_id
-             ');
+             '
+        );
         $result->bindValue(':staff_id', $staff_id);
 
         try {
@@ -641,7 +664,8 @@ class UserDetails {
                esuper_student
              WHERE
                student_id = :student_id
-             ');
+             '
+        );
         $result->bindValue(':student_id', $student_id);
 
         try {
