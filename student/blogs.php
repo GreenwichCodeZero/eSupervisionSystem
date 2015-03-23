@@ -163,8 +163,6 @@ $supervisor = $u->getResponse();
                 <ul class="collection">
                     <?php foreach ($blogs as $b) {
                         echo '<li class="collection-item">';
-
-
                      // Pretty format the date
                          $date = strtotime($b['communication_date_added']);
                          $prettyDate = date('l j F Y', $date);
@@ -182,7 +180,7 @@ $supervisor = $u->getResponse();
                             ?>
 
                              <!--  COMMENT HTML START -->
-							<p class="grey lighten-3">
+							<div class="grey lighten-4">
 								<b>
                                 <?php $staff =  $u->singleStaff ($comment['comment_staff_id'])->getResponse (); ?>
 
@@ -197,8 +195,8 @@ $supervisor = $u->getResponse();
 										echo $prettyDate . ', ' . substr($comment['comment_time_added'], 0, -3); 
 									?>
 								 </b> 
-                             </p>
-							 <p class="grey lighten-3"><?php echo $comment['comment_body']; ?></p>
+                             </div>
+							 <p class="grey lighten-4"><?php echo $comment['comment_body']; ?></p>
 
                             <!--  COMMENT HTML END -->
                             <? }
