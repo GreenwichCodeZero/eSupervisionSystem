@@ -336,46 +336,48 @@ $students = $u->getResponse();
                     foreach ($sent as $s) { ?>
                         <ul class="collection">
                             <li class="collection-item" <?php echo ($s['communication_from_id'] == $staff_username) ? 'style="background-color: #fafafa;"' : '' ?> >
-                                <form action="readfile.php" method="POST">
-                                    <p>
-                                        <span class="green-text">
-                                            <b>
-                                                <?php if ($s['communication_from_id'] == $staff_username) {
-                                                    // Message is from current staff user
-                                                    echo 'Me';
-                                                } else {
-                                                    // Message is from student
-                                                    echo $s['student_first'] . " " . $s['student_last'];
-                                                } ?>
-                                            </b>
-                                        </span>
-                                        &#8212;
-
-                                        <?php
-                                        // Pretty format the date
-                                        $date = strtotime($s['communication_date_added']);
-                                        $prettyDate = date('l j F Y', $date);
-
-                                        // Output date and time
-                                        echo $prettyDate . ', ' . substr($s['communication_time_added'], 0, -3); ?>
-                                    </p>
-
-                                    <p>
-                                        <?php echo $s['communication_body']; ?>
-                                    </p>
+                                <p>
+                                    <span class="green-text">
+                                        <b>
+                                            <?php if ($s['communication_from_id'] == $staff_username) {
+                                                // Message is from current staff user
+                                                echo 'Me';
+                                            } else {
+                                                // Message is from student
+                                                echo $s['student_first'] . " " . $s['student_last'];
+                                            } ?>
+                                        </b>
+                                    </span>
+                                    &#8212;
 
                                     <?php
-                                    if ($s['communication_file_id'] > 0) { ?>
+                                    // Pretty format the date
+                                    $date = strtotime($s['communication_date_added']);
+                                    $prettyDate = date('l j F Y', $date);
+
+                                    // Output date and time
+                                    echo $prettyDate . ', ' . substr($s['communication_time_added'], 0, -3); ?>
+                                </p>
+
+                                <p>
+                                    <?php echo $s['communication_body']; ?>
+                                </p>
+
+                                <?php
+                                if ($s['communication_file_id'] > 0) { ?>
+                                    <form action="readfile.php" method="POST">
                                         <hr/>
                                         <p>
-                                        <input type='hidden' name='file_id' value="<?php echo $s['communication_file_id']; ?>"/>
-                                            <button 
+                                            <input type='hidden' name='file_id'
+                                                   value="<?php echo $s['communication_file_id']; ?>"/>
+                                            <button
                                                 class="waves-effect waves-teal waves-light green btn-flat white-text"
                                                 style="margin-bottom: 0; margin-top: 15px;">
-                                                View File<i class="mdi-editor-attach-file right"></i></button>
+                                                View File<i class="mdi-editor-attach-file right"></i>
+                                            </button>
                                         </p>
-                                    <?php } ?>
-                                </form>
+                                    </form>
+                                <?php } ?>
                             </li>
                         </ul>
                     <?php }
