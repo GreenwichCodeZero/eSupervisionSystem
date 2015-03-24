@@ -91,7 +91,7 @@ class Communication {
                 break;
         }
 
-        $this->file_id = 0;
+        $this->file_id = null;
 
         if ($_FILES['fileToUpload']['size'] > 0) {
 
