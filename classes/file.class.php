@@ -32,7 +32,9 @@ class File {
 			   file_type_desc,
 			   file_mime_type
 			 FROM
-			   esuper_file_type'
+			   esuper_file_type
+			 ORDER BY
+			   file_type_name ASC'
         );
         $result->execute();
 
