@@ -133,9 +133,9 @@ $getAllProjectStudents = $getAllProjectStudentsQ->getResponse();
 					<span class="card-title green-text">View dashboards</span>
 					<div class="row">
 						<form action="staffDashboard.php" method="get">
-						<div class="col s6">
+						<div class="col s12">
 							<select id="staff" name="staff">
-							<option value="0">Please select a staff</option>
+							<option value="0">Select staff</option>
 							<?php
 							foreach($getAllUnauthorisedStaffs as $getAllUnauthorisedStaff){
 								echo '<option value="' . $getAllUnauthorisedStaff['staff_id'] . '">' . $getAllUnauthorisedStaff['staff_first'] . " " . $getAllUnauthorisedStaff['staff_last'] . "</option>";
@@ -148,9 +148,9 @@ $getAllProjectStudents = $getAllProjectStudentsQ->getResponse();
 					</div>
 					<div class="row">
 						<form action="studentDashboard.php" method="get">
-						<div class="col s6">
+						<div class="col s12">
 							<select id="student" name="student">
-							<option value="0">Please select a student</option>
+							<option value="0">Select student</option>
 							<?php
 							foreach($getAllProjectStudents as $getAllProjectStudent){
 								echo '<option value="' . $getAllProjectStudent['student_id'] . '">' . $getAllProjectStudent['student_first'] . " " . $getAllProjectStudent['student_last'] . "</option>";
