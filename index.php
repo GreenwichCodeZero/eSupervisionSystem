@@ -156,7 +156,7 @@ function RedirectToDashboard($userType) {
         <img id="logo" class="responsive-img" src="imgs/greenwichLogo.png" alt="University of Greenwich logo"/>
     </div>
     <div class="row">
-        <div class="card col s10 m6 l6 offset-s1 offset-m3 offset-l3">
+        <div class="card col s12 m6 l6 offset-m3 offset-l3">
             <form action="index.php" method="post" id="login">
                 <?php
                 // Sticky form fields
@@ -206,7 +206,7 @@ function RedirectToDashboard($userType) {
     </div>
 
     <div class="row">
-        <p class="col s10 m6 l6 offset-s1 offset-m3 offset-l3 notice">This website uses cookies to improve your
+        <p class="col s12 m6 l6 offset-m3 offset-l3 notice">This website uses cookies to improve your
             experience. By continuing you agree to these cookies being stored on your computer.</p>
     </div>
 </div>

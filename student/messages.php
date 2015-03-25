@@ -207,7 +207,7 @@ $received_count = count($received);
                     if ($message_count > 0) {
                         foreach ($sent as $s) { ?>
                             <li class="collection-item <?php echo ($s['communication_from_id'] == $stu_user) ? '' : 'grey lighten-4'; ?>" >
-                                <form action="readfile.php" method="POST">
+                                <form action="../readfile.php" method="POST">
                                     <p>
                                         <span class="green-text">
                                             <b>

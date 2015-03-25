@@ -137,7 +137,7 @@ $supervisor = $u->getResponse();
         <div id="submitBlog" class="row">
             <i class="small mdi-content-clear c_right-align" onClick="toggleForm('#submitBlog', '#newBlogEntry');"></i>
 
-            <form name="blogEntry" method="post" action='' enctype="multipart/form-data" class="col s10 m12 offset-s1">
+            <form name="blogEntry" method="post" action='' enctype="multipart/form-data" class="col s12">
                 <input type='hidden' name='communication_action' value='posttoblog'/>
                 <input type='hidden' name='communication_from_id' value='<?php echo $stu_user; ?>'/>
                 <input type='hidden' name='communication_to_id' value='blog'/>
@@ -150,7 +150,7 @@ $supervisor = $u->getResponse();
                 </button>
             </form>
         </div>
-        <div class="col s10 m12 offset-s1 card">
+        <div class="col s12 card">
             <a onClick="toggleForm('#submitBlog', '#newBlogEntry');" id="newBlogEntry" class="c_right-align">
                 <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Entry</div>
             </a>

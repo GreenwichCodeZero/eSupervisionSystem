@@ -130,10 +130,10 @@ $getAllProjectStudents = $getAllProjectStudentsQ->getResponse();
         <div class="col s12">
             <div class="card">
                 <div class="card-content">
-					<span class="card-title green-text">View dashboards</span>
+					<span class="card-title green-text">View Dashboards</span>
 					<div class="row">
 						<form action="staffDashboard.php" method="get">
-						<div class="col s12">
+						<div class="col s12 m6">
 							<select id="staff" name="staff">
 							<option value="0">Select staff</option>
 							<?php
@@ -148,7 +148,7 @@ $getAllProjectStudents = $getAllProjectStudentsQ->getResponse();
 					</div>
 					<div class="row">
 						<form action="studentDashboard.php" method="get">
-						<div class="col s12">
+						<div class="col s12 m6">
 							<select id="student" name="student">
 							<option value="0">Select student</option>
 							<?php

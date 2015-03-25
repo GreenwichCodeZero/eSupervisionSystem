@@ -290,7 +290,7 @@ $students = $u->getResponse();
         </div>
         <!-- NEW MESSAGE SECTION END-->
 
-        <div class="col s10 m12 offset-s1 card">
+        <div class="col s12 card">
             <a onClick="toggleForm('#sendMessage', '#newMessage');" class="c_right_align" id="newMessage">
                 <div class="c_right-align waves-effect waves-teal waves-light green btn-flat white-text">New Message
                 </div>
@@ -365,7 +365,7 @@ $students = $u->getResponse();
 
                                 <?php
                                 if ($s['communication_file_id'] > 0) { ?>
-                                    <form action="readfile.php" method="POST">
+                                    <form action="../readfile.php" method="POST">
                                         <hr/>
                                         <p>
                                             <input type='hidden' name='file_id'

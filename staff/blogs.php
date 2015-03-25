@@ -160,7 +160,7 @@ $students = $u->getResponse();
 				?>
 	</div>
 	<div class="row">
-		<div class="col s10 m12 offset-s1 card">
+		<div class="col s12 card">
 			<div class="card-content">
 				<span class="card-title green-text">Student Blog History</span>
 				<?php if ($blog_count > 0) {
@@ -212,7 +212,7 @@ $students = $u->getResponse();
 						</a>
 					<?php } ?>
 
-				<form action="readfile.php" method="POST">
+				<form action="../readfile.php" method="POST">
 					<div>
 						<span class="green-text">
 							<b>
