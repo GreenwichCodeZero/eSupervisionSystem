@@ -330,7 +330,7 @@ if (count($errorList) > 0) {
 <div class="container">
 
     <!-- Output message text -->
-    <div class="error" style="margin-top: 10px;">
+    <div>
         <?php echo $outputText; ?><?php echo $errorListOutput; ?>
     </div>
 
