@@ -459,7 +459,7 @@ if (count($errorList) > 0) {
     <!-- Output message text -->
     <?php echo $outputText; ?>
 
-    <div class="red-text text-light-3 validation-error">
+    <div class="error" style="margin-top: 10px;">
         <?php echo $errorListOutput; ?>
     </div>
 
